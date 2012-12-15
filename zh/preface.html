@@ -1,0 +1,229 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>前言 &mdash; akabook 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="akabook 3.0 documentation" href="../index.html" />
+    <link rel="up" title="中文版：Linux C/C++編程一站式學習" href="index.html" />
+    <link rel="next" title="1. 程序的基本概念" href="intro.html" />
+    <link rel="prev" title="歷史" href="history.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="intro.html" title="1. 程序的基本概念"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="history.html" title="歷史"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">akabook 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">中文版：Linux C/C++編程一站式學習</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>前言<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>本書最初是為北京亞嵌教育研究中心的嵌入式Linux系統工程師就業班課程量身定做的教材之一。該課程是為期四個月的全日制職業培訓，要求學員畢業時具備非常紮實的C編程能力，能熟練地使用Linux系統，同時對計算機體繫結構與指令集、操作系統原理和設備驅動程式都有較深入的瞭解。然而學員入學時的水平是非常初級而且參差不齊的：學歷有專科、本科也有研究生，專業有和計算機相關的也有很不相關的（例如會計專業），以前從事的職業有和技術相關的也有完全不相關的（例如HR），年齡從二十出頭到三十五六歲的都有。這麼多背景完全不同、基礎完全不同、思維習慣和理解能力完全不同的人來聽同一堂課，大家都迫切希望學會嵌入式開發技術，投身IT行業，這就是職業教育的特點，也是我編寫本書時需要考慮的主要問題。</p>
+<p>學習編程絶不是一件簡單的事，尤其對於零基礎的初學者來說更不簡單。大學的計算機專業有四年時間從零基礎開始培養一個人，微積分、線性代數、隨機數學、離散數學、組合數學、自動機、編譯原理、操作系統、計算機組成原理等等一堆基礎課，再加上C/C++、Java、資料庫、網絡、軟件工程、計算機圖形學等等一堆專業課，最後培養出一個能找到工作的學生。很遺憾這最後一條很多學校沒有做好，來亞嵌培訓的很多學生就是四年這麼學過來的，卻還是需要參加一個職業培訓才能找到比較理想的工作。與之形成鮮明對比的是，只給我們四個月的時間，同樣要求從零基礎開始，最後培養出一個能找到工作的學生，而且還要保證他找到工作，這就是職業教育的特點。</p>
+<p>為什麼我說“只給我們四個月的時間”？我們倒是想教四年呢，但學時的長短我們做不了主，是由市場規律決定的。四年的任務要求四個月做好，要怎麼完成這樣一個几乎不可能的任務？有些職業教育給出的答案是“實用主義”，打出了“有用就學，沒有用就不學”的口號，大肆貶低說大學裡教的基礎課都是過時的、無用的，只有他們教的技術才是實用的，這種炒作很不好，我認為大學裡教的每一門課都是非常有用的，基礎知識在任何時候都不會過時，倒是那些時髦的“實用技術”有可能很快就過時了。</p>
+<p>四年的任務怎麼才能用四個月做好？我們給出的答案是“優化”。</p>
+<p>現在大學裡安排的課程體系最大的缺點就是根本不考慮優化。每個過來人都會有這樣的感覺：大一大二學了好多數學課，卻不知道都是幹什麼用的，為什麼要學。連它有什麼用都不知道怎麼能有興趣學好呢？然後到大三大四學專業課時，用到以前的知識了，才發現以前學的數學是多麼有用，然而早就忘得一乾二淨了，考完試都還給老師了，回頭重新學吧，這時候才發現很多東西以前根本沒學明白，現在才真的學明白了，那麼前兩年的時間豈不是都浪費了？</p>
+<p>大學裡的課程體系還有一個缺點就是不靈活，每門課必須占一個學期，必須由一個老師教，不同課程的老師之間沒有任何溝通和銜接。其實這些課程之間是相互依賴的，把它們強行拆開是不符合認知規律的。比如我剛上大學的時候，大一上半學期就被逼着學C語言，其實C語言是一門很難的編程語言，不懂編譯原理、操作系統和計算機體繫結構根本不可能學明白，那半個學期自然就浪費掉了。當時几乎所有學校的計算機相關專業都是這樣，大一上來就學C語言（有的學校更瘋狂，大一上來就學C++），學生們都在大一時就“學會”了C語言，但其實都是半吊子水平，到了大三大四真正寫代碼的時候經常為一個Bug搞得焦頭爛額，卻沒有機會再系統地學一遍C語言，因為在學校看來，C語言課早在大一就給你“上完了”，就像一頓飯已經吃完了，不管你吃飽沒吃飽，不會再讓你重吃一遍了。</p>
+<p>顯而易見，如果認真地對這些計算機課程做優化，理清各門課程之間的依賴關係，的確是有很多水份可以擠的。我們正是致力於縮短學生的學習時間，而學習效果不僅不打折扣，還要更好，因為我們把各門課程的知識系統地串聯起來了。</p>
+<div class="section" id="id2">
+<h2>本書有什麼特點<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>本書不是孤立地講C語言，而是和編譯原理、操作系統、計算機體繫結構結合起來講。或者說，本書的內容只是以C語言為載體，真正講的是計算機的原理和程序的原理。</li>
+<li>強調基本概念和基本原理，在編排順序上非常重視概念之間的依賴關係，每次引入一個新的概念，只依賴于前面章節已經講過的概念，而絶不會依賴後面章節要講的概念。有些地方為了敘述得完整，也會引用後面要講的內容，比如說“有關XX我們到第X章再仔細講解”，凡是這種引用都不是必要的依賴，可以當它不存在，只管繼續往下看就行了。</li>
+<li>儘量做到每個知識點直到要用的時候才引入。過早引入一個知識點，講完了又不用它，讀者很快就會遺忘，這是不符合認知規律的。</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>本書面向什麼樣的讀者<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>這是一本從零基礎開始學習編程的書，不要求讀者有任何編程經驗，但讀者至少需要具備以下素質：</p>
+<ul class="simple">
+<li>熟悉Linux系統的基本操作。如果不具備這一點，請先參考其他教材學習Linux系統的基本操作，熟練之後再學習本書，比如《鳥哥的Linux私房菜》就是Linux系統管理和應用方面比較好的一本書。但學習本書並不需要會很多系統管理技術，只要會用基本命令，會自己安裝系統和軟件包就足夠了。</li>
+<li>具有高中畢業的數學水平。本書會用到高中的數學知識。事實上，如果不具有高中畢業的數學水平，也不必考慮做程序員了。但並不是說只要具有高中畢業的數學水平就足夠做程序員了，只能說看這本書應該沒有問題，數學是程序員最重要的修養，計算機科學其實就是數學的一個分支，如果你的數學功底很差，日後還需惡補一下。</li>
+<li>具有高中畢業的英文水平。理由同上。</li>
+<li>對計算機的原理和本質深感興趣，不是為就業而學習，不是為拿高薪而學習，而是真的感興趣，想把一切來龍去脈搞得清清楚楚而學習。</li>
+<li>勤於思考。本書盡最大努力理清概念之間的依賴關係，力求一站式學習，讀者不需要為了找一個概念的定義去翻其他書，也不需要為了搞清楚一個概念在本書中前後一通亂翻，只需從前到後按順序學習即可。但一站式學習並不等於傻瓜式學習，有些章節有一定的難度，需要積極思考才能領會。本書可以替你節省時間，但不能替你思考，不要指望像看小說一樣走馬觀花看一遍就能學會。</li>
+</ul>
+</div>
+<div class="section" id="k-r">
+<h2>為什麼要學這本書而不是K&amp;R？<a class="headerlink" href="#k-r" title="Permalink to this headline">¶</a></h2>
+<p>[K&amp;R]_ 是公認的世界上最經典的C語言教程，這點毫無疑問。在C標準出台之前， [K&amp;R]_ 第一版就是事實上的C標準。C89標準出台之後， [K&amp;R]_ 跟着標準推出了第二版，可惜此後就沒有更新過了，所以不能反映C89之後C語言的發展以及最新的C99標準，本書在這方面做了很多補充。上面我說過了，這本書與其說是講C語言，不如說是以C語言為載體講計算機和操作系統的原理，而 [K&amp;R]_ 只是為了講C語言而講C語言，側重點不同，內容編排也很不相同。 [K&amp;R]_ 寫得非常好，代碼和語言都非常簡潔，但很可惜，只有已經學會了C語言的人才懂得欣賞它， [K&amp;R]_ 是非常不適合入門學習的，尤其不適合零基礎的學生入門學習。</p>
+</div>
+<div class="section" id="id4">
+<h2>本書“是什麼”和“不是什麼”<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>本書包括兩大部分：</p>
+<ul class="simple">
+<li>C語言入門。介紹基本的C語法，幫助沒有任何編程經驗的讀者理解什麼是程序，怎麼寫程序，培養程序員的思維習慣，找到編程的感覺。其中前六章改編自 <a class="reference internal" href="bibli.html#thinkcpp">[ThinkCpp]</a> 。</li>
+<li>C語言本質。結合計算機和操作系統的原理講解C程序是怎麼編譯、連結、運行的，同時全面介紹C的語法。 <a class="reference internal" href="op.html#op-bitop"><em>位運算</em></a> 改編自林小竹老師的講義， <a class="reference internal" href="linkedlist.html#linkedlist-linkedlist"><em>鏈表</em></a> 和 <a class="reference internal" href="linkedlist.html#linkedlist-binarytree"><em>二叉樹</em></a> 改編自朱仲濤老師的講義， <a class="reference internal" href="asm.html"><em>x86彙編程序基礎</em></a> 改編自 <a class="reference internal" href="bibli.html#groundup">[GroundUp]</a> 。</li>
+</ul>
+<p>這本書定位在入門級，雖然內容很多，但不是一本百科全書，除了把C語言基本講透之外其他內容都不深入，書後列出了很多參考書目，是讀者進一步學習的起點。很多初學者看到網上一些老鳥推薦的書單，以為只要一本一本啃下來就能成為高手了，但很快就發現想邁出第一步都很難－－該從哪一本開始啃起呢？本書的參考書目也是我列的書單，但我所做的不只是列書單而已。 [K&amp;R]_ 的第1章是一個Whirlwind Tour，把全書的內容簡單過一遍，然後再逐個深入進去講解，本書也可以看作是計算機專業課程體系的一個Whirlwind Tour，學完之後讀者應該會有一個全局觀，下一步該啃哪本書自己心裡就有數了。</p>
+</div>
+<div class="section" id="linuxc-windowsc">
+<h2>為什麼要在Linux平台上學C語言？用Windows學C語言不好嗎？<a class="headerlink" href="#linuxc-windowsc" title="Permalink to this headline">¶</a></h2>
+<p>用Windows還真的是學不好C語言。C語言是一種面向底層的編程語言，要寫好C程序，必須對操作系統的工作原理非常清楚，因為操作系統也是用C寫的，我們用C寫應用程序直接使用操作系統提供的介面。Linux是一種開源的操作系統，你有任何疑問都可以從原始碼和文檔中找到答案，即使你看不懂原始碼也找不到文檔，也很容易找個高手教你，各種郵件列表、新聞組和論壇上從來都不缺樂於助人的高手；而Windows是一種封閉的操作系統，除了微軟的員工別人都看不到它的原始碼，只能通過文檔去猜測它的工作原理，更糟糕的是，微軟向來喜歡藏着掖着，好用的功能留着自己用，而不會寫到文檔裡公開。</p>
+<p id="index-0">Windows平台上的開發工具往往和各種整合開發環境（IDE，Integrated Development Environment）綁在一起，例如Visual Studio、Eclipse等。使用IDE確實很便捷，但IDE對於初學者絶對不是好東西。微軟喜歡宣揚傻瓜式編程的理念，告訴你用滑鼠拖幾個控件然後點一個按鈕就可以編譯出程序來，但是真正有用的程序有哪個是這麼拖出來的？很多從Windows平台入門學編程的人，編了好幾年程序，還是隻知道編完程序點一個按鈕就可以跑了，把幾個源檔案拖到一個項目裡就可以編譯到一起了，如果有更複雜的需求他們就傻眼了，因為他們腦子裡只有按鈕、菜單的概念，根本沒有編譯器、連結器、Makefile的概念，甚至連命令行都沒用過，然而這些都是初學編程就應該建立起來的基本概念。另一方面，編譯器、連結器和C語言的語法有密切的關係，不瞭解編譯器、連結器的工作原理就不可能真正掌握C的語法。</p>
+<p>所以，IDE並沒有幫助你學習，反而阻礙了你學習，本來要學好C編程只要把語法和編譯命令學會就行了，現在有了IDE，除了學會語法和編譯命令，你還得弄清楚編譯命令和IDE是怎麼整合的，這才算學明白了，本來就很複雜的學習任務被IDE搞得更加複雜了。Linux用戶的使用習慣從來都是以敲命令為主，以滑鼠操作為輔，從學編程的第一天起就要敲命令編譯程序，等到你把這些基本概念都搞清楚了，你覺得哪個IDE好用你再去用，不過到那時候你可能會更喜歡vi或emacs而不是IDE了。</p>
+</div>
+<div class="section" id="id7">
+<h2>體例說明<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<p>像 <tt class="docutils literal"><span class="pre">The</span> <span class="pre">quick</span> <span class="pre">brown</span> <span class="pre">fox</span> <span class="pre">jumps</span> <span class="pre">over</span> <span class="pre">the</span> <span class="pre">lazy</span> <span class="pre">dog</span></tt> 這樣的字型在本書中是代碼字型。這種字型的名稱是Dejavu Sans Mono（很遺憾本書的在綫版本無法保證讀者的瀏覽器看到的字型一定是這種），為什麼我要提倡用這種字型呢？</p>
+<ol class="arabic simple">
+<li>它是等寬字型，因此適合做代碼字型。</li>
+<li>它的數字 <tt class="docutils literal"><span class="pre">1</span></tt> 和小寫字母 <tt class="docutils literal"><span class="pre">l</span></tt> 、數字 <tt class="docutils literal"><span class="pre">0</span></tt> 和大寫字母 <tt class="docutils literal"><span class="pre">O</span></tt> 區分得非常清楚（我在教學中發現初學者很容易把這些字元抄錯），因此它比Courier New更適合做代碼字型。</li>
+<li>它是我的Linux圖形終端的預設字型，採用這種字型排版可以使得看書和看屏幕的感覺很一致，希望讀者在看這本書時也會有這種Dejavu（似曾相識）的感覺。</li>
+</ol>
+<p>代碼的示例如下：</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#! /bin/sh</span>
+<span class="nv">VAR</span><span class="o">=</span>1
+<span class="nv">VAR</span><span class="o">=</span><span class="k">$((</span><span class="nv">$VAR</span><span class="o">+</span><span class="m">1</span><span class="k">))</span>
+<span class="nb">echo</span> <span class="nv">$VAR</span>
+</pre></div>
+</td></tr></table></div>
+<p>終端顯示的示例如下，包括Shell提示符、輸入的命令和運行結果:</p>
+<div class="highlight-python"><pre>$ /bin/sh script.sh
+2</pre>
+</div>
+<p>本書中統一用$表示Shell提示符。</p>
+<p><strong>加粗</strong> 的字句表示強調。</p>
+<p>在定義一個名詞時會給出它的英文名稱，例如“整合開發環境（IDE，Integrated Development Environment）”，通過書後的索引可以找到每個名詞在書中的哪個位置被定義或者首次出現。</p>
+</div>
+<div class="section" id="id8">
+<h2>致謝<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<p>本書的寫作得到北京亞嵌教育研究中心的全力支持，尤其感謝李明老師和何家勝老師，沒有公司的支持，我不可能有時間有條件寫這本書，也不可能有機會將這本書公開在網上。</p>
+<p>然後要感謝亞嵌教育的歷屆學員和各位老師，在教學和討論過程中我經常會得到有益的啟發，這些都促使這本書更加完善。在本書的寫作過程中，很多讀者為本書提出很有價值的建議，很多建議是熱心網友通過在綫評論提的，在此向他們表示感謝。</p>
+<p>感謝幫助過我的老師們：李明，何家勝，邸海霞，郎鐵山，朱仲濤，廖文江，韓超，秦蔚，吳岳，張頔，邢文鵬，何曉龍，林小竹，衛劍釩，郭同彬，王波，王磊，洪峰。</p>
+<p>還要感謝電子工業出版社博文視點資訊有限公司李冰老師的大力支持。</p>
+<p>在寫作過程中我遇到過很多困難，工作繁忙，對未來迷茫，生活壓力大，缺乏安全感，個人瑣事等等。然而有這麼多熱心的同學、老師、朋友、網友在等着看我的書在綫更新，給我提建議希望我把書改得更完善，這是我堅持寫下去的最大的動力。謝謝你們！</p>
+<p>由於我的水平十分有限，沒寫過C編譯器和C標準庫，所以疏漏之處在所難免，如有錯誤歡迎批評指正。寫書是一件嚴肅的事，書中的錯誤所有人都看得見，白紙黑字賴不掉的。我教過的很多學生都在大學裡學過C語言，甚至考過二級，但程序寫得一塌糊塗，連最基本的概念都搞錯了，以前學過的C語言教材中的錯誤在他們腦子里根深蒂固，即使我糾正多次，他們仍然只記得以前學過的錯誤概念，這種有基礎的學生還不如沒有任何基礎的學生教起來容易。我非常害怕我教給別人的仍然是錯的，所以我仔細研究了C99之後才敢動筆寫書。這本書涵蓋的話題比較廣泛，我竭盡全力也不足以保證書中的內容全部正確，還要依靠社區的力量一起來完善這本書，這樣才能真正對讀者負責，所以我選擇將這本書開源。</p>
+<p>希望本書成為你求學道路上的第一個夥伴。</p>
+<p>宋勁杉 北京 2012年7月10日</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">前言</a><ul>
+<li><a class="reference internal" href="#id2">本書有什麼特點</a></li>
+<li><a class="reference internal" href="#id3">本書面向什麼樣的讀者</a></li>
+<li><a class="reference internal" href="#k-r">為什麼要學這本書而不是K&amp;R？</a></li>
+<li><a class="reference internal" href="#id4">本書“是什麼”和“不是什麼”</a></li>
+<li><a class="reference internal" href="#linuxc-windowsc">為什麼要在Linux平台上學C語言？用Windows學C語言不好嗎？</a></li>
+<li><a class="reference internal" href="#id7">體例說明</a></li>
+<li><a class="reference internal" href="#id8">致謝</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="history.html"
+                        title="previous chapter">歷史</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="intro.html"
+                        title="next chapter">1. 程序的基本概念</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/zh/preface.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><table border=0 cellspacing=0 style="color: white;">
+
+<tr><td>
+   請輸入您的email訂閲<a href="http://groups.google.com/group/learning-linux-c-cpp">本書的郵件列表</a><br/>
+   (Please enter your email to subscribe to <a href="http://groups.google.com/group/learning-linux-c-cpp">this book's mailing list</a>)<br/>
+   <form action="http://groups.google.com/group/learning-linux-c-cpp/boxsubscribe"><input type=text name=email><input type=submit name="sub" value="訂閲(Subscribe)"></form>
+</td></tr>
+
+<tr><td><br/>關注<a href="http://weibo.com/sansoong">我的微博</a></td></tr>
+
+<tr><td><br/>Checkout the source from github: <a href="https://github.com/learning-linux-c-cpp/akabook">https://github.com/learning-linux-c-cpp/akabook</a></td></tr>
+
+<tr><td>
+   <br/>感謝您的慷慨捐贈！<br/>
+   Thanks for your generous donation!<br/>
+   <a href="http://me.alipay.com/songjinshan" target="_blank"><img src="_static/me.alipay.png" alt="捐贈"></a>
+</td></tr>
+
+</table>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="intro.html" title="1. 程序的基本概念"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="history.html" title="歷史"
+             >previous</a> |</li>
+        <li><a href="../index.html">akabook 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >中文版：Linux C/C++編程一站式學習</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Sean Soong.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

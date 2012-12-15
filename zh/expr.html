@@ -1,0 +1,515 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2. 常量、變數和表達式 &mdash; akabook 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="akabook 3.0 documentation" href="../index.html" />
+    <link rel="up" title="中文版：Linux C/C++編程一站式學習" href="index.html" />
+    <link rel="next" title="3. 函數入門" href="func.html" />
+    <link rel="prev" title="1. 程序的基本概念" href="intro.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="func.html" title="3. 函數入門"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="1. 程序的基本概念"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">akabook 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">中文版：Linux C/C++編程一站式學習</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>2. 常量、變數和表達式<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="hello-world">
+<span id="expr-helloworld"></span><h2>2.1. 繼續Hello World<a class="headerlink" href="#hello-world" title="Permalink to this headline">¶</a></h2>
+<p>在 <a class="reference internal" href="intro.html#intro-firstprogram"><em>第一個程序</em></a> 中，讀者應該已經嘗試對Hello world程序做各種改動看編譯運行結果，其中有些改動會導致編譯出錯，有些改動會影響程序的輸出，有些改動則沒有任何影響。本節我們仍以Hello world程序為例介紹一些基本的語法規則。</p>
+<p>首先，註釋可以跨行，也可以穿插在程序之中，看下面的例子。</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+
+<span class="cm">/*</span>
+<span class="cm"> * comment1</span>
+<span class="cm"> * main: generate some simple output</span>
+<span class="cm"> */</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="cm">/* comment2 */</span><span class="s">&quot;Hello, world.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span> <span class="cm">/* comment3 */</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p id="index-0">第一個註釋跨了四行，頭尾兩行是註釋的界定符（Delimiter） <tt class="docutils literal"><span class="pre">/*</span></tt> 和 <tt class="docutils literal"><span class="pre">*/</span></tt> ，中間兩行開頭的*號（Asterisk）並沒有特殊含義，只是為了看起來整齊，這不是語法規則而是大家都遵守的C編碼風格（Coding Style）之一，編碼風格將在 <a class="reference internal" href="codingstyle.html"><em>編碼風格</em></a> 詳細介紹。</p>
+<p>使用註釋需要注意兩點：</p>
+<ol class="arabic simple" id="index-1">
+<li>註釋不能嵌套（Nest）使用，就是說一個註釋的文字中不能再出現 <tt class="docutils literal"><span class="pre">/*</span></tt> 和 <tt class="docutils literal"><span class="pre">*/</span></tt> 了，例如 <tt class="docutils literal"><span class="pre">/*</span> <span class="pre">text1</span> <span class="pre">/*</span> <span class="pre">text2</span> <span class="pre">*/</span> <span class="pre">text3</span> <span class="pre">*/</span></tt> 是錯誤的，編譯器只把 <tt class="docutils literal"><span class="pre">/*</span> <span class="pre">text1</span> <span class="pre">/*</span> <span class="pre">text2</span> <span class="pre">*/</span></tt> 看成註釋，後面的 <tt class="docutils literal"><span class="pre">text3</span> <span class="pre">*/</span></tt> 無法解析，因而會報錯。</li>
+<li>有的C代碼中有類似 <tt class="docutils literal"><span class="pre">//</span> <span class="pre">comment</span></tt> 的註釋，兩個/斜線（Slash）表示從這裡直到該行末尾的所有字元都屬於註釋，這種註釋不能跨行，也不能穿插在一行代碼中間。這是從C++借鑒的語法，在C99中被標準化。</li>
+</ol>
+<div class="admonition note" id="index-2">
+<p class="first admonition-title">Note</p>
+<p>C語言標準</p>
+<p>C語言的發展歷史大致上分為三個階段：Old Style C、C89和C99。Ken Thompson和Dennis Ritchie最初發明C語言時有很多語法和現在最常用的寫法並不一樣，但為了向後兼容性（Backward Compatibility），這些語法仍然在C89和C99中保留下來了，本書不詳細講Old Style C，但在必要的地方會加以說明。C89是最早的C語言規範，于1989年提出，1990年首先由ANSI（美國國家標準委員會，American National Standards Institute）推出，後來被採納為ISO國際標準（ISO/IEC 9899:1990），因而有時也稱為C90，最經典的C語言教材 [K&amp;R]_ 就是基于這個版本的，C89是目前最廣泛採用的C語言標準，大多數編譯器都完全支持C89。C99標準（ISO/IEC 9899:1999）是在1999年推出的，加入了許多新特性，但目前仍沒有得到廣泛支持，在C99推出之後相當長的一段時間裡，連 <strong class="command">gcc</strong> 也沒有完全實現C99的所有特性。C99標準詳見 <a class="reference internal" href="bibli.html#c99">[C99]</a> 。本書講C的語法以C99為準，但示例代碼通常只使用C89語法，很少使用C99的新特性。</p>
+<p class="last">C標準的目的是為了精確定義C語言，而不是為了教別人怎麼編程，C標準在表達上追求準確和無歧義，卻十分不容易看懂， <a class="reference internal" href="bibli.html#standardc">[StandardC]</a> 和 <a class="reference internal" href="bibli.html#standardclibrary">[StandardCLibrary]</a> 是對C89及其修訂版本的闡釋（可惜作者沒有隨C99更新這兩本書），比C標準更容易看懂，另外，參考 <a class="reference internal" href="bibli.html#c99rationale">[C99Rationale]</a> 也有助于加深對C標準的理解。</p>
+</div>
+<p id="index-3">像 <tt class="docutils literal"><span class="pre">&quot;Hello,</span> <span class="pre">world.\n&quot;</span></tt> 這種由雙引號引起來的一串字元稱為字元串字面值（String Literal），或者簡稱字元串。注意，程序的運行結果並沒有雙引號， <tt class="docutils literal"><span class="pre">printf</span></tt> 打印出來的只是裡面的一串字元 <tt class="docutils literal"><span class="pre">Hello,</span> <span class="pre">world.</span></tt> ，因此雙引號是字元串字面值的界定符，夾在雙引號中間的一串字元才是它的內容。注意，打印出來的結果也沒有 <tt class="docutils literal"><span class="pre">\n</span></tt> 這兩個字元，這是為什麼呢？在 <a class="reference internal" href="intro.html#intro-naturalformallang"><em>自然語言和形式語言</em></a> 中提到過，C語言規定了一些轉義序列（Escape Sequence），這裡的 <tt class="docutils literal"><span class="pre">\n</span></tt> 並不表示它的字面意思，也就是說並不表示\和n這兩個字元本身，而是合起來表示一個換行符。例如我們寫三條打印語句：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello, world.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;Goodbye, &quot;</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;cruel world!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
+<p>運行的結果是第一條語句單獨打印到第一行，後兩條語句則依次打印到第二行。為了節省篇幅突出重點，以後的例子通常省略 <tt class="docutils literal"><span class="pre">#include</span></tt> 和 <tt class="docutils literal"><span class="pre">int</span> <span class="pre">main(void)</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></tt> 這些Boilerplate，但讀者在練習時需要加上這些構成一個完整的程序才能編譯通過。</p>
+<p>C標準規定的轉義字元有以下幾種：</p>
+<table border="1" class="docutils" id="expr-escapesequence">
+<span id="index-4"></span><caption>C標準規定的轉義字元</caption>
+<colgroup>
+<col width="7%" />
+<col width="93%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>\&#8217;</td>
+<td>&#8216;引號（Single Quote或Apostrophe）</td>
+</tr>
+<tr class="row-even"><td>\&#8221;</td>
+<td>&#8220;引號（Double Quote）</td>
+</tr>
+<tr class="row-odd"><td>\?</td>
+<td>?號（Question Mark）</td>
+</tr>
+<tr class="row-even"><td>\</td>
+<td>反斜線（Backslash）</td>
+</tr>
+<tr class="row-odd"><td>\a</td>
+<td>響鈴（Alert或Bell）</td>
+</tr>
+<tr class="row-even"><td>\b</td>
+<td>退格（Backspace）</td>
+</tr>
+<tr class="row-odd"><td>\f</td>
+<td>分頁符（Form Feed）</td>
+</tr>
+<tr class="row-even"><td>\n</td>
+<td>換行符（Line Feed）</td>
+</tr>
+<tr class="row-odd"><td>\r</td>
+<td>回車（Carriage Return）</td>
+</tr>
+<tr class="row-even"><td>\t</td>
+<td>水平製表符（Horizontal Tab）</td>
+</tr>
+<tr class="row-odd"><td>\v</td>
+<td>垂直製表符（Vertical Tab）</td>
+</tr>
+</tbody>
+</table>
+<p>如果在字元串字面值中要表示單引號和問號，既可以使用轉義序列 <tt class="docutils literal"><span class="pre">\'</span></tt> 和 <tt class="docutils literal"><span class="pre">\?</span></tt> ，也可以直接用字元&#8217;和?，而要表示\或&#8221;則必須使用轉義序列，因為\字元表示轉義而不表示它的字面含義，&#8221;表示字元串的界定符而不表示它的字面含義。可見轉義序列有兩個作用：一是把普通字元轉義成特殊字元，例如把字母n轉義成換行符；二是把特殊字元轉義成普通字元，例如\和&#8221;是特殊字元，轉義後取它的字面值。</p>
+<p id="index-5">C語言規定了幾個控制字元，不能用鍵盤直接輸入，因此採用\加字母的轉義序列表示。 <tt class="docutils literal"><span class="pre">\a</span></tt> 是響鈴字元，在字元終端下顯示這個字元的效果是PC喇叭發出嘀的一聲，在圖形界面終端下的輸出效果取決於終端的配置。在終端下顯示 <tt class="docutils literal"><span class="pre">\b</span></tt> 和按下退格鍵的效果相同。 <tt class="docutils literal"><span class="pre">\f</span></tt> 是分頁符，主要用於控制打印機在打印原始碼時提前分頁，這樣可以避免一個函數跨兩頁打印。 <tt class="docutils literal"><span class="pre">\n</span></tt> 和 <tt class="docutils literal"><span class="pre">\r</span></tt> 分別表示Line Feed和Carriage Return，這兩個詞來自老式的英文打字機，Line Feed是跳到下一行（進紙，喂紙，有個喂的動作所以是feed），Carriage Return是回到本行開頭（Carriage是卷着紙的軸，隨着打字慢慢左移，打完一行就一下子移回最右邊，如果你看過歐美的老電影應該能想起來這是什麼）。用老式打字機打完一行之後需要這麼兩個動作， <tt class="docutils literal"><span class="pre">\r\n</span></tt> ，所以現在Windows平台的文本檔案用 <tt class="docutils literal"><span class="pre">\r\n</span></tt> 做換行符，許多應用層網絡協議（如HTTP）也用 <tt class="docutils literal"><span class="pre">\r\n</span></tt> 做換行符，而Linux和各種UNIX平台的文本檔案只用 <tt class="docutils literal"><span class="pre">\n</span></tt> 做換行符。在終端下顯示 <tt class="docutils literal"><span class="pre">\t</span></tt> 和按下Tab鍵的效果相同，用於在終端下定位到表格的下一列， <tt class="docutils literal"><span class="pre">\v</span></tt> 用於在終端下定位到表格的下一行。 <tt class="docutils literal"><span class="pre">\v</span></tt> 比較少用， <tt class="docutils literal"><span class="pre">\t</span></tt> 比較常用，以後將“水平製表符”簡稱為“製表符”或Tab。請讀者用 <tt class="docutils literal"><span class="pre">printf</span></tt> 語句試試這幾個控制字元的作用。</p>
+<p>注意 <tt class="docutils literal"><span class="pre">&quot;Goodbye,</span> <span class="pre">&quot;</span></tt> 末尾的空格，字元串字面值中的空格也算一個字元，也會出現在輸出結果中，而程序中別處的空格和Tab多一個少一個往往是無關緊要的，不會對編譯結果產生任何影響，例如不縮進不會影響程序的結果， <tt class="docutils literal"><span class="pre">main</span></tt> 後面多幾個空格也沒影響，但是 <tt class="docutils literal"><span class="pre">int</span></tt> 和 <tt class="docutils literal"><span class="pre">main</span></tt> 之間至少要有一個空格分隔開：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="nf">main</span>    <span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello, world.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>不僅空格和Tab是無關緊要的，換行也是如此，我甚至可以把整個程序寫成一行（但 <tt class="docutils literal"><span class="pre">include</span></tt> 必須單獨占一行）：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include&lt;stdio.h&gt;</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello, world.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="k">return</span> <span class="mi">0</span><span class="p">;}</span>
+</pre></div>
+</td></tr></table></div>
+<p>這樣也行，但肯定不是好的代碼風格，去掉縮進已經很影響可讀性了，寫成現在這個樣子可讀性更差。 <strong>好的代碼風格要求縮進整齊，每個語句一行，適當留空行。</strong></p>
+</div>
+<div class="section" id="id6">
+<h2>2.2. 常量<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<p id="index-6">常量（Constant）是程序中最基本的元素，有字元常量（Character Constant）、整數（Integer）常量、浮點數（Floating Point）常量和枚舉常量。枚舉常量將在 <a class="reference internal" href="struct.html#struct-typetag"><em>數據類型標誌</em></a> 介紹。下面看一個例子：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="n">printf</span><span class="p">(</span><span class="s">&quot;character: %c</span><span class="se">\n</span><span class="s">integer: %d</span><span class="se">\n</span><span class="s">floating point: %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="sc">&#39;}&#39;</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mf">3.14</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
+<p>字元常量要用單引號括起來，例如上面的 <tt class="docutils literal"><span class="pre">'}'</span></tt> ，注意單引號只能括一個字元而不能像雙引號那樣括一串字元，字元常量也可以是一個轉義序列，例如 <tt class="docutils literal"><span class="pre">'\n'</span></tt> ，這時雖然單引號括了兩個字元，但實際上只表示一個字元。和字元串字面值中使用轉義序列有一點區別，如果在字元常量中要表示雙引號&#8221;和問號?，既可以使用轉義序列 <tt class="docutils literal"><span class="pre">\&quot;</span></tt> 和 <tt class="docutils literal"><span class="pre">\?</span></tt> ，也可以直接用字元&#8221;和?，而要表示&#8217;和\則必須使用轉義序列。[#]_</p>
+<span class="target" id="index-7"></span><table class="docutils footnote" frame="void" id="id7" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id10">[1]</a></td><td>讀者可能會奇怪，為什麼需要規定一個轉義序列 <tt class="docutils literal"><span class="pre">\?</span></tt> 呢？因為C語言規定了一些三連符（Trigraph），在某些特殊的終端上缺少某些字元，需要用Trigraph輸入，例如用 <tt class="docutils literal"><span class="pre">??=</span></tt> 表示#字元。Trigraph極不常用，極不常用的C語法在本書中通常不會介紹，介紹這個只是為了讓讀者理解轉義序列的作用，即特殊字元轉普通字元，普通字元轉特殊字元。?號也是一種特殊字元，要表示其字面意思也需要用轉義序列，但如果?號單獨出現，不會被誤認為是三連符，因而也可以不用轉義序列。</td></tr>
+</tbody>
+</table>
+<p id="index-8">在計算機中整數和小數的內部表示方式不同（將在 <a class="reference internal" href="number.html"><em>計算機中數的表示</em></a> 詳細介紹），因而在C語言中是兩種不同的類型（Type），通常小數在計算機中的表示方式稱為浮點數，詳見 <a class="reference internal" href="number.html#number-float"><em>浮點數</em></a> 。上例的34和3.14分別是整數常量和浮點數常量。</p>
+<p>上例的 <tt class="docutils literal"><span class="pre">printf</span></tt> 語句輸出結果和 <tt class="docutils literal"><span class="pre">Hello</span> <span class="pre">world</span></tt> 那個例子不太一樣，字元串 <tt class="docutils literal"><span class="pre">&quot;character:</span> <span class="pre">%c\ninteger:</span> <span class="pre">%d\nfloating</span> <span class="pre">point:</span> <span class="pre">%f\n&quot;</span></tt> 並不是按原樣打印輸出的，而是輸出成這樣:</p>
+<div class="highlight-python"><pre>character: }
+integer: 34
+floating point: 3.140000</pre>
+</div>
+<p id="index-9"><tt class="docutils literal"><span class="pre">printf</span></tt> 中的第一個字元串稱為格式化字元串（Format String），它規定了後面幾個常量以何種格式插入到這個字元串中，在格式化字元串中%號（Percent Sign）後面加上字母c、d、f分別表示字元型、整型和浮點型的轉換說明（Conversion Specification），轉換說明只在格式化字元串中占個位置，並不出現在最終的打印結果中，這種用法通常叫做占位符（Placeholder）。這也是一種字面意思與真實意思不同的情況，但是轉換說明和轉義序列又有區別， <strong>轉義序列是編譯時處理的，而轉換說明是在運行時由printf函數處理的</strong> ：</p>
+<ol class="arabic simple">
+<li>源檔案中的字元串字面值是 <tt class="docutils literal"><span class="pre">&quot;character:</span> <span class="pre">%c\ninteger:</span> <span class="pre">%d\nfloating</span> <span class="pre">point:</span> <span class="pre">%f\n&quot;</span></tt> ， <tt class="docutils literal"><span class="pre">\n</span></tt> 占兩個字元。</li>
+<li>編譯之後保存在執行檔中的字元串是 <tt class="docutils literal"><span class="pre">character：</span> <span class="pre">%c換行integer:</span> <span class="pre">%d換行floating</span> <span class="pre">point:</span> <span class="pre">%f換行</span></tt> ， <tt class="docutils literal"><span class="pre">\n</span></tt> 已經被替換成一個換行符，而 <tt class="docutils literal"><span class="pre">%c</span></tt> 這兩個字元不變。</li>
+<li>在運行時這個字元串被傳給 <tt class="docutils literal"><span class="pre">printf</span></tt> ， <tt class="docutils literal"><span class="pre">printf</span></tt> 再把其中的 <tt class="docutils literal"><span class="pre">%c</span></tt> 、 <tt class="docutils literal"><span class="pre">%d</span></tt> 、 <tt class="docutils literal"><span class="pre">%f</span></tt> 解釋成轉換說明。</li>
+</ol>
+<p>有時候不同類型的數據很容易弄混，例如 <tt class="docutils literal"><span class="pre">&quot;5&quot;</span></tt> 、 <tt class="docutils literal"><span class="pre">'5'</span></tt> 、 <tt class="docutils literal"><span class="pre">5</span></tt> ，如果你注意了它們的界定符就會很清楚，第一個是字元串字面值，第二個是字元，第三個是整數，看了本章後面幾節你就知道為什麼一定要嚴格區分它們之間的差別了。</p>
+<p class="rubric">習題</p>
+<ol class="arabic simple">
+<li>我們知道，用\斜線表示轉義序列和在 <tt class="docutils literal"><span class="pre">printf</span></tt> 格式化字元串中用%號表示占位符是兩種不同的機制，前者在編譯時處理，後者在運行時處理。但兩者在語法上具有類似的規律，想想在 <tt class="docutils literal"><span class="pre">printf</span></tt> 的格式化字元串中怎麼表示一個%字元？寫個小程序試驗一下。</li>
+</ol>
+</div>
+<div class="section" id="expr-variable">
+<span id="id8"></span><h2>2.3. 變數<a class="headerlink" href="#expr-variable" title="Permalink to this headline">¶</a></h2>
+<p id="index-10">變數（Variable）是編程語言最重要的概念之一，在程序中變數是一個名字，而這個名字代表的是計算機存儲器中的一塊空間，可以在裡面保存一個值（Value），保存的值是可以隨時變的，比如這次存個字元 <tt class="docutils literal"><span class="pre">'a'</span></tt> ，變數的值就是 <tt class="docutils literal"><span class="pre">'a'</span></tt> ，下次存個字元 <tt class="docutils literal"><span class="pre">'b'</span></tt> ，變數的值就變成 <tt class="docutils literal"><span class="pre">'b'</span></tt> ，正因為變數的值可以隨時變所以才叫變數。</p>
+<p id="index-11">常量有不同的類型，變數也有不同的類型，變數的類型決定了它所占的存儲空間的大小。在C語言中用聲明（Declaration）來規定變數的名字和類型，例如下面有四條聲明，規定了四個變數 <tt class="docutils literal"><span class="pre">fred</span></tt> 、 <tt class="docutils literal"><span class="pre">bob</span></tt> 、 <tt class="docutils literal"><span class="pre">jimmy</span></tt> 和 <tt class="docutils literal"><span class="pre">tom</span></tt> 的類型分別是字元型、整型、單精度浮點型、雙精度浮點型：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">char</span> <span class="n">fred</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">bob</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">jimmy</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">tom</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<div class="admonition note" id="expr-declaration">
+<span id="index-12"></span><p class="first admonition-title">Note</p>
+<p>聲明和定義</p>
+<p>C語言中的聲明有變數聲明、函數聲明和類型聲明三種。本節只講變數聲明，下一章會講到函數聲明，從 <a class="reference internal" href="struct.html"><em>結構體</em></a> 開始我們會看到類型聲明。</p>
+<p>從另一個角度來看，聲明分為“是定義（Definition）的聲明”和“不是定義的聲明”，那麼什麼樣的聲明同時也是定義呢？簡單地說， <strong>分配存儲空間的聲明同時也是定義，不分配存儲空間的聲明不是定義</strong> 。具體來說：</p>
+<ul class="simple">
+<li>如果一個變數聲明要求程序在運行時為該變數分配存儲空間，那麼這個聲明同時也是變數的定義。本章和接下來幾章的示例代碼中的變數聲明都是要分配存儲空間的，因而都是定義；等學到 <a class="reference internal" href="link.html#link-declaration"><em>聲明和定義</em></a> 我們會看到有些變數聲明不分配存儲空間，因而不是定義。</li>
+<li>如果一個函數聲明帶有函數體，要求編譯器為它生成指令（當然在運行時也需要分配存儲空間來存放這些指令），那麼這個聲明同時也是函數的定義。在下一章我們會看到帶函數體的聲明和不帶函數體的聲明，不帶函數體的聲明不是函數定義。</li>
+<li>類型聲明總是不分配存儲空間的，所以嚴格來說只有類型聲明而沒有類型定義，但通常我們習慣說“定義了某種類型”，所以在本書中“類型定義”和“類型聲明”表示相同的含義，不加區分。</li>
+</ul>
+<p class="last">變數聲明也是以;號結尾的，這一點和語句類似，但是在語法上變數聲明和語句是有區別的，語句只能出現在函數體中，而變數聲明既可以出現在函數體中也可以出現在所有函數之外。</p>
+</div>
+<p>浮點型有三種， <tt class="docutils literal"><span class="pre">float</span></tt> 是單精度浮點型， <tt class="docutils literal"><span class="pre">double</span></tt> 是雙精度浮點型， <tt class="docutils literal"><span class="pre">long</span> <span class="pre">double</span></tt> 是精度更高的浮點型。它們之間的區別和轉換規則將在 <a class="reference internal" href="type.html"><em>數據類型詳解</em></a> 詳細介紹，在隨後的幾章中我們只使用 <tt class="docutils literal"><span class="pre">double</span></tt> 類型，上一節介紹的常量3.14是 <tt class="docutils literal"><span class="pre">double</span></tt> 類型的常量， <tt class="docutils literal"><span class="pre">printf</span></tt> 的 <tt class="docutils literal"><span class="pre">%f</span></tt> 也是 <tt class="docutils literal"><span class="pre">double</span></tt> 型的轉換說明（注意 <tt class="docutils literal"><span class="pre">%f</span></tt> 不是 <tt class="docutils literal"><span class="pre">float</span></tt> 型的轉換說明）。給變數起名不能太隨意，上面四個變數的名字就不夠好，我們猜不出這些變數是用來存什麼的，像下面這樣起名就比較有意義：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">char</span> <span class="n">firstletter</span><span class="p">;</span>
+<span class="kt">char</span> <span class="n">lastletter</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">hour</span><span class="p">,</span> <span class="n">minute</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p>在這個例子中我們還看到兩個相同類型的變數（同樣是 <tt class="docutils literal"><span class="pre">int</span></tt> 類型的 <tt class="docutils literal"><span class="pre">hour</span></tt> 和 <tt class="docutils literal"><span class="pre">minute</span></tt> ）可以一起聲明。</p>
+<p id="index-13">給變數起名有一定的限制，C語言規定必須以字母或下劃線（Underscore）開頭，後面可以跟若干個字母、數字、下劃線，但不能有其他字元。例如這些是合法的變數名： <tt class="docutils literal"><span class="pre">Abc</span></tt> 、 <tt class="docutils literal"><span class="pre">__abc__</span></tt> 、 <tt class="docutils literal"><span class="pre">_123</span></tt> 。但這些是不合法的變數名： <tt class="docutils literal"><span class="pre">3abc</span></tt> 、 <tt class="docutils literal"><span class="pre">ab$</span></tt> 。其實這條規則不僅適用於變數名，也適用於所有可以由程序員起名的語法元素，例如以後要講的函數名、宏定義、結構體成員名等，在C語言中這些統稱為標識符（Identifier）。</p>
+<p id="index-14">另外要注意，表示類型的 <tt class="docutils literal"><span class="pre">char</span></tt> 、 <tt class="docutils literal"><span class="pre">int</span></tt> 、 <tt class="docutils literal"><span class="pre">float</span></tt> 、 <tt class="docutils literal"><span class="pre">double</span></tt> 等雖然符合上述規則，但也不能用作標識符。在C語言中有些單詞有特殊意義，不允許用作標識符，這些單詞稱為關鍵字（Keyword）或保留字（Reserved Word）。通常用於編程的文本編輯器都會高亮顯示（Highlight）這些關鍵字，所以只要小心一點通常不會誤用作標識符。C99規定的關鍵字有:</p>
+<div class="highlight-python"><pre>auto  break  case  char  const  continue  default  do  double
+else  enum  extern  float  for  goto  if  inline  int  long
+register  restrict  return  short  signed  sizeof  static  struct  switch  typedef
+union  unsigned  void  volatile  while  _Bool  _Complex  _Imaginary</pre>
+</div>
+<p>還有一點要注意， <strong>一般來說應避免使用以下劃線開頭的標識符</strong> ，以下劃線開頭的標識符只要不和C語言關鍵字衝突的都是合法的，但是往往被編譯器用作一些功能擴展（比如 <a class="reference internal" href="asmc.html#asmc-structunion"><em>結構體和聯合體</em></a> 講到 <strong class="command">gcc</strong> 的 <tt class="docutils literal"><span class="pre">__attribute__</span></tt> 語法），C標準庫也定義了很多以下劃線開頭的標識符留作內部使用，所以除非你對編譯器的特性和C標準庫的實現特別清楚，一般應避免使用這種標識符，以免造成命名衝突。</p>
+<p id="index-15">請記住： <strong>理解一個概念不是把定義背下來就行了，一定要理解它的外延和內涵，也就是什麼情況屬於這個概念，什麼情況不屬於這個概念，什麼情況雖然屬於這個概念但一般推薦的做法（Best Practice）是要儘量避免這種情況，這才算是真正理解了。</strong></p>
+</div>
+<div class="section" id="id9">
+<h2>2.4. 賦值<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<p id="index-16">定義了變數之後，我們要把值存到變數所表示的存儲空間裡，可以用賦值（Assignment）語句實現。比如下面的例子首先定義三個變數，再分別給它們賦值：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">char</span> <span class="n">firstletter</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">hour</span><span class="p">,</span> <span class="n">minute</span><span class="p">;</span>
+<span class="n">firstletter</span> <span class="o">=</span> <span class="sc">&#39;a&#39;</span><span class="p">;</span>   <span class="cm">/* give firstletter the value &#39;a&#39; */</span>
+<span class="n">hour</span> <span class="o">=</span> <span class="mi">11</span><span class="p">;</span>           <span class="cm">/* assign the value 11 to hour */</span>
+<span class="n">minute</span> <span class="o">=</span> <span class="mi">59</span><span class="p">;</span>         <span class="cm">/* set minute to 59 */</span>
+</pre></div>
+</td></tr></table></div>
+<p>注意：</p>
+<ol class="arabic simple" id="index-17">
+<li>變數一定要先聲明後使用，編譯器必須先看到變數聲明，才知道 <tt class="docutils literal"><span class="pre">firstletter</span></tt> 、 <tt class="docutils literal"><span class="pre">hour</span></tt> 和 <tt class="docutils literal"><span class="pre">minute</span></tt> 是變數名，各自代表一塊存儲空間。</li>
+<li>變數聲明中的類型表明這個變數代表多大的一塊存儲空間，以及在這塊存儲空間裡按什麼格式存放數據，編譯器看到變數的類型才知道生成什麼樣的指令來讀寫變數的存儲空間。存儲空間的單位是位元組（Byte），在C語言中 <tt class="docutils literal"><span class="pre">char</span></tt> 型變數占一個位元組，其他類型的變數占多少個位元組在不同平台上有不同的規定，將在 <a class="reference internal" href="type.html"><em>數據類型詳解</em></a> 詳細討論。</li>
+<li>賦值語句的作用是把等號右邊的值賦給等號左邊的變數。這裡的等號不表示數學裡的相等關係，和1+1=2的等號是不同的。在數學上不會有i=i+1這種等式成立，而在C語言中這樣的賦值操作表示把變數i的存儲空間中的值取出來，再加上1，得到的結果再存回i的存儲空間中。再比如，在數學上a=7和7=a是一樣的，而在C語言中後者是不合法的，因為7是常量，不代表存儲空間也不能被賦值，因此不能出現在等號左邊。</li>
+</ol>
+<p id="index-18">變數的定義和賦值也可以一步完成，這稱為變數的初始化（Initialization），例如要達到上面代碼的效果也可以這樣寫：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">char</span> <span class="n">firstletter</span> <span class="o">=</span> <span class="sc">&#39;a&#39;</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">hour</span> <span class="o">=</span> <span class="mi">11</span><span class="p">,</span> <span class="n">minute</span> <span class="o">=</span> <span class="mi">59</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p id="index-19">其中等號右邊的值叫做Initializer，例如上面的 <tt class="docutils literal"><span class="pre">'a'</span></tt> 、 <tt class="docutils literal"><span class="pre">11</span></tt> 和 <tt class="docutils literal"><span class="pre">59</span></tt> 。注意， <strong>初始化是一種特殊的聲明，而不是一種賦值語句</strong> 。就目前來看，先定義一個變數再給它賦值和定義這個變數的同時給它初始化所達到的效果是一樣的，C語言的很多語法規則既適用於賦值也適用於初始化，但在以後的學習中你也會瞭解到它們之間的不同，請在學習過程中注意總結賦值和初始化的相同和不同之處。</p>
+<p>如果在紙上“跑”一個程序 <a class="footnote-reference" href="#id7" id="id10">[1]</a> ，可以用一個框表示變數的存儲空間，在框的外邊標上變數名，在框裡記上它的值，如下圖所示。</p>
+<table class="docutils footnote" frame="void" id="id11" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id15">[2]</a></td><td>在紙上跑程序是每個初學編程的人都要練的一項基本功，你應該能自己算出程序的運行結果，從而對它的結果有一個預期，如果你自己都不知道這個程序該出什麼結果，那交給計算機跑出來的結果是對是錯你如何判斷？</td></tr>
+</tbody>
+</table>
+<div class="figure">
+<img alt="../_images/expr.variable.png" src="../_images/expr.variable.png" />
+<p class="caption">在紙上表示變數</p>
+</div>
+<p>你可以用不同形狀的框表示不同類型的變數，這樣可以提醒你給變數賦的值必須符合它的類型。如果所賦的值和變數的類型不符會導致編譯器報警告或報錯（這是一種語義錯誤），例如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="n">hour</span><span class="p">,</span> <span class="n">minute</span><span class="p">;</span>
+<span class="n">hour</span> <span class="o">=</span> <span class="s">&quot;Hello.&quot;</span><span class="p">;</span>       <span class="cm">/* WRONG ! */</span>
+<span class="n">minute</span> <span class="o">=</span> <span class="s">&quot;59&quot;</span><span class="p">;</span>         <span class="cm">/* WRONG !! */</span>
+</pre></div>
+</td></tr></table></div>
+<p>注意最後一個語句，把 <tt class="docutils literal"><span class="pre">&quot;59&quot;</span></tt> 賦給 <tt class="docutils literal"><span class="pre">minute</span></tt> 看起來像是對的，但是類型不對，字元串字面值不能賦給整型變數。</p>
+<p>既然可以為變數的存儲空間賦值，就應該可以把值取出來用，現在我們取出這些變數的值用 <tt class="docutils literal"><span class="pre">`printf`</span></tt> 打印：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Current time is %d:%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">hour</span><span class="p">,</span> <span class="n">minute</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
+<p>變數名用在等號左邊表示賦值，而用在 <tt class="docutils literal"><span class="pre">printf</span></tt> 中表示把它的存儲空間中的值取出來替換在那裡，就相當於 <tt class="docutils literal"><span class="pre">printf(&quot;Current</span> <span class="pre">time</span> <span class="pre">is</span> <span class="pre">%d:%d\n&quot;,</span> <span class="pre">11,</span> <span class="pre">59);</span></tt> 。</p>
+</div>
+<div class="section" id="expr-expression">
+<span id="id12"></span><h2>2.5. 表達式<a class="headerlink" href="#expr-expression" title="Permalink to this headline">¶</a></h2>
+<p id="index-20">常量和變數都可以參與加減乘除運算，例如 <tt class="docutils literal"><span class="pre">1+1</span></tt> 、 <tt class="docutils literal"><span class="pre">hour-1</span></tt> 、 <tt class="docutils literal"><span class="pre">hour</span> <span class="pre">*</span> <span class="pre">60</span> <span class="pre">+</span> <span class="pre">minute</span></tt> 、 <tt class="docutils literal"><span class="pre">minute/60</span></tt> 等。這裡的+ - * /稱為運算符（Operator），而參與運算的常量和變數稱為操作數（Operand），由運算符和操作數組成的算式稱為表達式（Expression）。</p>
+<p id="index-21">和數學上規定的一樣， <tt class="docutils literal"><span class="pre">hour</span> <span class="pre">*</span> <span class="pre">60</span> <span class="pre">+</span> <span class="pre">minute</span></tt> 這個表達式應該先算乘再算加，也就是說運算符是有優先順序（Precedence）的，*和/是同一優先順序，+和-是同一優先順序，*和/的優先順序高於+和-，同一優先順序的運算從左到右依次計算，如果不希望按預設的優先順序計算則要加()括號（Parenthesis）。例如(3+4)*5/6應先算3+4，再算*5，再算/6。</p>
+<p>前面講過打印語句和賦值語句，現在我們定義：在任意表達式後面加個;號就構成一種語句，稱為表達式語句。例如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="n">hour</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">minute</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p>這是個合法的語句，但這個語句在程序中起不到任何作用，把 <tt class="docutils literal"><span class="pre">hour</span></tt> 的值和 <tt class="docutils literal"><span class="pre">minute</span></tt> 的值取出來相加和相乘，得到的計算結果卻沒有保存，白算了一通。再比如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="n">total_minute</span><span class="p">;</span>
+<span class="n">total_minute</span> <span class="o">=</span> <span class="n">hour</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">minute</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p>這個語句就很有意義，把計算結果保存在另一個變數 <tt class="docutils literal"><span class="pre">total_minute</span></tt> 裡。事實上等號也是一種運算符，稱為賦值運算符，賦值語句也是一種表達式語句，等號的優先順序比+和*都低，所以先算出等號右邊的結果然後才做賦值操作，整個表達式 <tt class="docutils literal"><span class="pre">total_minute</span> <span class="pre">=</span> <span class="pre">hour</span> <span class="pre">*</span> <span class="pre">60</span> <span class="pre">+</span> <span class="pre">minute</span></tt> 後面加個;號構成一個語句。</p>
+<p><strong>任何表達式都有值和類型兩個基本屬性。</strong> <tt class="docutils literal"><span class="pre">hour</span> <span class="pre">*</span> <span class="pre">60</span> <span class="pre">+</span> <span class="pre">minute</span></tt> 的值是由三個 <tt class="docutils literal"><span class="pre">int</span></tt> 型的操作數計算出來的，所以這個表達式的類型也是 <tt class="docutils literal"><span class="pre">int</span></tt> 型。同理，表達式 <tt class="docutils literal"><span class="pre">total_minute</span> <span class="pre">=</span> <span class="pre">hour</span> <span class="pre">*</span> <span class="pre">60</span> <span class="pre">+</span> <span class="pre">minute</span></tt> 的類型也是 <tt class="docutils literal"><span class="pre">int</span></tt> ，它的值是多少呢？C語言規定等號運算符的計算結果就是等號左邊被賦予的那個值，所以這個表達式的值和 <tt class="docutils literal"><span class="pre">hour</span> <span class="pre">*</span> <span class="pre">60</span> <span class="pre">+</span> <span class="pre">minute</span></tt> 的值相同，也和 <tt class="docutils literal"><span class="pre">total_minute</span></tt> 被賦值之後的值相同。</p>
+<p>等號運算符還有一個和+ - * /不同的特性，如果一個表達式中出現多個等號，這些等號是從右到左依次計算的，和+ - * /正相反，例如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="n">total_minute</span><span class="p">,</span> <span class="n">total</span><span class="p">;</span>
+<span class="n">total</span> <span class="o">=</span> <span class="n">total_minute</span> <span class="o">=</span> <span class="n">hour</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">minute</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p>計算順序是：</p>
+<ol class="arabic simple">
+<li>計算 <tt class="docutils literal"><span class="pre">hour</span> <span class="pre">*</span> <span class="pre">60</span> <span class="pre">+</span> <span class="pre">minute</span></tt> 得到一個結果。</li>
+<li>計算右邊的等號，就是把 <tt class="docutils literal"><span class="pre">hour</span> <span class="pre">*</span> <span class="pre">60</span> <span class="pre">+</span> <span class="pre">minute</span></tt> 的結果賦給變數 <tt class="docutils literal"><span class="pre">total_minute</span></tt> ，這個結果同時也是表達式 <tt class="docutils literal"><span class="pre">total_minute</span> <span class="pre">=</span> <span class="pre">hour</span> <span class="pre">*</span> <span class="pre">60</span> <span class="pre">+</span> <span class="pre">minute</span></tt> 的值。</li>
+<li>計算左邊的等號，即把表達式 <tt class="docutils literal"><span class="pre">total_minute</span> <span class="pre">=</span> <span class="pre">hour</span> <span class="pre">*</span> <span class="pre">60</span> <span class="pre">+</span> <span class="pre">minute</span></tt> 的值再賦給變數 <tt class="docutils literal"><span class="pre">total</span></tt> ，這個結果同時也是整個表達式 <tt class="docutils literal"><span class="pre">total</span> <span class="pre">=</span> <span class="pre">total_minute</span> <span class="pre">=</span> <span class="pre">hour</span> <span class="pre">*</span> <span class="pre">60</span> <span class="pre">+</span> <span class="pre">minute</span></tt> 的值。</li>
+</ol>
+<p id="index-22">如果一個操作數的左右兩側各有一個相同優先順序的運算符，這個操作數與左邊的運算符結合還是與右邊的運算符結合取決於運算符的結合性（Associativity），相同優先順序的運算符應該具有相同的結合性，+ -和* /是左結合的，而等號是右結合的。在上面的表達式中，操作數 <tt class="docutils literal"><span class="pre">total_minute</span></tt> 的左右兩邊都有等號，應該和右邊的等號結合，相當於 <tt class="docutils literal"><span class="pre">total</span> <span class="pre">=</span> <span class="pre">(total_minute</span> <span class="pre">=</span> <span class="pre">hour</span> <span class="pre">*</span> <span class="pre">60</span> <span class="pre">+</span> <span class="pre">minute)</span></tt> ，而不是 <tt class="docutils literal"><span class="pre">(total</span> <span class="pre">=</span> <span class="pre">total_minute)</span> <span class="pre">=</span> <span class="pre">hour</span> <span class="pre">*</span> <span class="pre">60</span> <span class="pre">+</span> <span class="pre">minute</span></tt> 。</p>
+<p>現在我們總結一下到目前為止學過的語法規則:</p>
+<div class="highlight-python"><pre>表達式 → 標識符
+表達式 → 常量
+表達式 → 字元串字面值
+表達式 → (表達式)
+表達式 → 表達式 + 表達式
+表達式 → 表達式 - 表達式
+表達式 → 表達式 * 表達式
+表達式 → 表達式 / 表達式
+表達式 → 表達式 = 表達式
+語句 → 表達式;
+語句 → printf(表達式, 表達式, 表達式, ...);
+變數聲明 → 類型 標識符 = Initializer, 標識符 = Initializer, ...; （“= Initializer”的部分是可寫可不寫的）</pre>
+</div>
+<p>注意， <strong>本書所列的語法規則都是簡化過的，是不准確的，目的是為了便于初學者理解</strong> ，比如上面所列的語法規則並沒有描述運算符的優先順序和結合性。完整的C語法規則請參考 <a class="reference internal" href="bibli.html#c99">[C99]</a> 的Annex A。</p>
+<p>表達式可以是單個的常量或變數，也可以是根據以上規則組合而成的更複雜的表達式。以前我們用 <tt class="docutils literal"><span class="pre">printf</span></tt> 打印常量或變數的值，現在可以用 <tt class="docutils literal"><span class="pre">printf</span></tt> 打印更複雜的表達式的值，例如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d:%d is %d minutes after 00:00</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">hour</span><span class="p">,</span> <span class="n">minute</span><span class="p">,</span> <span class="n">hour</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">minute</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
+<p>編譯器在翻譯這條語句時，首先根據上述語法規則把這個語句解析成下圖所示的語法樹，然後再根據語法樹生成相應的指令。</p>
+<div class="figure">
+<img alt="../_images/expr.parse.png" src="../_images/expr.parse.png" />
+<p class="caption">語法樹</p>
+</div>
+<p>語法樹的每一步分解利用一條語法規則，直到分解成Token為止，所以語法樹的末端全部是Token。語法解析的過程十分複雜，我們不深入討論如何分解，而是反過來從組合的角度來理解語法規則。上面的打印語句是這樣組合而成的：</p>
+<ol class="arabic simple">
+<li><tt class="docutils literal"><span class="pre">hour</span></tt> 是標識符，根據規則“表達式 → 標識符”，它也是表達式。</li>
+<li><tt class="docutils literal"><span class="pre">60</span></tt> 是常量，根據規則“表達式 → 常量”，它也是表達式。</li>
+<li>既然 <tt class="docutils literal"><span class="pre">hour</span></tt> 和 <tt class="docutils literal"><span class="pre">60</span></tt> 都是表達式，根據規則“表達式 → 表達式 * 表達式”， <tt class="docutils literal"><span class="pre">hour</span> <span class="pre">*</span> <span class="pre">60</span></tt> 可以組合成表達式。</li>
+<li><tt class="docutils literal"><span class="pre">minute</span></tt> 是標識符，根據規則“表達式 → 標識符”，它也是表達式。</li>
+<li>既然 <tt class="docutils literal"><span class="pre">hour</span> <span class="pre">*</span> <span class="pre">60</span></tt> 和 <tt class="docutils literal"><span class="pre">minute</span></tt> 都是表達式，根據規則“表達式 → 表達式 + 表達式”， <tt class="docutils literal"><span class="pre">hour</span> <span class="pre">*</span> <span class="pre">60</span> <span class="pre">+</span> <span class="pre">minute</span></tt> 可以組合成表達式。</li>
+<li><tt class="docutils literal"><span class="pre">&quot;%d:%d</span> <span class="pre">is</span> <span class="pre">%d</span> <span class="pre">minutes</span> <span class="pre">after</span> <span class="pre">00:00\n&quot;</span></tt> 是字元串字面值，根據規則“表達式 → 字元串字面值”，它也是表達式。</li>
+<li>既然 <tt class="docutils literal"><span class="pre">&quot;%d:%d</span> <span class="pre">is</span> <span class="pre">%d</span> <span class="pre">minutes</span> <span class="pre">after</span> <span class="pre">00:00\n&quot;</span></tt> 是表達式， <tt class="docutils literal"><span class="pre">hour</span></tt> 是表達式， <tt class="docutils literal"><span class="pre">minute</span></tt> 是表達式， <tt class="docutils literal"><span class="pre">hour</span> <span class="pre">*</span> <span class="pre">60</span> <span class="pre">+</span> <span class="pre">minute</span></tt> 是表達式，根據規則“語句 → printf(表達式, 表達式, 表達式, ...);”， <tt class="docutils literal"><span class="pre">printf(&quot;%d:%d</span> <span class="pre">is</span> <span class="pre">%d</span> <span class="pre">minutes</span> <span class="pre">after</span> <span class="pre">00:00\n&quot;,</span> <span class="pre">hour,</span> <span class="pre">minute,</span> <span class="pre">hour</span> <span class="pre">*</span> <span class="pre">60</span> <span class="pre">+</span> <span class="pre">minute);</span></tt> 可以組合成一個語句。</li>
+</ol>
+<p>根據這些語法規則進一步組合可以寫出更複雜的語句，比如在一條語句中完成計算、賦值和打印功能：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d:%d is %d minutes after 00:00</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">hour</span><span class="p">,</span> <span class="n">minute</span><span class="p">,</span> <span class="n">total_minute</span> <span class="o">=</span> <span class="n">hour</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">minute</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
+<p id="index-23">理解組合（Composition）規則是理解語法規則的關鍵所在，正因為可以根據語法規則任意組合，我們才可以用簡單的常量、變數、表達式、語句和聲明搭建出任意複雜的程序，以後我們學習新的語法規則時會進一步體會到這一點。注意表達式不宜過度組合，否則會給閲讀和調試帶來困難，上面的例子最好拆成兩條語句來寫：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span class="n">total_minute</span> <span class="o">=</span> <span class="n">hour</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">minute</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d:%d is %d minutes after 00:00</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">hour</span><span class="p">,</span> <span class="n">minute</span><span class="p">,</span> <span class="n">total_minute</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
+<p>根據語法規則組合出來的表達式在語義上並不總是正確的，例如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="n">minute</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">=</span> <span class="n">hour</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p id="index-24">等號左邊的表達式要求表示一個存儲位置而不是一個值，這是等號運算符和+ - * /運算符的又一個顯著的不同。有的表達式既可以表示一個存儲位置也可以表示一個值，而有的表達式只能表示值，不能表示存儲位置，例如 <tt class="docutils literal"><span class="pre">minute</span> <span class="pre">+</span> <span class="pre">1</span></tt> 這個表達式就不能表示存儲位置，放在等號左邊是語義錯誤。表達式所表示的存儲位置稱為左值（lvalue），允許放在等號左邊，而之前我們所說的表達式的值也稱為右值（rvalue），只能放在等號右邊。總之， <strong>有的表達式既可以做左值也可以做右值，而有的表達式只能做右值</strong> 。目前我們學過的表達式中只有變數可以做左值，以後會講到另外幾種可以做左值的表達式。</p>
+<p>我們看一個有意思的例子，如果定義三個變數 <tt class="docutils literal"><span class="pre">int</span> <span class="pre">a,</span> <span class="pre">b,</span> <span class="pre">c;</span></tt> ，表達式 <tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">b</span> <span class="pre">=</span> <span class="pre">c</span></tt> 是合法的，先求 <tt class="docutils literal"><span class="pre">b</span> <span class="pre">=</span> <span class="pre">c</span></tt> 的值，再把這個值賦給 <tt class="docutils literal"><span class="pre">a</span></tt> ，而表達式 <tt class="docutils literal"><span class="pre">(a</span> <span class="pre">=</span> <span class="pre">b)</span> <span class="pre">=</span> <span class="pre">c</span></tt> 是不合法的，先求 <tt class="docutils literal"><span class="pre">(a</span> <span class="pre">=</span> <span class="pre">b)</span></tt> 的值沒問題，但 <tt class="docutils literal"><span class="pre">(a</span> <span class="pre">=</span> <span class="pre">b)</span></tt> 這個表達式不能再做左值了，因此放在 <tt class="docutils literal"><span class="pre">=</span> <span class="pre">c</span></tt> 的等號左邊是錯的。</p>
+<p>最後說說整數的除法運算，有一點特殊之處：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="n">hour</span> <span class="o">=</span> <span class="mi">11</span><span class="p">;</span>
+<span class="n">minute</span> <span class="o">=</span> <span class="mi">59</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d and %d hours</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">hour</span><span class="p">,</span> <span class="n">minute</span> <span class="o">/</span> <span class="mi">60</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
+<p>執行結果是 <tt class="docutils literal"><span class="pre">11</span> <span class="pre">and</span> <span class="pre">0</span> <span class="pre">hours</span></tt> ，也就是說59/60得0，這是因為兩個 <tt class="docutils literal"><span class="pre">int</span></tt> 型操作數相除的表達式仍為 <tt class="docutils literal"><span class="pre">int</span></tt> 型，只能保存計算結果的整數部分，即使小數部分是0.98也要捨去。</p>
+<p id="index-25">向下取整的運算稱為Floor，用數學符號⌊⌋表示；向上取整的運算稱為Ceiling，用數學符號⌈⌉表示。例如:</p>
+<div class="highlight-python"><pre>⌊59/60⌋=0
+⌈59/60⌉=1
+⌊-59/60⌋=-1
+⌈-59/60⌉=0</pre>
+</div>
+<p id="index-26">在C語言中整數除法取的既不是Floor也不是Ceiling，無論操作數是正是負總是把小數部分截掉，在數軸上向零的方向取整（Truncate towards Zero），或者說當操作數為正的時候相當於Floor，當操作數為負的時候相當於Ceiling。回到先前的例子，要得到更精確的結果可以這樣：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d hours and %d percent of an hour</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">hour</span><span class="p">,</span> <span class="n">minute</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">/</span> <span class="mi">60</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d and %f hours</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">hour</span><span class="p">,</span> <span class="n">minute</span> <span class="o">/</span> <span class="mf">60.0</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
+<p>注意第二個 <tt class="docutils literal"><span class="pre">printf</span></tt> 中的表達式 <tt class="docutils literal"><span class="pre">minute</span> <span class="pre">/</span> <span class="pre">60.0</span></tt> ， <tt class="docutils literal"><span class="pre">60.0</span></tt> 是 <tt class="docutils literal"><span class="pre">double</span></tt> 型的，/運算符要求左右兩邊的操作數類型一致，而現在並不一致，那怎麼計算呢？C語言規定了一套隱式類型轉換規則，在這裡編譯器自動把左邊的 <tt class="docutils literal"><span class="pre">minute</span></tt> 也轉成 <tt class="docutils literal"><span class="pre">double</span></tt> 型來計算，計算結果（即表達式 <tt class="docutils literal"><span class="pre">minute</span> <span class="pre">/</span> <span class="pre">60.0</span></tt> 的值）也是 <tt class="docutils literal"><span class="pre">double</span></tt> 型的，在 <tt class="docutils literal"><span class="pre">printf</span></tt> 的格式化字元串中應該用 <tt class="docutils literal"><span class="pre">%f</span></tt> 轉換說明與之對應。</p>
+<p>本來編程語言作為一種形式語言要求有簡單而嚴格的規則，自動類型轉換規則不僅很複雜，而且使C語言的形式看起來也不那麼嚴格了，C語言這麼設計是為了書寫程序簡便而做的折衷，有些事情編譯器可以自動做好，程序員就不必每次都寫一堆繁瑣的轉換代碼。然而C語言的類型轉換規則非常難掌握，本書的前幾章會儘量避免類型轉換，到 <a class="reference internal" href="type.html#type-conversion"><em>類型轉換</em></a> 再集中解決這個問題。</p>
+<p class="rubric">習題</p>
+<ol class="arabic simple">
+<li>假設變數x和n是兩個正整數，我們知道x/n這個表達式的結果要取Floor，例如x是17，n是4，則結果是4。如果希望結果取Ceiling（例如x是17，n是4，則結果是5；x是16，n是4，則結果是4），應該怎麼寫表達式呢？</li>
+</ol>
+</div>
+<div class="section" id="expr-char">
+<span id="id14"></span><h2>2.6. 字元類型與字元編碼<a class="headerlink" href="#expr-char" title="Permalink to this headline">¶</a></h2>
+<p>字元常量或字元型變數也可以當作整數參與運算，例如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="sc">&#39;a&#39;</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
+<p>執行結果是b。</p>
+<p id="index-27">我們知道，符號在計算機內部也用數字表示，每個字元在計算機內部用一個整數表示，稱為字元編碼（Character Encoding），目前最常用的是ASCII碼（American Standard Code for Information Interchange），詳見 <a class="reference internal" href="app-encoding.html#app-encoding-asciitable"><em>ASCII碼表</em></a> 。表中每一欄的最後一列是字元，前三列分別是用十進制（Dec）、十六進制（Hx）和八進制（Oct）表示的字元編碼，各種進制之間的換算將在 <a class="reference internal" href="number.html#number-conversion"><em>不同進制之間的換算</em></a> 介紹。從十進制那一列可以看出ASCII碼的取值範圍是0~127。表中的很多字元是不可見字元（Non-printable Character）和空白字元（Whitespace） <a class="footnote-reference" href="#id11" id="id15">[2]</a> ，不能像字母a這樣把字元本身填在表中，而是用一個名字來描述該字元，例如CR(carriage return)、LF(NL line feed，newline)、DEL等等。作為練習，請讀者查一查 <a class="reference internal" href="#expr-escapesequence"><em>C標準規定的轉義字元</em></a> 中的字元在ASCII碼表中的什麼位置。</p>
+<table class="docutils footnote" frame="void" id="id16" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[3]</td><td>空白字元在不同的上下文中有不同的含義，在C語言中空白字元定義為空格、水平Tab（ <tt class="docutils literal"><span class="pre">\t</span></tt> ）、垂直Tab（ <tt class="docutils literal"><span class="pre">\v</span></tt> ）、換行（ <tt class="docutils literal"><span class="pre">\r</span></tt> 和 <tt class="docutils literal"><span class="pre">\n</span></tt> ）和分頁符（ <tt class="docutils literal"><span class="pre">\f</span></tt> ），本書在使用“空白字元”這個詞時會明確說明在當前上下文中空白字元指的是哪些字元。</td></tr>
+</tbody>
+</table>
+<p>回到剛纔的例子，在ASCII碼中字元a是97，字元b是98。計算 <tt class="docutils literal"><span class="pre">'a'</span> <span class="pre">+</span> <span class="pre">1</span></tt> 這個表達式，應該按ASCII碼把 <tt class="docutils literal"><span class="pre">'a'</span></tt> 當作整數值97，然後加1，得到98，根據轉換說明 <tt class="docutils literal"><span class="pre">%c</span></tt> ， <tt class="docutils literal"><span class="pre">printf</span></tt> 要把98這個整數值當作ASCII碼來解釋，打印出相應的字元b。</p>
+<p id="index-28">之前我們說“整型”是指 <tt class="docutils literal"><span class="pre">int</span></tt> 型，而現在我們知道 <tt class="docutils literal"><span class="pre">char</span></tt> 型本質上就是整數，只不過取值範圍比 <tt class="docutils literal"><span class="pre">int</span></tt> 型小，所以 <strong>以後我們把char型和int型統稱為整數類型（Integer Type）或簡稱整型</strong> ，在 <a class="reference internal" href="type.html#type-integer"><em>整型</em></a> 我們還要學習幾種類型也屬於整型。</p>
+<p>字元&#8217;a&#8217;~&#8217;z&#8217;、&#8217;A&#8217;~&#8217;Z&#8217;、&#8216;0&#8217;~&#8216;9&#8217;的ASCII碼都是連續的，因此表達式 <tt class="docutils literal"><span class="pre">'a'</span> <span class="pre">+</span> <span class="pre">25</span></tt> 和 <tt class="docutils literal"><span class="pre">'z'</span></tt> 的值相等， <tt class="docutils literal"><span class="pre">'0'</span> <span class="pre">+</span> <span class="pre">9</span></tt> 和 <tt class="docutils literal"><span class="pre">'9'</span></tt> 的值也相等。注意&#8216;0&#8217;~&#8216;9&#8217;的ASCII碼是十六進制的30~39，和整數值0~9是不相等的。</p>
+<p id="index-29">字元也可以用ASCII碼轉義序列表示，這種轉義序列由\加上1~3個八進制數字組成，或者由\x加上1~2個十六進制數字組成，可以用在字元常量或字元串字面值中。例如 <tt class="docutils literal"><span class="pre">'\0'</span></tt> 或 <tt class="docutils literal"><span class="pre">'\x0'</span></tt> 表示NUL字元（Null Character）， <tt class="docutils literal"><span class="pre">'\11'</span></tt> 或 <tt class="docutils literal"><span class="pre">'\x9'</span></tt> 表示Tab字元， <tt class="docutils literal"><span class="pre">&quot;\11&quot;</span></tt> 或 <tt class="docutils literal"><span class="pre">&quot;\x9&quot;</span></tt> 表示只包含一個Tab字元的字元串。注意 <tt class="docutils literal"><span class="pre">'0'</span></tt> 的ASCII碼是48，而 <tt class="docutils literal"><span class="pre">'\0'</span></tt> 的ASCII碼是0，兩者是不同的。</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2. 常量、變數和表達式</a><ul>
+<li><a class="reference internal" href="#hello-world">2.1. 繼續Hello World</a></li>
+<li><a class="reference internal" href="#id6">2.2. 常量</a></li>
+<li><a class="reference internal" href="#expr-variable">2.3. 變數</a></li>
+<li><a class="reference internal" href="#id9">2.4. 賦值</a></li>
+<li><a class="reference internal" href="#expr-expression">2.5. 表達式</a></li>
+<li><a class="reference internal" href="#expr-char">2.6. 字元類型與字元編碼</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intro.html"
+                        title="previous chapter">1. 程序的基本概念</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="func.html"
+                        title="next chapter">3. 函數入門</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/zh/expr.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><table border=0 cellspacing=0 style="color: white;">
+
+<tr><td>
+   請輸入您的email訂閲<a href="http://groups.google.com/group/learning-linux-c-cpp">本書的郵件列表</a><br/>
+   (Please enter your email to subscribe to <a href="http://groups.google.com/group/learning-linux-c-cpp">this book's mailing list</a>)<br/>
+   <form action="http://groups.google.com/group/learning-linux-c-cpp/boxsubscribe"><input type=text name=email><input type=submit name="sub" value="訂閲(Subscribe)"></form>
+</td></tr>
+
+<tr><td><br/>關注<a href="http://weibo.com/sansoong">我的微博</a></td></tr>
+
+<tr><td><br/>Checkout the source from github: <a href="https://github.com/learning-linux-c-cpp/akabook">https://github.com/learning-linux-c-cpp/akabook</a></td></tr>
+
+<tr><td>
+   <br/>感謝您的慷慨捐贈！<br/>
+   Thanks for your generous donation!<br/>
+   <a href="http://me.alipay.com/songjinshan" target="_blank"><img src="_static/me.alipay.png" alt="捐贈"></a>
+</td></tr>
+
+</table>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="func.html" title="3. 函數入門"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="1. 程序的基本概念"
+             >previous</a> |</li>
+        <li><a href="../index.html">akabook 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >中文版：Linux C/C++編程一站式學習</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Sean Soong.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

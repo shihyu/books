@@ -1,0 +1,605 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1. 計算機中數的表示 &mdash; akabook 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="akabook 3.0 documentation" href="../index.html" />
+    <link rel="up" title="中文版：Linux C/C++編程一站式學習" href="index.html" />
+    <link rel="next" title="2. 數據類型詳解" href="type.html" />
+    <link rel="prev" title="13. 本階段總結" href="summary1.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="type.html" title="2. 數據類型詳解"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="summary1.html" title="13. 本階段總結"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">akabook 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">中文版：Linux C/C++編程一站式學習</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>1. 計算機中數的表示<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="number-binary">
+<span id="id2"></span><h2>1.1. 為什麼計算機用二進制計數<a class="headerlink" href="#number-binary" title="Permalink to this headline">¶</a></h2>
+<p id="index-0">人類的計數方式通常是“逢十進一”，稱為十進制（Decimal），大概因為人有十個手指，所以十進制是最自然的計數方式，很多民族的語言文字中都有十個數字，而阿拉伯數字0~9是目前最廣泛採用的。</p>
+<p id="index-1">計算機是用數字電路搭成的，數字電路中只有1和0兩種狀態，所以對計算機來說二進制（Binary）是最自然的計數方式。根據“逢二進一”的原則，十進制的1、2、3、4分別對應二進制的1、10、11、100。二進制的一位數字稱為一個位（bit） <a class="footnote-reference" href="#id4" id="id3">[1]</a> ，三個bit能夠表示的最大的二進制數是111，也就是十進制的7。不管用哪種計數方式，數的大小並沒有變，十進制的1+1等於2，二進制的1+1等於10，二進制10和十進制2的大小是相等的。計算機採用如下的邏輯電路計算兩個bit的加法：</p>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[1]</a></td><td>bit通常首字母小寫，因為bit簡寫為b，而Byte簡寫為B</td></tr>
+</tbody>
+</table>
+<div class="figure">
+<img alt="../_images/number.digitallogic.png" src="../_images/number.digitallogic.png" />
+<p class="caption">1-bit Full Adder</p>
+</div>
+<p id="index-2">圖的上半部分（出自Wikipedia）的電路稱為一位全加器（1-bit Full Adder），圖的下半部分是一些邏輯電路符號的圖例。我們首先解釋這些圖例，邏輯電路由門電路（Gate）和導線（Wire）組成，同一條導線上在某一時刻的電壓值只能是高和低兩種狀態之一，分別用1和0表示。如果兩條導線短接在一起則它們的電壓值相同，在接點處畫一個黑點，如果接點處沒有畫黑點則表示這兩條綫並沒有短接在一起，只是在畫圖時無法避免交叉而已。導線的電壓值進入門電路的輸入端，經過邏輯運算後在門電路的輸出端輸出運算結果的電壓值，任何複雜的加減乘除運算都可以分解成簡單的邏輯運算。AND、OR和NOT運算在 <a class="reference internal" href="cond.html#cond-bool"><em>布爾代數</em></a> 中講過了，這三種邏輯運算分別用與門、或門和反相器（Inverter）實現。另外幾種邏輯運算在這裡補充一下。異或（XOR，eXclusive OR）運算的真值表如下：</p>
+<table border="1" class="docutils">
+<caption>XOR的真值表</caption>
+<colgroup>
+<col width="11%" />
+<col width="11%" />
+<col width="78%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">A</th>
+<th class="head">B</th>
+<th class="head">A XOR B</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="row-odd"><td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="row-even"><td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p id="index-3">異或運算用一句話概括就是：兩個操作數相同則結果為0，兩個操作數不同則結果為1。與非（NAND）和或非（NOR）運算就是在與、或運算的基礎上取反：</p>
+<table border="1" class="docutils">
+<caption>NAND的真值表</caption>
+<colgroup>
+<col width="10%" />
+<col width="10%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">A</th>
+<th class="head">B</th>
+<th class="head">A NAND B</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="row-even"><td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<caption>NOR的真值表</caption>
+<colgroup>
+<col width="11%" />
+<col width="11%" />
+<col width="78%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">A</th>
+<th class="head">B</th>
+<th class="head">A NOR B</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="row-even"><td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="row-odd"><td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p id="index-4">如果把與門、或門和反相器組合來實現NAND和NOR運算，則電路過于複雜了，因此邏輯電路中通常有專用的與非門和或非門。現在我們看看上圖中的AND、OR、XOR是怎麼實現兩個bit的加法的。A、B是兩個加數，C<sub>in</sub> 是低位傳上來的進位（Carry），相當於三個加數求和，三個加數都是0則結果為0，三個加數都是1則結果為11，即輸出位S是1，產生的進位C<sub>out</sub> 也是1。下面根據加法的規則用真值表列出所有可能的情況：</p>
+<table border="1" class="docutils">
+<caption>1-bit Full Adder的真值表</caption>
+<colgroup>
+<col width="4%" />
+<col width="4%" />
+<col width="43%" />
+<col width="46%" />
+<col width="4%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">A</th>
+<th class="head">B</th>
+<th class="head">C<sub>in</sub></th>
+<th class="head">C<sub>out</sub></th>
+<th class="head">S</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="row-odd"><td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="row-even"><td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="row-even"><td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td>1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="row-even"><td>1</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="row-odd"><td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>請讀者自己驗算上面的電路圖是否正確實現了這個真值表。如果把很多個一位全加器串接起來，就成了多位加法器，如下圖所示（該圖出自Wikipedia）：</p>
+<div class="figure">
+<img alt="../_images/number.fulladder.png" src="../_images/number.fulladder.png" />
+<p class="caption">4-bit Ripple Carry Adder</p>
+</div>
+<p id="index-5">圖中的一位全加器用方框表示，上一級全加器的C<sub>out</sub> 連接到下一級全加器的C<sub>in</sub> ，讓進位像漣漪一樣一級一級傳開，所以叫做Ripple Carry Adder，這樣就可以把兩個4 bit二進制數A<sub>3</sub>A<sub>2</sub>A<sub>1</sub>A<sub>0</sub> 和B<sub>3</sub>B<sub>2</sub>B<sub>1</sub>B<sub>0</sub> 加起來了。在這裡介紹Ripple Carry Adder只是為了讓讀者理解計算機是如何通過邏輯運算來做算術運算的，實際上這種加法器效率很低，只能加完一位再加下一位，更實用、更複雜的加法器可以多個位一起計算，有興趣的讀者可參考 <a class="reference internal" href="bibli.html#id2">[數字邏輯基礎]</a> 的5.4節。</p>
+</div>
+<div class="section" id="number-conversion">
+<span id="id6"></span><h2>1.2. 不同進制之間的換算<a class="headerlink" href="#number-conversion" title="Permalink to this headline">¶</a></h2>
+<p>在十進制中，個位的1代表10<sup>0</sup>=1，十位的1代表10<sup>1</sup>=10，百位的1代表10<sup>2</sup>=100，所以</p>
+<blockquote>
+<div>123=1×10<sup>2</sup>+2×10<sup>1</sup>+3×10<sup>0</sup></div></blockquote>
+<p>同理，在二進制中，個位的1代表2<sup>0</sup>=1，十位的1代表2<sup>1</sup>=2，百位的1代表2<sup>2</sup>=4，所以</p>
+<blockquote>
+<div>(A<sub>3</sub>A<sub>2</sub>A<sub>1</sub>A<sub>0</sub>)<sub>2</sub>=A<sub>3</sub>×2<sup>3</sup>+A<sub>2</sub>×2<sup>2</sup>+A<sub>1</sub>×2<sup>1</sup>+A<sub>0</sub>×2<sup>0</sup></div></blockquote>
+<p id="index-6">如果二進制和十進制數出現在同一個等式中，為了區別我們用(A<sub>3</sub>A<sub>2</sub>A<sub>1</sub>A<sub>0</sub>)<sub>2</sub> 這種形式表示A<sub>3</sub>A<sub>2</sub>A<sub>1</sub>A<sub>0</sub> 是二進制數，每個數字只能是0或1，其他沒有套括號加下標的數仍表示十進制數。對於(A<sub>3</sub>A<sub>2</sub>A<sub>1</sub>A<sub>0</sub>)<sub>2</sub> 這樣一個二進制數，最左邊的A<sub>3</sub> 位稱為最高位（MSB，Most Significant Bit），最右邊的A<sub>0</sub> 位稱為最低位（LSB，Least Significant Bit）。以後我們遵循這樣的慣例：假設一個數是32位的，則LSB稱為第0位而不是第1位（這一位上的1表示2<sup>0</sup> ），MSB稱為第31位（這一位上的1表示2<sup>31</sup> ）。上式就是從二進制到十進制的換算公式。作為練習，請讀者算一下(1011)<sub>2</sub> 和(1111)<sub>2</sub> 換算成十進制分別是多少。</p>
+<p>下面來看十進制怎麼換算成二進制。我們知道</p>
+<blockquote>
+<div>13=1×2<sup>3</sup>+1×2<sup>2</sup>+0×2<sup>1</sup>+1×2<sup>0</sup></div></blockquote>
+<p>所以13換算成二進制應該是(1101)<sub>2</sub> 。問題是怎麼把13分解成等號右邊的形式呢？注意到等號右邊可以寫成</p>
+<blockquote>
+<div>13=(((0×2+1<sub>3</sub>)×2+1<sub>2</sub>)×2+0<sub>1</sub>)×2+1<sub>0</sub></div></blockquote>
+<p>我們將13反覆除以2取餘數就可以提取出上式中的1101四個數字，為了讓讀者更容易看清楚是哪個1和哪個0，上式和下式中對應的數字都加了下標：</p>
+<blockquote>
+<div><p>13÷2=6...1<sub>0</sub></p>
+<p>6÷2=3...0<sub>1</sub></p>
+<p>3÷2=1...1<sub>2</sub></p>
+<p>1÷2=0...1<sub>3</sub></p>
+</div></blockquote>
+<p>把這四步得到的餘數按相反的順序排列就是13的二進製表示，因此這種方法稱為除二反序取余法。</p>
+<p id="index-7">計算機用二進製表示數，程序員也必須習慣使用二進制，但二進制寫起來太囉嗦了，所以通常將二進制數分成每三位一組或者每四位一組，每組用一個數字表示。比如把(10100011)<sub>2</sub> 從最低位開始每三位分成一組，即(10,100,011)<sub>2</sub> ，然後把每組寫成一個0~7的數字，就是(243)<sub>8</sub> ，這種表示法的特點是逢八進一，稱為八進制（Octal）。類似地，我們也可以把(10100011)<sub>2</sub> 按每四位分成一組，即(1010,0011)<sub>2</sub> ，然後把每組寫成一個數字，這個數的低位是3，高位已經大於9了，我們規定用字母A~F表示10~15，則這個數可以寫成(A3)<sub>16</sub> ，每一位數字的取值範圍是0~F，逢十六進一，稱為十六進制（Hexadecimal）。所以，八進制、十六進制是程序員為了書寫二進制方便而發明的簡便寫法，就像草書和正楷的關係一樣。</p>
+<p class="rubric">習題</p>
+<ol class="arabic">
+<li><p class="first">二進制小數可以這樣定義：</p>
+<p>(0.A<sub>-1</sub>A<sub>-2</sub>A<sub>-3</sub>...)<sub>2</sub>=A<sub>-1</sub>×2<sup>-1</sup>+A<sub>-2</sub>×2<sup>-2</sup>+A<sub>-3</sub>×2<sup>-3</sup>+...</p>
+<p>這個定義同時也是從二進制小數到十進制小數的換算公式。從本節講的十進制轉二進制的推導過程出發類比一下，十進制小數換算成二進制小數應該怎麼算？</p>
+</li>
+<li><p class="first">思考一下，八進制（或十六進制）與十進制之間如何相互換算？</p>
+</li>
+</ol>
+</div>
+<div class="section" id="id7">
+<h2>1.3. 整數的加減運算<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<p>我們已經瞭解了計算機中正整數如何表示，加法如何計算，那麼負數如何表示，減法又如何計算呢？本節討論這些問題。為了書寫方便，本節舉的例子都是8位二進制數的計算，實際計算機做整數加減運算的操作數可以是8位、16位、32位或64位的。</p>
+<div class="section" id="sign-and-magnitude">
+<h3>1.3.1. Sign and Magnitude表示法<a class="headerlink" href="#sign-and-magnitude" title="Permalink to this headline">¶</a></h3>
+<p id="index-8">要用8位二進制數表示正數和負數，一種簡單的想法是把最高位規定為符號位（Sign Bit），0表示正1表示負，剩下的7位表示絶對值的大小，這稱為Sign and Magnitude表示法，例如-1表示成10000001，+1表示成00000001。這樣用8位二進制數可以表示的整數的取值範圍是-(2<sup>7</sup>-1)~2<sup>7</sup>-1，即-127~127。</p>
+<p>採用這種表示法，計算機做加法運算需要處理以下邏輯：</p>
+<ol class="arabic simple" id="index-9">
+<li>如果兩數符號位相同，就把它們的低7位相加，符號位不變。如果低7位相加時在最高位產生進位，說明結果的絶對值大於127，超出7位所能表示的數值範圍，這稱為溢出（Overflow） <a class="footnote-reference" href="#id9" id="id8">[2]</a> ，這時通常把計算機中的一個溢出標誌（Overflow Flag）置1，讀一下這個標誌就知道當前運算是否產生了溢出。</li>
+<li>如果兩數符號位不同，首先比較它們的低7位（即絶對值）誰大，然後用較大的絶對值減較小的絶對值，結果的符號位和絶對值大的數相同。</li>
+</ol>
+<table class="docutils footnote" frame="void" id="id9" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id8">[2]</a></td><td>溢出可以進一步細分，正整數溢出稱為上溢（Overflow），負整數溢出稱為下溢（Underflow）。</td></tr>
+</tbody>
+</table>
+<p>那麼減法如何計算呢？由於我們規定了負數的表示，可以把減法改寫成加法，要計算a-b，可以先把b變號然後和a相加，相當於計算a+(-b)。但如果兩個加數的符號位不同就要用較大的絶對值減較小的絶對值，這一步減法計算仍然是免不了的。我們知道加法要進位，減法要借位，計算過程是不同的，我們在 <a class="reference internal" href="#number-binary"><em>為什麼計算機用二進制計數</em></a> 簡單介紹了加法器電路，現在看來還需要再設計一套減法器電路。</p>
+<p>如果採用Sign and Magnitude表示法，計算機做加減運算需要處理很多邏輯：比較符號位，比較絶對值，加法變減法，減法變加法，小數減大數變成大數減小數……這是非常低效率的。還有一個缺點是0的表示不唯一，既可以表示成10000000也可以表示成00000000，這進一步增加了邏輯的複雜性，所以我們迫切需要重新設計整數的表示方法使計算過程更簡單。</p>
+</div>
+<div class="section" id="s-complement">
+<h3>1.3.2. 1&#8217;s Complement表示法<a class="headerlink" href="#s-complement" title="Permalink to this headline">¶</a></h3>
+<p>本節介紹一種二進制補碼表示法，為了便於理解，先從我們熟悉的十進制數的補碼表示法開始講起。現在我們用3位十進制數字做為補碼來表示-499~499之間的數，具體規定如下：</p>
+<table border="1" class="docutils">
+<caption>9的補碼表示法</caption>
+<colgroup>
+<col width="31%" />
+<col width="69%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">數值</th>
+<th class="head">補碼表示</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>-499</td>
+<td>500</td>
+</tr>
+<tr class="row-odd"><td>-498</td>
+<td>501</td>
+</tr>
+<tr class="row-even"><td>...</td>
+<td>...</td>
+</tr>
+<tr class="row-odd"><td>-1</td>
+<td>998</td>
+</tr>
+<tr class="row-even"><td>0</td>
+<td>999</td>
+</tr>
+<tr class="row-odd"><td>0</td>
+<td>0</td>
+</tr>
+<tr class="row-even"><td>1</td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td>...</td>
+<td>...</td>
+</tr>
+<tr class="row-even"><td>498</td>
+<td>498</td>
+</tr>
+<tr class="row-odd"><td>499</td>
+<td>499</td>
+</tr>
+</tbody>
+</table>
+<p id="index-10">也就是說，正數的補碼就是它本身，負數的補碼是999加上該負數（或者說減去該負數的絶對值），0有兩個補碼－－0和999。這種補碼表示稱為9的補碼（9&#8217;s Complement）。採用9的補碼表示，可以把取值範圍內（-499~499）任意正負數的加減法運算轉化成正數的加法運算來做。我們看一個例子。</p>
+<ol class="arabic simple">
+<li>要計算：167-59</li>
+<li>減法改寫成加法：167+(-59)</li>
+<li>取9的補碼表示：167+940</li>
+<li>兩個補碼相加的結果是：107進1</li>
+<li>高位進的1加到低位上去，結果是：108(本來應該加1000，結果加了1，少加了999，正好把先前取9的補碼多加的999抵消掉了)</li>
+<li>注意，計算結果也是9的補碼，如果計算結果在500~999之間，說明它是負數或0，需要轉換回原數才是最終結果</li>
+<li>以上計算過程的證明：167-59=167+(-59)=167+(999-59)-1000+1=167+940-1000+1=1107-1000+1=107+1=108</li>
+</ol>
+<p>在上述計算步驟中其實我們還是做了一次減法運算－－取-59的補碼需要計算999-59，這個減法沒有借位，比較容易算。看到這裡，讀者最放心不下的恐怕是這個步驟：計算結果的最高位如果有進位則要加回到最低位上去，如果沒有進位就不做任何處理。雖然上面給出了證明，但只是證明了“在167-59的計算過程中這麼處理是正確的”。完整的證明需要考慮五種情況：</p>
+<ul class="simple">
+<li>兩個正數相加</li>
+<li>兩個負數相加</li>
+<li>一正一負相加得正</li>
+<li>一正一負相加得負</li>
+<li>任何數加0（補碼可以用0表示也可以用999表示），結果不變</li>
+</ul>
+<p>我們舉的例子驗證了第三種情況，另外四種情況請讀者自己驗證。注意，如果計算結果超出了取值範圍-499~499則產生溢出，我們暫時不考慮溢出的情況，下一節會講到如何判定溢出。</p>
+<p id="index-11">現在我們把上述補碼表示法推廣到8位二進制數，這種補碼表示稱為1的補碼（1&#8217;s Complement）：</p>
+<ol class="arabic simple">
+<li>正數的補碼就是它本身，取值範圍是00000001~01111111（1~127）。</li>
+<li>負數的補碼是11111111減去該負數的絶對值，取值範圍是10000000~11111110（-127~-1）。負數取補碼非常簡單，連減法都不用做，因為1-1=0，1-0=1，所以取補碼就是把每個bit取反。</li>
+<li>正數補碼的最高位都是0，負數補碼的最高位都是1，所以最高位仍可以看作符號位。</li>
+<li>0有兩個補碼－－0和11111111。</li>
+<li>如果是減法運算，先改寫成加法運算，然後把各加數取補碼後相加，計算結果的最高位如果有進位則要加回到最低位上去，計算結果也是補碼表示的。</li>
+</ol>
+<p>舉個例子：</p>
+<ol class="arabic simple">
+<li>要計算：00001000-00000100</li>
+<li>減法改寫成加法：00001000+(-00000100)</li>
+<li>取1的補碼表示：00001000+11111011</li>
+<li>兩個補碼相加的結果是：00000011進1</li>
+<li>高位進的1加到低位上去，結果是：00000100</li>
+</ol>
+<p>1&#8217;s Complement表示法相對於Sign and Magnitude表示法的優勢是非常明顯的：不需要把符號和絶對值分開考慮，計算邏輯很簡單，甚至連減法器電路都省了，只要有一套加法器電路，再有一套把每個bit取反的電路，就可以做取值範圍內任意正負數的加減法運算。美中不足的是0的補碼表示仍然不唯一，既可以是11111111也可以是00000000，為瞭解決這最後一個問題，我們引入2&#8217;s Complement表示法。</p>
+</div>
+<div class="section" id="id10">
+<h3>1.3.3. 2&#8217;s Complement表示法<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<p id="index-12">上一節以8位二進制數為例介紹了1&#8217;s Complement表示法，我們在此基礎上稍加修改，得到2&#8217;s Complement表示法：</p>
+<ol class="arabic simple">
+<li>0和正數的補碼就是它本身，取值範圍是0~01111111（0~127）。</li>
+<li>負數的補碼是在1&#8217;s Complement表示法的基礎上再加1，取值範圍是10000000~11111111（-128~-1）。</li>
+<li>0和正數補碼的最高位都是0，負數補碼的最高位都是1，所以最高位仍可以看作符號位。</li>
+<li>如果是減法運算，先改寫成加法運算，然後把各加數取補碼後相加，忽略計算結果最高位的進位 <a class="footnote-reference" href="#id12" id="id11">[3]</a> ，計算結果也是補碼表示的。</li>
+</ol>
+<table class="docutils footnote" frame="void" id="id12" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id11">[3]</a></td><td>讀者如果對“忽略計算結果最高位的進位”這個步驟放心不下，仍可以分幾種情況自行驗證：兩個正數相加；兩個負數相加；一正一負相加得正；一正一負相加得負；任何數加0結果不變（這個顯然，因為0現在只有一種補碼表示就是0）。</td></tr>
+</tbody>
+</table>
+<p>目前絶大多數計算機都採用這種補碼表示法。為什麼稱為“2的補碼”呢？我們看一個例子，用8位二進制數來表示-4的補碼是這樣算的：</p>
+<blockquote>
+<div>11111111-00000100+1=100000000-00000100=2<sup>8</sup>-4</div></blockquote>
+<p>同理，如果用32位二進制數來表示-4的補碼，應該等於2<sup>32</sup>-4。</p>
+<p>採用2&#8217;s Complement表示法，8位二進制數可以表示的取值範圍是-128~127，如果計算結果超出這個範圍就會產生溢出，例如：</p>
+<div class="figure">
+<img alt="../_images/number.overflow.png" src="../_images/number.overflow.png" />
+<p class="caption">有符號數加法溢出</p>
+</div>
+<p>如何判定產生了溢出呢？我們還是分幾種情況討論：如果兩個正數相加溢出，結果一定是負數；如果兩個負數相加溢出，結果一定是正數；一正一負相加，無論結果是正是負都不可能溢出。</p>
+<div class="figure">
+<img alt="../_images/number.overflowp.png" src="../_images/number.overflowp.png" />
+<p class="caption">如何判定溢出</p>
+</div>
+<p>從上圖可以得出結論：在相加過程中最高位產生的進位和次高位產生的進位如果相同則表示沒有溢出，如果不同則表示有溢出。在邏輯電路中可以把這兩個進位連接到一個異或門，把異或門的輸出連接到溢出標誌。</p>
+</div>
+<div class="section" id="id13">
+<h3>1.3.4. 有符號數和無符號數<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<p id="index-13">前面幾節我們用8位二進制數表示正數和負數，講了三種表示法，每種表示法對應一種計算規則，取值範圍也略有不同，這稱為有符號數（Signed Number）；如果直接用8位二進制數表示0~255，這稱為無符號數（Unsigned Number）。其實計算機做加法時並不區分操作數是有符號數還是無符號數，計算過程都一樣，比如上一節的例子也可以看作無符號數的加法：</p>
+<div class="figure">
+<img alt="../_images/number.carry.png" src="../_images/number.carry.png" />
+<p class="caption">無符號數加法進位</p>
+</div>
+<p id="index-14">如果把這兩個操作數看作有符號數-126和-8相加，計算結果是錯的，因為產生了溢出；但如果看作無符號數130和248相加，計算結果是122進1，也就是122+256，這個結果是對的。計算機的加法器在做完計算之後，根據最高位產生的進位設置進位標誌（Carry Flag），同時根據最高位和次高位產生的進位的異或設置溢出標誌。至于這個加法到底是有符號數加法還是無符號數加法則取決於程序怎麼理解了，如果程序把它理解成有符號數加法，下一步就要檢查溢出標誌，如果程序把它理解成無符號數加法，下一步就要檢查進位標誌。</p>
+<p id="index-15">通常計算機在做算術運算之後還可能設置另外兩個標誌：如果計算結果的所有bit都是零則設置零標誌（Zero Flag），如果計算結果的最高位是1則設置負數標誌（Negative Flag或Sign Flag）。如果程序把計算結果理解成有符號數，也可以檢查負數標誌判斷結果是正是負。</p>
+</div>
+</div>
+<div class="section" id="number-float">
+<span id="id14"></span><h2>1.4. 浮點數<a class="headerlink" href="#number-float" title="Permalink to this headline">¶</a></h2>
+<p id="index-16">浮點數在計算機中的表示是基于科學計數法（Scientific Notation）的，我們知道32767這個數用科學計數法可以寫成3.2767×10<sup>4</sup> ，3.2767稱為尾數（Mantissa，或者叫Significand），4稱為指數（Exponent）。浮點數在計算機中的表示與此類似，只不過基數（Radix）是2而不是10。下面我們用一個簡單的模型來解釋浮點數的基本概念。我們的模型由三部分組成：符號位、指數部分（表示2的多少次方）和尾數部分（小數點前面總是0，尾數部分只表示小數點後的數字）。</p>
+<div class="figure">
+<img alt="../_images/number.float.png" src="../_images/number.float.png" />
+<p class="caption">一種浮點數格式</p>
+</div>
+<p>如果要表示17這個數，我們知道17=17.0×100=0.17×10<sup>2</sup> ，類似地，17=(10001)<sub>2</sub>×2<sup>0</sup>=(0.10001)<sub>2</sub>×2<sup>5</sup> ，這樣就可以表示為：</p>
+<div class="figure">
+<img alt="../_images/number.float17.png" src="../_images/number.float17.png" />
+<p class="caption">17的浮點數表示</p>
+</div>
+<p id="index-17">如果我們要表示0.25就遇到新的困難了，因為0.25=1×2<sup>-2</sup>=(0.1)<sub>2</sub>×2<sup>-1</sup> ，而我們的模型中指數部分沒有規定如何表示負數。我們可以在指數部分規定一個符號位，然而更廣泛採用的辦法是使用偏移的指數（Biased Exponent）。規定一個偏移值，比如16，實際的指數要加上這個偏移值再填寫到指數部分，這樣比16大的就表示正指數，比16小的就表示負指數。要表示0.25，指數部分應該填16-1=15：</p>
+<div class="figure">
+<img alt="../_images/number.biasfloat025.png" src="../_images/number.biasfloat025.png" />
+<p class="caption">0.25的偏移指數浮點數表示</p>
+</div>
+<p id="index-18">現在還有一個問題需要解決：每個浮點數的表示都不唯一，例如17=(0.10001)<sub>2</sub>×2<sup>5</sup>=(0.010001)<sub>2</sub>×2<sup>6</sup> ，這樣給計算機處理增加了複雜性。為瞭解決這個問題，我們規定尾數部分的最高位必須是1，也就是說尾數必須以0.1開頭，對指數做相應的調整，這稱為正規化（Normalize）。由於尾數部分的最高位必須是1，這個1就不必保存了，可以節省出一位來用於提高精度，我們說最高位的1是隱含的（Implied）。這樣17就只有一種表示方法了，指數部分應該是16+5=21=(10101)<sub>2</sub> ，尾數部分去掉最高位的1是0001：</p>
+<div class="figure">
+<img alt="../_images/number.normalfloat17.png" src="../_images/number.normalfloat17.png" />
+<p class="caption">17的正規化尾數浮點數表示</p>
+</div>
+<p>兩個浮點數相加，首先把小數點對齊然後相加：</p>
+<div class="figure">
+<img alt="../_images/number.addfloat.png" src="../_images/number.addfloat.png" />
+<p class="caption">浮點數相加</p>
+</div>
+<p id="index-19">由於浮點數表示的精度有限，計算結果末尾的10兩位被捨去了。做浮點運算時要注意精度損失（Significance Loss）的問題，有時計算順序不同也會導致不同的結果。比如：</p>
+<blockquote>
+<div>11.0010000+0.00000001+0.00000001=11.0010000+0.00000001=11.0010000</div></blockquote>
+<p>後面加的兩個很小的數全被捨去了，沒有對計算結果產生任何影響。但如果調一下計算順序它們就能影響到計算結果了：</p>
+<blockquote>
+<div>0.00000001+0.00000001+11.0010000=0.00000010+11.0010000=11.0010001</div></blockquote>
+<p>再比如128.25=(10000000.01)<sub>2</sub> ，需要10個有效位，而我們的模型中尾數部分是8位，算上隱含的最高位1一共有9個有效位，那麼128.25的浮點數表示只能捨去末尾的1，表示成(10000000.0)<sub>2</sub> ，其實跟128相等了。</p>
+<p id="index-20">整數運算會產生溢出，浮點運算也會產生溢出，浮點運算的溢出也分上溢和下溢兩種，但和整數運算的定義不同。假設整數採用8位2&#8217;s Complement表示法，取值範圍是-128~127，如果計算結果是-130則稱為下溢，計算結果是130則稱為上溢。假設按本節介紹的浮點數表示法，取值範圍是-(0.111111111)<sub>2</sub>×2<sup>15</sup>~(0.111111111)<sub>2</sub>×2<sup>15</sup> ，如果計算結果超出這個範圍則稱為上溢；如果計算結果未超出這個範圍但絶對值太小了，在-(0.1)<sub>2</sub>×2<sup>-16</sup>~(0.1)<sub>2</sub>×2<sup>-16</sup> 之間，那麼也同樣無法表示，稱為下溢。</p>
+<p id="index-21">浮點數是一個相當複雜的話題，不同平台的浮點數表示和浮點運算在實現上也有較大差異，本節只是通過這個簡單的模型介紹一些基本概念而不深入討論，理解了這些基本概念有助於你理解浮點數標準，目前業界廣泛採用的浮點數標準是由IEEE（Institute of Electrical and Electronics Engineers）制定的IEEE 754。</p>
+<p>在 <a class="reference internal" href="cond.html#cond-bool"><em>布爾代數</em></a> 講過浮點數不能做精確比較，現在讀者應該知道為什麼不能精確比較了：首先，浮點數的精度有限；其次，浮點數是用二進制的科學計數法表示的，通常不能精確地表示十進制數的小數部分。本節前面舉例的時候總是用十進制的0.25，如果換成十進制的0.1就沒法精確地用二進制小數來表示了。我們把 <a class="reference internal" href="cond.html#cond-bool"><em>布爾代數</em></a> 的例子拿過來再研究一下：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">double</span> <span class="n">a</span> <span class="o">=</span> <span class="mf">0.3</span> <span class="o">-</span> <span class="mf">0.2</span><span class="p">;</span>
+        <span class="kt">double</span> <span class="n">b</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">)</span>
+               <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Equal</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="k">else</span>
+               <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Unequal</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;a=%.18f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;b=%.18f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>其中 <tt class="docutils literal"><span class="pre">printf</span></tt> 的轉換說明 <tt class="docutils literal"><span class="pre">%.18f</span></tt> 表示打印時保留小數點後18位的精度。運行結果是:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Unequal</span>
+<span class="n">a</span><span class="o">=</span><span class="mf">0.099999999999999978</span>
+<span class="n">b</span><span class="o">=</span><span class="mf">0.100000000000000006</span>
+</pre></div>
+</div>
+<p>最後討論一個細節問題。我們知道，定義全局變數時如果沒有Initializer就用0初始化，定義數組時如果Initializer中提供的元素不夠那麼剩下的元素也用0初始化。例如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">d</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">a</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mf">1.0</span> <span class="p">};</span>
+</pre></div>
+</td></tr></table></div>
+<p>“用0初始化”的意思是變數 <tt class="docutils literal"><span class="pre">i</span></tt> 、變數 <tt class="docutils literal"><span class="pre">d</span></tt> 和數組元素 <tt class="docutils literal"><span class="pre">a[1]~a[9]</span></tt> 的所有位元組都用0填充，或者說所有bit都是0。無論是用Sign and Magnitude表示法、1&#8217;s Complement表示法還是2&#8217;s Complement表示法，一個整數的所有bit是0都表示0值，但一個浮點數的所有bit是0一定表示0值嗎？嚴格來說不一定，某種平台可能會規定一個浮點數的所有bit是0並不表示0值，但 <a class="reference internal" href="bibli.html#c99rationale">[C99Rationale]</a> 第6.7.8節提到：</p>
+<blockquote>
+<div>As far as the committee knows, all machines treat all bits zero as a representation of floating-point zero. But, all bits zero might not be the canonical representation of zero.</div></blockquote>
+<p>因此在絶大多數平台上，一個浮點數的所有bit是0就表示0值。</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1. 計算機中數的表示</a><ul>
+<li><a class="reference internal" href="#number-binary">1.1. 為什麼計算機用二進制計數</a></li>
+<li><a class="reference internal" href="#number-conversion">1.2. 不同進制之間的換算</a></li>
+<li><a class="reference internal" href="#id7">1.3. 整數的加減運算</a><ul>
+<li><a class="reference internal" href="#sign-and-magnitude">1.3.1. Sign and Magnitude表示法</a></li>
+<li><a class="reference internal" href="#s-complement">1.3.2. 1&#8217;s Complement表示法</a></li>
+<li><a class="reference internal" href="#id10">1.3.3. 2&#8217;s Complement表示法</a></li>
+<li><a class="reference internal" href="#id13">1.3.4. 有符號數和無符號數</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#number-float">1.4. 浮點數</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="summary1.html"
+                        title="previous chapter">13. 本階段總結</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="type.html"
+                        title="next chapter">2. 數據類型詳解</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/zh/number.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><table border=0 cellspacing=0 style="color: white;">
+
+<tr><td>
+   請輸入您的email訂閲<a href="http://groups.google.com/group/learning-linux-c-cpp">本書的郵件列表</a><br/>
+   (Please enter your email to subscribe to <a href="http://groups.google.com/group/learning-linux-c-cpp">this book's mailing list</a>)<br/>
+   <form action="http://groups.google.com/group/learning-linux-c-cpp/boxsubscribe"><input type=text name=email><input type=submit name="sub" value="訂閲(Subscribe)"></form>
+</td></tr>
+
+<tr><td><br/>關注<a href="http://weibo.com/sansoong">我的微博</a></td></tr>
+
+<tr><td><br/>Checkout the source from github: <a href="https://github.com/learning-linux-c-cpp/akabook">https://github.com/learning-linux-c-cpp/akabook</a></td></tr>
+
+<tr><td>
+   <br/>感謝您的慷慨捐贈！<br/>
+   Thanks for your generous donation!<br/>
+   <a href="http://me.alipay.com/songjinshan" target="_blank"><img src="_static/me.alipay.png" alt="捐贈"></a>
+</td></tr>
+
+</table>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="type.html" title="2. 數據類型詳解"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="summary1.html" title="13. 本階段總結"
+             >previous</a> |</li>
+        <li><a href="../index.html">akabook 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >中文版：Linux C/C++編程一站式學習</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Sean Soong.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1097 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>字元編碼 &mdash; akabook 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="akabook 3.0 documentation" href="../index.html" />
+    <link rel="up" title="中文版：Linux C/C++編程一站式學習" href="index.html" />
+    <link rel="next" title="GNU Free Documentation License Version 1.3, 3 November 2008" href="app-gfdl.html" />
+    <link rel="prev" title="12. 鏈表、二叉樹和哈希表" href="linkedlist.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="app-gfdl.html" title="GNU Free Documentation License Version 1.3, 3 November 2008"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="linkedlist.html" title="12. 鏈表、二叉樹和哈希表"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">akabook 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">中文版：Linux C/C++編程一站式學習</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>字元編碼<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="ascii">
+<h2>ASCII碼<a class="headerlink" href="#ascii" title="Permalink to this headline">¶</a></h2>
+<p>ASCII碼的取值範圍是0~127，可以用7個bit表示。C語言規定 <tt class="docutils literal"><span class="pre">char</span></tt> 型占一個位元組，如果存放ASCII碼則只用到低7位，高位為0。以下是ASCII碼表：</p>
+<table border="1" class="docutils" id="app-encoding-asciitable">
+<caption>ASCII碼表</caption>
+<colgroup>
+<col width="4%" />
+<col width="3%" />
+<col width="4%" />
+<col width="37%" />
+<col width="4%" />
+<col width="3%" />
+<col width="4%" />
+<col width="9%" />
+<col width="4%" />
+<col width="3%" />
+<col width="4%" />
+<col width="5%" />
+<col width="4%" />
+<col width="3%" />
+<col width="4%" />
+<col width="5%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Dec</th>
+<th class="head">Hx</th>
+<th class="head">Oct</th>
+<th class="head">Char</th>
+<th class="head">Dec</th>
+<th class="head">Hx</th>
+<th class="head">Oct</th>
+<th class="head">Char</th>
+<th class="head">Dec</th>
+<th class="head">Hx</th>
+<th class="head">Oct</th>
+<th class="head">Char</th>
+<th class="head">Dec</th>
+<th class="head">Hx</th>
+<th class="head">Oct</th>
+<th class="head">Char</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0</td>
+<td>0</td>
+<td>0</td>
+<td>NUL (null)</td>
+<td>32</td>
+<td>20</td>
+<td>40</td>
+<td>(blank)</td>
+<td>64</td>
+<td>40</td>
+<td>100</td>
+<td>&#64;</td>
+<td>96</td>
+<td>60</td>
+<td>140</td>
+<td>`</td>
+</tr>
+<tr class="row-odd"><td>1</td>
+<td>1</td>
+<td>1</td>
+<td>SOH (start of heading)</td>
+<td>33</td>
+<td>21</td>
+<td>41</td>
+<td>!</td>
+<td>65</td>
+<td>41</td>
+<td>101</td>
+<td>A</td>
+<td>97</td>
+<td>61</td>
+<td>141</td>
+<td>a</td>
+</tr>
+<tr class="row-even"><td>2</td>
+<td>2</td>
+<td>2</td>
+<td>STX (start of text)</td>
+<td>34</td>
+<td>22</td>
+<td>42</td>
+<td>&#8220;</td>
+<td>66</td>
+<td>42</td>
+<td>102</td>
+<td>B</td>
+<td>98</td>
+<td>62</td>
+<td>142</td>
+<td>b</td>
+</tr>
+<tr class="row-odd"><td>3</td>
+<td>3</td>
+<td>3</td>
+<td>ETX (end of text)</td>
+<td>35</td>
+<td>23</td>
+<td>43</td>
+<td>#</td>
+<td>67</td>
+<td>43</td>
+<td>103</td>
+<td>C</td>
+<td>99</td>
+<td>63</td>
+<td>143</td>
+<td>c</td>
+</tr>
+<tr class="row-even"><td>4</td>
+<td>4</td>
+<td>4</td>
+<td>EOT (end of transmission)</td>
+<td>36</td>
+<td>24</td>
+<td>44</td>
+<td>$</td>
+<td>68</td>
+<td>44</td>
+<td>104</td>
+<td>D</td>
+<td>100</td>
+<td>64</td>
+<td>144</td>
+<td>d</td>
+</tr>
+<tr class="row-odd"><td>5</td>
+<td>5</td>
+<td>5</td>
+<td>ENQ (enquiry)</td>
+<td>37</td>
+<td>25</td>
+<td>45</td>
+<td>%</td>
+<td>69</td>
+<td>45</td>
+<td>105</td>
+<td>E</td>
+<td>101</td>
+<td>65</td>
+<td>145</td>
+<td>e</td>
+</tr>
+<tr class="row-even"><td>6</td>
+<td>6</td>
+<td>6</td>
+<td>ACK (acknowledge)</td>
+<td>38</td>
+<td>26</td>
+<td>46</td>
+<td>&amp;</td>
+<td>70</td>
+<td>46</td>
+<td>106</td>
+<td>F</td>
+<td>102</td>
+<td>66</td>
+<td>146</td>
+<td>f</td>
+</tr>
+<tr class="row-odd"><td>7</td>
+<td>7</td>
+<td>7</td>
+<td>BEL (bell)</td>
+<td>39</td>
+<td>27</td>
+<td>47</td>
+<td>&#8216;</td>
+<td>71</td>
+<td>47</td>
+<td>107</td>
+<td>G</td>
+<td>103</td>
+<td>67</td>
+<td>147</td>
+<td>g</td>
+</tr>
+<tr class="row-even"><td>8</td>
+<td>8</td>
+<td>10</td>
+<td>BS  (backspace)</td>
+<td>40</td>
+<td>28</td>
+<td>50</td>
+<td>(</td>
+<td>72</td>
+<td>48</td>
+<td>110</td>
+<td>H</td>
+<td>104</td>
+<td>68</td>
+<td>150</td>
+<td>h</td>
+</tr>
+<tr class="row-odd"><td>9</td>
+<td>9</td>
+<td>11</td>
+<td>TAB (horizontal tab)</td>
+<td>41</td>
+<td>29</td>
+<td>51</td>
+<td>)</td>
+<td>73</td>
+<td>49</td>
+<td>111</td>
+<td>I</td>
+<td>105</td>
+<td>69</td>
+<td>151</td>
+<td>i</td>
+</tr>
+<tr class="row-even"><td>10</td>
+<td>a</td>
+<td>12</td>
+<td>LF  (NL line feed, new line)</td>
+<td>42</td>
+<td>2a</td>
+<td>52</td>
+<td>*</td>
+<td>74</td>
+<td>4a</td>
+<td>112</td>
+<td>J</td>
+<td>106</td>
+<td>6a</td>
+<td>152</td>
+<td>j</td>
+</tr>
+<tr class="row-odd"><td>11</td>
+<td>b</td>
+<td>13</td>
+<td>VT  (vertical tab)</td>
+<td>43</td>
+<td>2b</td>
+<td>53</td>
+<td>+</td>
+<td>75</td>
+<td>4b</td>
+<td>113</td>
+<td>K</td>
+<td>107</td>
+<td>6b</td>
+<td>153</td>
+<td>k</td>
+</tr>
+<tr class="row-even"><td>12</td>
+<td>c</td>
+<td>14</td>
+<td>FF  (NP form feed, new page)</td>
+<td>44</td>
+<td>2c</td>
+<td>54</td>
+<td>,</td>
+<td>76</td>
+<td>4c</td>
+<td>114</td>
+<td>L</td>
+<td>108</td>
+<td>6c</td>
+<td>154</td>
+<td>l</td>
+</tr>
+<tr class="row-odd"><td>13</td>
+<td>d</td>
+<td>15</td>
+<td>CR  (carriage return)</td>
+<td>45</td>
+<td>2d</td>
+<td>55</td>
+<td>-</td>
+<td>77</td>
+<td>4d</td>
+<td>115</td>
+<td>M</td>
+<td>109</td>
+<td>6d</td>
+<td>155</td>
+<td>m</td>
+</tr>
+<tr class="row-even"><td>14</td>
+<td>e</td>
+<td>16</td>
+<td>SO  (shift out)</td>
+<td>46</td>
+<td>2e</td>
+<td>56</td>
+<td>.</td>
+<td>78</td>
+<td>4e</td>
+<td>116</td>
+<td>N</td>
+<td>110</td>
+<td>6e</td>
+<td>156</td>
+<td>n</td>
+</tr>
+<tr class="row-odd"><td>15</td>
+<td>f</td>
+<td>17</td>
+<td>SI  (shift in)</td>
+<td>47</td>
+<td>2f</td>
+<td>57</td>
+<td>/</td>
+<td>79</td>
+<td>4f</td>
+<td>117</td>
+<td>O</td>
+<td>111</td>
+<td>6f</td>
+<td>157</td>
+<td>o</td>
+</tr>
+<tr class="row-even"><td>16</td>
+<td>10</td>
+<td>20</td>
+<td>DLE (data link escape)</td>
+<td>48</td>
+<td>30</td>
+<td>60</td>
+<td>0</td>
+<td>80</td>
+<td>50</td>
+<td>120</td>
+<td>P</td>
+<td>112</td>
+<td>70</td>
+<td>160</td>
+<td>p</td>
+</tr>
+<tr class="row-odd"><td>17</td>
+<td>11</td>
+<td>21</td>
+<td>DC1 (device control 1)</td>
+<td>49</td>
+<td>31</td>
+<td>61</td>
+<td>1</td>
+<td>81</td>
+<td>51</td>
+<td>121</td>
+<td>Q</td>
+<td>113</td>
+<td>71</td>
+<td>161</td>
+<td>q</td>
+</tr>
+<tr class="row-even"><td>18</td>
+<td>12</td>
+<td>22</td>
+<td>DC2 (device control 2)</td>
+<td>50</td>
+<td>32</td>
+<td>62</td>
+<td>2</td>
+<td>82</td>
+<td>52</td>
+<td>122</td>
+<td>R</td>
+<td>114</td>
+<td>72</td>
+<td>162</td>
+<td>r</td>
+</tr>
+<tr class="row-odd"><td>19</td>
+<td>13</td>
+<td>23</td>
+<td>DC3 (device control 3)</td>
+<td>51</td>
+<td>33</td>
+<td>63</td>
+<td>3</td>
+<td>83</td>
+<td>53</td>
+<td>123</td>
+<td>S</td>
+<td>115</td>
+<td>73</td>
+<td>163</td>
+<td>s</td>
+</tr>
+<tr class="row-even"><td>20</td>
+<td>14</td>
+<td>24</td>
+<td>DC4 (device control 4)</td>
+<td>52</td>
+<td>34</td>
+<td>64</td>
+<td>4</td>
+<td>84</td>
+<td>54</td>
+<td>124</td>
+<td>T</td>
+<td>116</td>
+<td>74</td>
+<td>164</td>
+<td>t</td>
+</tr>
+<tr class="row-odd"><td>21</td>
+<td>15</td>
+<td>25</td>
+<td>NAK (negative acknowledge)</td>
+<td>53</td>
+<td>35</td>
+<td>65</td>
+<td>5</td>
+<td>85</td>
+<td>55</td>
+<td>125</td>
+<td>U</td>
+<td>117</td>
+<td>75</td>
+<td>165</td>
+<td>u</td>
+</tr>
+<tr class="row-even"><td>22</td>
+<td>16</td>
+<td>26</td>
+<td>SYN (synchronous idle)</td>
+<td>54</td>
+<td>36</td>
+<td>66</td>
+<td>6</td>
+<td>86</td>
+<td>56</td>
+<td>126</td>
+<td>V</td>
+<td>118</td>
+<td>76</td>
+<td>166</td>
+<td>v</td>
+</tr>
+<tr class="row-odd"><td>23</td>
+<td>17</td>
+<td>27</td>
+<td>ETB (end of trans. block)</td>
+<td>55</td>
+<td>37</td>
+<td>67</td>
+<td>7</td>
+<td>87</td>
+<td>57</td>
+<td>127</td>
+<td>W</td>
+<td>119</td>
+<td>77</td>
+<td>167</td>
+<td>w</td>
+</tr>
+<tr class="row-even"><td>24</td>
+<td>18</td>
+<td>30</td>
+<td>CAN (cancel)</td>
+<td>56</td>
+<td>38</td>
+<td>70</td>
+<td>8</td>
+<td>88</td>
+<td>58</td>
+<td>130</td>
+<td>X</td>
+<td>120</td>
+<td>78</td>
+<td>170</td>
+<td>x</td>
+</tr>
+<tr class="row-odd"><td>25</td>
+<td>19</td>
+<td>31</td>
+<td>EM  (end of medium)</td>
+<td>57</td>
+<td>39</td>
+<td>71</td>
+<td>9</td>
+<td>89</td>
+<td>59</td>
+<td>131</td>
+<td>Y</td>
+<td>121</td>
+<td>79</td>
+<td>171</td>
+<td>y</td>
+</tr>
+<tr class="row-even"><td>26</td>
+<td>1a</td>
+<td>32</td>
+<td>SUB (substitute)</td>
+<td>58</td>
+<td>3a</td>
+<td>72</td>
+<td>:</td>
+<td>90</td>
+<td>5a</td>
+<td>132</td>
+<td>Z</td>
+<td>122</td>
+<td>7a</td>
+<td>172</td>
+<td>z</td>
+</tr>
+<tr class="row-odd"><td>27</td>
+<td>1b</td>
+<td>33</td>
+<td>ESC (escape)</td>
+<td>59</td>
+<td>3b</td>
+<td>73</td>
+<td>;</td>
+<td>91</td>
+<td>5b</td>
+<td>133</td>
+<td>[</td>
+<td>123</td>
+<td>7b</td>
+<td>173</td>
+<td>{</td>
+</tr>
+<tr class="row-even"><td>28</td>
+<td>1c</td>
+<td>34</td>
+<td>FS  (file separator)</td>
+<td>60</td>
+<td>3c</td>
+<td>74</td>
+<td>&lt;</td>
+<td>92</td>
+<td>5c</td>
+<td>134</td>
+<td>\</td>
+<td>124</td>
+<td>7c</td>
+<td>174</td>
+<td>|</td>
+</tr>
+<tr class="row-odd"><td>29</td>
+<td>1d</td>
+<td>35</td>
+<td>GS  (group separator)</td>
+<td>61</td>
+<td>3d</td>
+<td>75</td>
+<td>=</td>
+<td>93</td>
+<td>5d</td>
+<td>135</td>
+<td>]</td>
+<td>125</td>
+<td>7d</td>
+<td>175</td>
+<td>}</td>
+</tr>
+<tr class="row-even"><td>30</td>
+<td>1e</td>
+<td>36</td>
+<td>RS  (recored separator)</td>
+<td>62</td>
+<td>3e</td>
+<td>76</td>
+<td>&gt;</td>
+<td>94</td>
+<td>5e</td>
+<td>136</td>
+<td>^</td>
+<td>126</td>
+<td>7e</td>
+<td>176</td>
+<td>~</td>
+</tr>
+<tr class="row-odd"><td>31</td>
+<td>1f</td>
+<td>37</td>
+<td>US  (unit separator)</td>
+<td>63</td>
+<td>3f</td>
+<td>77</td>
+<td>?</td>
+<td>95</td>
+<td>5f</td>
+<td>137</td>
+<td>_</td>
+<td>127</td>
+<td>7f</td>
+<td>177</td>
+<td>DEL</td>
+</tr>
+</tbody>
+</table>
+<p id="index-0">絶大多數計算機的一個位元組是8位，取值範圍是0~255，而ASCII碼並沒有規定編號為128~255的字元，為了能用一個位元組表示更多的字元，各廠商制定了很多種ASCII碼的擴展規範。注意，雖然通常把這些規範稱為擴展ASCII碼（Extended ASCII），但其實它們並不屬於ASCII碼標準。例如下面這種擴展ASCII碼由IBM制定，在字元終端下被廣泛採用，其中包含了很多表格邊線字元用來畫界面。</p>
+<div class="figure">
+<img alt="../_images/app-encoding.extascii.png" src="../_images/app-encoding.extascii.png" />
+<p class="caption">IBM的擴展ASCII碼表</p>
+</div>
+<p id="index-1">在圖形界面下最廣泛使用的擴展ASCII碼是ISO-8859-1，也稱為Latin-1，其中包含歐洲各國語言中最常用的非英文字母，但畢竟只擴展了128個字元，一些不常用的字母就沒有包含進來。如下表所示。</p>
+<table border="1" class="docutils">
+<caption>ISO-8859-1</caption>
+<colgroup>
+<col width="13%" />
+<col width="4%" />
+<col width="13%" />
+<col width="4%" />
+<col width="13%" />
+<col width="4%" />
+<col width="13%" />
+<col width="4%" />
+<col width="13%" />
+<col width="4%" />
+<col width="13%" />
+<col width="4%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>160</td>
+<td>&nbsp;</td>
+<td>176</td>
+<td>°</td>
+<td>192</td>
+<td>À</td>
+<td>208</td>
+<td>Ð</td>
+<td>224</td>
+<td>à</td>
+<td>240</td>
+<td>ð</td>
+</tr>
+<tr class="row-even"><td>161</td>
+<td>¡</td>
+<td>177</td>
+<td>±</td>
+<td>193</td>
+<td>Á</td>
+<td>209</td>
+<td>Ñ</td>
+<td>225</td>
+<td>á</td>
+<td>241</td>
+<td>ñ</td>
+</tr>
+<tr class="row-odd"><td>162</td>
+<td>¢</td>
+<td>178</td>
+<td>²</td>
+<td>194</td>
+<td>Â</td>
+<td>210</td>
+<td>Ò</td>
+<td>226</td>
+<td>â</td>
+<td>242</td>
+<td>ò</td>
+</tr>
+<tr class="row-even"><td>163</td>
+<td>£</td>
+<td>179</td>
+<td>³</td>
+<td>195</td>
+<td>Ã</td>
+<td>211</td>
+<td>Ó</td>
+<td>227</td>
+<td>ã</td>
+<td>243</td>
+<td>ó</td>
+</tr>
+<tr class="row-odd"><td>164</td>
+<td>¤</td>
+<td>180</td>
+<td>´</td>
+<td>196</td>
+<td>Ä</td>
+<td>212</td>
+<td>Ô</td>
+<td>228</td>
+<td>ä</td>
+<td>244</td>
+<td>ô</td>
+</tr>
+<tr class="row-even"><td>165</td>
+<td>¥</td>
+<td>181</td>
+<td>µ</td>
+<td>197</td>
+<td>Å</td>
+<td>213</td>
+<td>Õ</td>
+<td>229</td>
+<td>å</td>
+<td>245</td>
+<td>õ</td>
+</tr>
+<tr class="row-odd"><td>166</td>
+<td>¦</td>
+<td>182</td>
+<td>¶</td>
+<td>198</td>
+<td>Æ</td>
+<td>214</td>
+<td>Ö</td>
+<td>230</td>
+<td>æ</td>
+<td>246</td>
+<td>ö</td>
+</tr>
+<tr class="row-even"><td>167</td>
+<td>§</td>
+<td>183</td>
+<td>·</td>
+<td>199</td>
+<td>Ç</td>
+<td>215</td>
+<td>×</td>
+<td>231</td>
+<td>ç</td>
+<td>247</td>
+<td>÷</td>
+</tr>
+<tr class="row-odd"><td>168</td>
+<td>¨</td>
+<td>184</td>
+<td>¸</td>
+<td>200</td>
+<td>È</td>
+<td>216</td>
+<td>Ø</td>
+<td>232</td>
+<td>è</td>
+<td>248</td>
+<td>ø</td>
+</tr>
+<tr class="row-even"><td>169</td>
+<td>©</td>
+<td>185</td>
+<td>¹</td>
+<td>201</td>
+<td>É</td>
+<td>217</td>
+<td>Ù</td>
+<td>233</td>
+<td>é</td>
+<td>249</td>
+<td>ù</td>
+</tr>
+<tr class="row-odd"><td>170</td>
+<td>ª</td>
+<td>186</td>
+<td>º</td>
+<td>202</td>
+<td>Ê</td>
+<td>218</td>
+<td>Ú</td>
+<td>234</td>
+<td>ê</td>
+<td>250</td>
+<td>ú</td>
+</tr>
+<tr class="row-even"><td>171</td>
+<td>«</td>
+<td>187</td>
+<td>»</td>
+<td>203</td>
+<td>Ë</td>
+<td>219</td>
+<td>Û</td>
+<td>235</td>
+<td>ë</td>
+<td>251</td>
+<td>û</td>
+</tr>
+<tr class="row-odd"><td>172</td>
+<td>¬</td>
+<td>188</td>
+<td>¼</td>
+<td>204</td>
+<td>Ì</td>
+<td>220</td>
+<td>Ü</td>
+<td>236</td>
+<td>ì</td>
+<td>252</td>
+<td>ü</td>
+</tr>
+<tr class="row-even"><td>173</td>
+<td>­</td>
+<td>189</td>
+<td>½</td>
+<td>205</td>
+<td>Í</td>
+<td>221</td>
+<td>Ý</td>
+<td>237</td>
+<td>í</td>
+<td>253</td>
+<td>ý</td>
+</tr>
+<tr class="row-odd"><td>174</td>
+<td>®</td>
+<td>190</td>
+<td>¾</td>
+<td>206</td>
+<td>Î</td>
+<td>222</td>
+<td>Þ</td>
+<td>238</td>
+<td>î</td>
+<td>254</td>
+<td>þ</td>
+</tr>
+<tr class="row-even"><td>175</td>
+<td>¯</td>
+<td>191</td>
+<td>¿</td>
+<td>207</td>
+<td>Ï</td>
+<td>223</td>
+<td>ß</td>
+<td>239</td>
+<td>ï</td>
+<td>255</td>
+<td>ÿ</td>
+</tr>
+</tbody>
+</table>
+<p>編號128~159的是一些控制字元，在上表中沒有列出。</p>
+</div>
+<div class="section" id="unicodeutf-8">
+<h2>Unicode和UTF-8<a class="headerlink" href="#unicodeutf-8" title="Permalink to this headline">¶</a></h2>
+<p id="index-2">為了在一套編碼中涵蓋全世界各國語言文字和專業領域符號（例如數學符號、樂譜符號），ISO制定了ISO 10646標準，也稱為UCS（Universal Character Set）。UCS編碼的長度是31位，可以表示2<sup>31</sup> 個字元。如果兩個字元編碼的高位相同，只有低16位不同，則它們屬於同一個平面（Plane），所以一個平面由2<sup>16</sup> 個字元組成。目前絶大多數常用字元都位於第一個平面（編碼範圍是0x0000~0xFFFF），稱為BMP（Basic Multilingual Plane）或Plane 0，為了向後兼容，其中編號為0~256的字元和ASCII碼以及Latin-1相同。UCS編碼通常用U-xxxxxxxx這種形式表示，而BMP的編碼通常用U+xxxx這種形式表示，其中x是十六進制數字。在ISO制定UCS的同時，另一個廠商聯合組織也在着手制定這樣的編碼，稱為Unicode，後來兩家聯手制定統一的編碼，但各自發佈各自的標準文檔，所以UCS編碼和Unicode碼是相同的。</p>
+<p id="index-3">有了字元編碼，另一個問題就是這樣的編碼在計算機中怎麼表示。現在已經不可能用一個位元組表示一個字元了，最直接的想法就是用四個位元組表示一個字元，這種表示方法稱為UCS-4或UTF-32，UTF是Unicode Transformation Format的縮寫。這樣表示顯然比較浪費存儲空間，如果表示BMP字元，4個位元組中的兩個高位位元組都是0，如果表示ASCII或Latin-1字元，4個位元組中的3個高位位元組都是0，而我們常用的絶大多數字元都在BMP、ASCII或Latin-1字符集中。另一種比較節省存儲空間的辦法是用兩個位元組表示一個字元，稱為UCS-2或UTF-16，這樣只能表示BMP中的字元，但BMP中有一些控制字元用於擴展，可以用兩個這樣的控制字元表示其他平面的字元，稱為Surrogate Pair。</p>
+<p>無論是UTF-32還是UTF-16都有一個更嚴重的問題就是和C語言不兼容，在C語言中位元組0表示字元串結尾，庫函數 <tt class="docutils literal"><span class="pre">strlen</span></tt> 、 <tt class="docutils literal"><span class="pre">strcpy</span></tt> 等等都依賴于這一點，如果字元串用UTF-32或UTF-16存儲，其中有很多位元組0並不表示字元串結尾，那就亂套了。</p>
+<p id="index-4">UNIX之父Ken Thompson提出的UTF-8編碼很好地解決了這個問題，因此得到廣泛應用。和UTF-16、UTF-32不同的是，UTF-8編碼的長度不固定，每個字元用1~6個位元組表示。UTF-8編碼具有以下性質：</p>
+<ul class="simple">
+<li>編碼為U+0000~U+007F的字元只占一個位元組，就是0x00~0x7F，和ASCII碼兼容。</li>
+<li>編碼大於U+007F的字元用2~6個位元組表示，每個位元組的最高位都是1，而所有ASCII碼的最高位都是0，因此非ASCII碼字元的UTF-8編碼中不會出現ASCII碼的位元組（也不會出現位元組0）。</li>
+<li>在非ASCII碼字元的多位元組編碼中，第一個位元組的取值範圍是0xC0~0xFD，根據第一個位元組可以判斷後面還有幾個位元組也屬於當前字元的編碼，後面每個位元組的取值範圍都是0x80~0xBF，詳見下面的編碼格式。</li>
+<li>所有Unicode字元（共231個）都可以用UTF-8編碼表示出來。</li>
+<li>UTF-8編碼最長6個位元組，BMP字元的UTF-8編碼最長三個位元組。</li>
+<li>0xFE和0xFF這兩個位元組在UTF-8編碼中不會出現。</li>
+</ul>
+<p>具體來說，UTF-8編碼有以下幾種格式:</p>
+<div class="highlight-python"><pre>U-00000000 – U-0000007F: 0xxxxxxx
+U-00000080 – U-000007FF: 110xxxxx 10xxxxxx
+U-00000800 – U-0000FFFF: 1110xxxx 10xxxxxx 10xxxxxx
+U-00010000 – U-001FFFFF: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+U-00200000 – U-03FFFFFF: 111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
+U-04000000 – U-7FFFFFFF: 1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx</pre>
+</div>
+<ul class="simple">
+<li>ASCII碼字元的UTF-8編碼只有一個位元組（就是ASCII碼本身），最高位是0。</li>
+<li>非ASCII碼字元的第一個位元組最高位是1，並且後面至少還要跟一個1，最高位後面跟幾個1就表示後面還有幾個位元組也屬於當前字元的編碼，例如111110xx，最高位後面跟4個1，表示後面還有4個位元組也屬於當前字元的編碼。</li>
+<li>後面每個位元組的最高兩位都是10，而第一個位元組的最高兩位要麼是0x，要麼是11，因此可以和後面的位元組區分開。這樣的設計有利於誤碼同步，例如在網絡傳輸過程中丟失了幾個位元組，很容易判斷當前字元是不完整的，也很容易找到下一個字元應該從哪開始，頂多丟掉一兩個字元就可以同步了，而不會導致後面的解碼過程全部錯亂。</li>
+<li>上面的格式中標為x的位就是字元的Unicode碼，最後一種6位元組的格式中x位有31個，可以表示31位的Unicode碼。UTF-8編碼就像一列火車，第一個位元組是車頭，後面每個位元組是車廂，其中承載的貨物是Unicode碼。UTF-8規定承載的Unicode碼以大端表示，就是說第一個位元組中的x位是Unicode碼的高位，後面位元組中的x位是Unicode碼的低位。</li>
+<li>UTF-8規定每個字元必須用儘可能少的位元組來編碼，換句話說，在符合編碼格式的前提下，Unicode碼從最高位開始的0位要儘可能少。</li>
+</ul>
+<p>舉例來說，U+00A9（©字元）的二進制是10101001，編碼成UTF-8是11000010 10101001（0xC2 0xA9），但不能編碼成11100000 10000010 10101001。</p>
+</div>
+<div class="section" id="linux-cunicodeutf-8">
+<h2>在Linux C編程中使用Unicode和UTF-8<a class="headerlink" href="#linux-cunicodeutf-8" title="Permalink to this headline">¶</a></h2>
+<p>目前各種Linux發行版都支持UTF-8編碼，在磁碟上保存一個含有非ASCII字元的文本檔案，預設是以UTF-8編碼的。當前系統的字元編碼設置可以用 <strong class="command">locale</strong> 命令查看:</p>
+<div class="highlight-python"><pre>$ locale
+LANG=en_US.UTF-8
+LANGUAGE=
+LC_CTYPE="en_US.UTF-8"
+LC_NUMERIC="en_US.UTF-8"
+LC_TIME="en_US.UTF-8"
+LC_COLLATE="en_US.UTF-8"
+LC_MONETARY="en_US.UTF-8"
+LC_MESSAGES="en_US.UTF-8"
+LC_PAPER="en_US.UTF-8"
+LC_NAME="en_US.UTF-8"
+LC_ADDRESS="en_US.UTF-8"
+LC_TELEPHONE="en_US.UTF-8"
+LC_MEASUREMENT="en_US.UTF-8"
+LC_IDENTIFICATION="en_US.UTF-8"
+LC_ALL=</pre>
+</div>
+<p id="index-5">Locale定義了語言、字元編碼、日期時間格式、數字格式、貨幣格式等參數，詳見 <em class="manpage">locale(1)</em> 、 <em class="manpage">locale(5)</em> 、 <em class="manpage">locale(7)</em> 。 <strong class="command">locale</strong> 命令列出的這些參數每一個都可以用環境變數單獨設置，但通常這些參數的取值是一致的。在我的系統中只設置了環境變數 <tt class="docutils literal"><span class="pre">LANG</span></tt> ，其他參數沒有設置，用 <strong class="command">locale</strong> 命令可以看到其他Locale參數也繼承了環境變數 <tt class="docutils literal"><span class="pre">LANG</span></tt> 的值。</p>
+<p>常用漢字都位於BMP中，所以一個漢字的UTF-8編碼通常是3個位元組。例如編輯一個C程序：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;你好</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>源檔案是以UTF-8編碼存儲的:</p>
+<div class="highlight-python"><pre>$ hexdump -C nihao.c
+00000000  23 69 6e 63 6c 75 64 65  20 3c 73 74 64 69 6f 2e  |#include &lt;stdio.|
+00000010  68 3e 0a 0a 69 6e 74 20  6d 61 69 6e 28 76 6f 69  |h&gt;..int main(voi|
+00000020  64 29 0a 7b 0a 09 70 72  69 6e 74 66 28 22 e4 bd  |d).{..printf("..|
+00000030  a0 e5 a5 bd 5c 6e 22 29  3b 0a 09 72 65 74 75 72  |....\n");..retur|
+00000040  6e 20 30 3b 0a 7d 0a                              |n 0;.}.|
+00000047</pre>
+</div>
+<p id="index-6">其中 <tt class="docutils literal"><span class="pre">e4</span> <span class="pre">bd</span> <span class="pre">a0</span></tt> 這三個位元組就是“你”的UTF-8編碼， <tt class="docutils literal"><span class="pre">e5</span> <span class="pre">a5</span> <span class="pre">bd</span></tt> 這三個位元組就是“好”的UTF-8編碼。把它編譯成目標檔案，&#8221;你好n&#8221;這個字元串就成了這樣一串位元組： <tt class="docutils literal"><span class="pre">e4</span> <span class="pre">bd</span> <span class="pre">a0</span> <span class="pre">e5</span> <span class="pre">a5</span> <span class="pre">bd</span> <span class="pre">0a</span> <span class="pre">00</span></tt> ，轉義序列由兩個位元組變成一個位元組，字元串末尾添了一個位元組0，而漢字仍然占3個位元組，在C標準中多位元組編碼的字元稱為Multibyte Character。運行這個程序會把這一串位元組輸出到當前終端設備，如果當前終端能夠識別UTF-8編碼（比如圖形界面的終端窗口）就能打印出漢字，如果不能識別UTF-8編碼（比如一般的字元終端）就打印不出漢字。也就是說，在這個程序中識別漢字的工作既不是由C編譯器做的也不是由 <tt class="docutils literal"><span class="pre">printf</span></tt> 函數做的，C編譯器原封不動地把源檔案中的UTF-8編碼複製到目標檔案中， <tt class="docutils literal"><span class="pre">printf</span></tt> 函數再把這一串位元組當作以Null結尾的字元串原封不動地輸出到終端設備，識別漢字的工作是由終端設備做的。</p>
+<p id="index-7">僅有這種程度的漢字支持是不夠的，有時候我們需要在C程序中操作字元串裡的字元，比如求字元串&#8221;你好n&#8221;中有幾個漢字或字元，用 <tt class="docutils literal"><span class="pre">strlen</span></tt> 就不靈了，因為 <tt class="docutils literal"><span class="pre">strlen</span></tt> 求的是位元組數而不是字元數。為了在程序中操作Unicode字元，C標準定義了寬字元（Wide Character）類型 <tt class="docutils literal"><span class="pre">wchar_t</span></tt> （使用這個類型名需包含標頭檔 <tt class="file docutils literal"><span class="pre">wchar.h</span></tt> ）。在字元常量或字元串字面值前面加一個 <tt class="docutils literal"><span class="pre">L</span></tt> 就表示寬字元常量或寬字元串，例如定義 <tt class="docutils literal"><span class="pre">wchar_t</span> <span class="pre">c</span> <span class="pre">=</span> <span class="pre">L'你';</span></tt> ，變數 <tt class="docutils literal"><span class="pre">c</span></tt> 的值就是漢字“你”的31位Unicode碼，而 <tt class="docutils literal"><span class="pre">L&quot;你好\n&quot;</span></tt> 就相當於數組 <tt class="docutils literal"><span class="pre">wchar_t</span> <span class="pre">str[]</span> <span class="pre">=</span> <span class="pre">{</span> <span class="pre">L'你',</span> <span class="pre">L'好',</span> <span class="pre">L'\n',</span> <span class="pre">0</span> <span class="pre">};</span></tt> 。C標準還定義了一些操作寬字元串的庫函數，例如 <tt class="docutils literal"><span class="pre">wcslen</span></tt> 函數可以取寬字元串中的字元個數。</p>
+<p>注意Wide Character和Multibyte Character這兩個概念的區別：</p>
+<ol class="arabic simple">
+<li>C標準沒有規定Wide Character和Multibyte Character應該採用什麼編碼，但目前各種Linux發行版的Wide Character都採用Unicode碼，Multibyte Character都採用UTF-8編碼。</li>
+<li>每個Wide Character有固定的長度，用 <tt class="docutils literal"><span class="pre">wchar_t</span></tt> 類型來表示。而每個Multibyte Character的長度不固定，沒有規定一種類型來表示Multibyte Character。</li>
+<li>Wide Character中可能包含位元組0，所以不能保存在普通的以Null結尾的字元串中，而必須保存在寬字元串中。而Multibyte Character中除了Null字元外不允許出現位元組0，因此可以保存在以Null結尾的字元串中。</li>
+<li>Wide Character適合做字元運算，比如統計字元數，而Multibyte Character適合做存儲和傳輸，存儲時比較節省空間，傳輸時有較好的容錯性。</li>
+</ol>
+<p>看下面的例子：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="cp">#include &lt;locale.h&gt;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">setlocale</span><span class="p">(</span><span class="n">LC_CTYPE</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Can&#39;t set the specified locale! &quot;</span>
+                        <span class="s">&quot;Check LC_ALL, LC_CTYPE, LANG.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+                <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%ls&quot;</span><span class="p">,</span> <span class="s">L&quot;你好</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>寬字元串 <tt class="docutils literal"><span class="pre">L&quot;你好\n&quot;</span></tt> 在原始碼中當然還是UTF-8編碼，但編譯器會把它轉換成4個Unicode碼 <tt class="docutils literal"><span class="pre">0x00004f60</span> <span class="pre">0x0000597d</span> <span class="pre">0x0000000a</span> <span class="pre">0x00000000</span></tt> 保存到目標檔案中，按小端存儲就是 <tt class="docutils literal"><span class="pre">60</span> <span class="pre">4f</span> <span class="pre">00</span> <span class="pre">00</span> <span class="pre">7d</span> <span class="pre">59</span> <span class="pre">00</span> <span class="pre">00</span> <span class="pre">0a</span> <span class="pre">00</span> <span class="pre">00</span> <span class="pre">00</span> <span class="pre">00</span> <span class="pre">00</span> <span class="pre">00</span> <span class="pre">00</span></tt> ，用 <tt class="docutils literal"><span class="pre">hexdump</span></tt> 命令查看目標檔案可以找到這些位元組。</p>
+<p><tt class="docutils literal"><span class="pre">printf</span></tt> 的轉換說明 <tt class="docutils literal"><span class="pre">%ls</span></tt> 表示把後面的參數按寬字元串解釋，不是見到位元組0就結束，而是見到Null字元的Unicode碼（4個位元組0）才結束，但輸出到終端仍然要以Multibyte Character編碼輸出，這樣終端設備才能識別，所以 <tt class="docutils literal"><span class="pre">printf</span></tt> 函數先把寬字元串轉換成UTF-8編碼的Multibyte Character字元串再輸出到終端。我們把輸出重定向到檔案會看得更清楚:</p>
+<div class="highlight-python"><pre>$ gcc main.c
+$ ./a.out &gt; foo
+$ hexdump -C foo
+00000000  e4 bd a0 e5 a5 bd 0a                              |.......|
+00000007</pre>
+</div>
+<p>最後解釋一下 <em class="manpage">setlocale(3)</em> 函數：</p>
+<ol class="arabic simple">
+<li>雖然當前系統的Locale設置是 <tt class="docutils literal"><span class="pre">&quot;en_US.UTF-8&quot;</span></tt> ，但C程序在啟動時各種Locale參數都設置成預設值 <tt class="docutils literal"><span class="pre">&quot;C&quot;</span></tt> ，並不繼承當前系統的Locale設置。這樣規定是為了代碼的可移植性，如果一個C程序不調用 <tt class="docutils literal"><span class="pre">setlocale</span></tt> 函數，那麼它不管在什麼系統上運行，其各種Locale參數都是 <tt class="docutils literal"><span class="pre">&quot;C&quot;</span></tt> ，其中 <tt class="docutils literal"><span class="pre">LC_CTYPE</span></tt> 參數是 <tt class="docutils literal"><span class="pre">&quot;C&quot;</span></tt> 表示採用ASCII字符集。</li>
+<li>我們調用 <tt class="docutils literal"><span class="pre">setlocale</span></tt> 傳的第一個參數是 <tt class="docutils literal"><span class="pre">LC_CTYPE</span></tt> ，它在C語言中被定義成一個整數常量，第二個參數是設置給它的值。如果第二個參數是空字元串 <tt class="docutils literal"><span class="pre">&quot;&quot;</span></tt> ，則表示採用當前系統的Locale設置， <tt class="docutils literal"><span class="pre">setlocale</span></tt> 函數依次查找環境變數 <tt class="docutils literal"><span class="pre">LC_ALL</span></tt> 、 <tt class="docutils literal"><span class="pre">LC_CTYPE</span></tt> 和 <tt class="docutils literal"><span class="pre">LANG</span></tt> ，找到第一個有定義的環境變數就用它的值來設置 <tt class="docutils literal"><span class="pre">LC_CTYPE</span></tt> 。因此，調用 <tt class="docutils literal"><span class="pre">setlocale</span></tt> 函數後 <tt class="docutils literal"><span class="pre">LC_CTYPE</span></tt> 參數的值變成了 <tt class="docutils literal"><span class="pre">&quot;en_US.UTF-8&quot;</span></tt> 。</li>
+<li><tt class="docutils literal"><span class="pre">LC_CTYPE</span></tt> 參數影響C語言對寬字元和寬字元串的處理，正因為我們通過這個參數設置了UTF-8編碼， <tt class="docutils literal"><span class="pre">printf</span></tt> 函數才會把寬字元串轉換成UTF-8編碼的Multibyte Character字元串再輸出到終端。上面的程序如果去掉 <tt class="docutils literal"><span class="pre">setlocale</span></tt> 調用， <tt class="docutils literal"><span class="pre">LC_CTYPE</span></tt> 參數的值預設是 <tt class="docutils literal"><span class="pre">&quot;C&quot;</span></tt> （採用ASCII字符集），則無法打印出“你好”，因為這兩個字元不屬於ASCII字符集。</li>
+</ol>
+<p>關於Unicode和UTF-8本節只介紹了最基本的概念，部分內容出自 <a class="reference internal" href="bibli.html#unicodefaq">[UnicodeFAQ]</a> ，讀者可進一步參考這篇文章。</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">字元編碼</a><ul>
+<li><a class="reference internal" href="#ascii">ASCII碼</a></li>
+<li><a class="reference internal" href="#unicodeutf-8">Unicode和UTF-8</a></li>
+<li><a class="reference internal" href="#linux-cunicodeutf-8">在Linux C編程中使用Unicode和UTF-8</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="linkedlist.html"
+                        title="previous chapter">12. 鏈表、二叉樹和哈希表</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="app-gfdl.html"
+                        title="next chapter">GNU Free Documentation License Version 1.3, 3 November 2008</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/zh/app-encoding.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><table border=0 cellspacing=0 style="color: white;">
+
+<tr><td>
+   請輸入您的email訂閲<a href="http://groups.google.com/group/learning-linux-c-cpp">本書的郵件列表</a><br/>
+   (Please enter your email to subscribe to <a href="http://groups.google.com/group/learning-linux-c-cpp">this book's mailing list</a>)<br/>
+   <form action="http://groups.google.com/group/learning-linux-c-cpp/boxsubscribe"><input type=text name=email><input type=submit name="sub" value="訂閲(Subscribe)"></form>
+</td></tr>
+
+<tr><td><br/>關注<a href="http://weibo.com/sansoong">我的微博</a></td></tr>
+
+<tr><td><br/>Checkout the source from github: <a href="https://github.com/learning-linux-c-cpp/akabook">https://github.com/learning-linux-c-cpp/akabook</a></td></tr>
+
+<tr><td>
+   <br/>感謝您的慷慨捐贈！<br/>
+   Thanks for your generous donation!<br/>
+   <a href="http://me.alipay.com/songjinshan" target="_blank"><img src="_static/me.alipay.png" alt="捐贈"></a>
+</td></tr>
+
+</table>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="app-gfdl.html" title="GNU Free Documentation License Version 1.3, 3 November 2008"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="linkedlist.html" title="12. 鏈表、二叉樹和哈希表"
+             >previous</a> |</li>
+        <li><a href="../index.html">akabook 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >中文版：Linux C/C++編程一站式學習</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Sean Soong.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

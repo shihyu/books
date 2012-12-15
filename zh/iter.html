@@ -1,0 +1,605 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>6. 循環語句 &mdash; akabook 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="akabook 3.0 documentation" href="../index.html" />
+    <link rel="up" title="中文版：Linux C/C++編程一站式學習" href="index.html" />
+    <link rel="next" title="7. 結構體" href="struct.html" />
+    <link rel="prev" title="5. 深入理解函數" href="func2.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="struct.html" title="7. 結構體"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="func2.html" title="5. 深入理解函數"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">akabook 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">中文版：Linux C/C++編程一站式學習</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>6. 循環語句<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="while">
+<span id="iter-while"></span><h2>6.1. while語句<a class="headerlink" href="#while" title="Permalink to this headline">¶</a></h2>
+<p id="index-0">在 <a class="reference internal" href="func2.html#func2-recurse"><em>遞歸</em></a> 中，我們介紹了用遞歸求n!的方法，其實每次遞歸調用都在重複做同一件事，就是把n乘到(n-1)!上然後把結果返回。雖說是重複，但每次做都稍微有一點區別（n的值不一樣），這種每次都有一點區別的重複工作稱為迭代（Iteration）。我們使用計算機的主要目的之一就是讓它做重複迭代的工作，因為把一件工作重複做成千上萬次而不出錯正是計算機最擅長的，也是人最不擅長的。雖然迭代用遞歸來做就夠了，但C語言提供了循環語句使迭代程序寫起來更方便。例如 <tt class="docutils literal"><span class="pre">factorial</span></tt> 用 <tt class="docutils literal"><span class="pre">while</span></tt> 語句可以寫成：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="nf">factorial</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">result</span> <span class="o">*</span> <span class="n">n</span><span class="p">;</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>和 <tt class="docutils literal"><span class="pre">if</span></tt> 語句類似， <tt class="docutils literal"><span class="pre">while</span></tt> 語句由一個控製表達式和一個子語句組成，子語句可以是由若干條語句和聲明組成的語句塊:</p>
+<div class="highlight-python"><pre>語句 → while (控製表達式) 語句</pre>
+</div>
+<p id="index-1">如果控製表達式的值為真，子語句就被執行，然後再次測試控製表達式的值，如果還是真，就把子語句再執行一遍，再測試控製表達式的值……這種控制流程稱為循環（Loop），子語句稱為循環體。如果某次測試控製表達式的值為假，就跳出循環執行後面的 <tt class="docutils literal"><span class="pre">return</span></tt> 語句，如果第一次測試控製表達式的值就是假，那麼直接跳到 <tt class="docutils literal"><span class="pre">return</span></tt> 語句，循環體一次都不執行。</p>
+<p id="index-2">變數 <tt class="docutils literal"><span class="pre">result</span></tt> 在這個循環中的作用是累加器（Accumulator），把每次循環的中間結果累積起來，循環結束後得到的累積值就是最終結果，由於這個例子是用乘法來累積的，所以 <tt class="docutils literal"><span class="pre">result</span></tt> 的初值是1，如果用加法累積則 <tt class="docutils literal"><span class="pre">result</span></tt> 的初值應該是0。變數 <tt class="docutils literal"><span class="pre">n</span></tt> 是循環變數（Loop Variable），對於每次循環，在循環體中都要改變它的值，在控製表達式中都要測試它的值，這兩點合起來起到控制循環次數的作用，在這個例子中 <tt class="docutils literal"><span class="pre">n</span></tt> 的值是遞減的，也有些循環採用遞增的循環變數。這個例子有一定的典型性，累加器和循環變數這兩種模式在循環中都很常見。</p>
+<p>可見，遞歸能解決的問題用循環也能解決，但解決問題的思路不一樣。用遞歸解決這個問題靠的是遞推關係n!=n·(n-1)!，用循環解決這個問題則更像是把這個公式展開了：n!=n·(n-1)·(n-2)·…·3·2·1。把公式展開了理解會更直觀一些，所以有些時候循環程序比遞歸程序更容易理解。但也有一些公式要展開是非常複雜甚至是不可能的，反倒是遞推關係更直觀一些，這種情況下遞歸程序比循環程序更容易理解。</p>
+<p id="index-3">這個例子的遞歸和循環解法還有一點不同：看 <a class="reference internal" href="func2.html#func2-factorial"><em>factorial(3)的調用過程</em></a> ，在整個遞歸調用過程中，雖然分配和釋放了很多變數，但所有變數都只在初始化時賦值，沒有任何變數的值發生過改變，而上面的循環程序則通過對 <tt class="docutils literal"><span class="pre">n</span></tt> 和 <tt class="docutils literal"><span class="pre">result</span></tt> 這兩個變數多次賦值來達到同樣的目的。前一種思路稱為函數式編程（Functional Programming），而後一種思路稱為命令式編程（Imperative Programming）。函數式編程的“函數”類似於數學函數的概念，回顧一下 <a class="reference internal" href="func.html#func-mathfunc"><em>數學函數</em></a> 所講的，數學函數是沒有Side Effect的，而C語言的函數可以有Side Effect，比如在一個函數中修改某個全局變數的值就是一種Side Effect。在 <a class="reference internal" href="func.html#func-scope"><em>作用域</em></a> 講過全局變數被多次賦值會給調試帶來困難，如果一個函數體很長，控制流程很複雜，那麼局部變數被多次賦值也會有同樣的問題。因此，不要以為“變數可以多次賦值”是天經地義的，有很多編程語言可以完全採用函數式編程的方式，避免Side Effect，例如LISP、Haskell、Erlang等。用C語言編程主要還是採用Imperative的方式，但要記住， <strong>給變數多次賦值時要格外小心，在代碼中多次讀寫同一變數應該以一種一致的方式進行</strong> 。所謂“一致的方式”是說應該有一套統一的規則，規定在一段代碼中哪裡會對某個全局變數賦值、哪裡會讀取它的值，比如在 <a class="reference internal" href="stdlib.html#stdlib-errno"><em>errno與perror/strerror函數</em></a> 會講到訪問 <tt class="docutils literal"><span class="pre">errno</span></tt> 的規則。</p>
+<p id="index-4">遞歸函數如果寫得不小心就會變成無窮遞歸，同樣道理，循環如果寫得不小心就會變成無限循環（Infinite Loop）或者叫死循環。如果 <tt class="docutils literal"><span class="pre">while</span></tt> 語句的控製表達式永遠為真就成了一個死循環，例如 <tt class="docutils literal"><span class="pre">while</span> <span class="pre">(1)</span> <span class="pre">{...}</span></tt> 。在寫循環時要小心檢查你寫的控製表達式有沒有可能取值為假，除非你故意寫死循環（有的時候這是必要的）。在上面的例子中，不管 <tt class="docutils literal"><span class="pre">n</span></tt> 一開始是幾，每次循環都會把 <tt class="docutils literal"><span class="pre">n</span></tt> 減掉1， <tt class="docutils literal"><span class="pre">n</span></tt> 越來越小最後必然等於0，所以控製表達式最後必然取值為假，但如果把 <tt class="docutils literal"><span class="pre">n</span> <span class="pre">=</span> <span class="pre">n</span> <span class="pre">-</span> <span class="pre">1;</span></tt> 這句漏掉就成了死循環。有時候是不是死循環並不是那麼一目瞭然，例如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">while</span> <span class="p">(</span><span class="n">n</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>如果 <tt class="docutils literal"><span class="pre">n</span></tt> 為正整數，這個循環能跳出來嗎？循環體所做的事情是：如果 <tt class="docutils literal"><span class="pre">n</span></tt> 是偶數，就把 <tt class="docutils literal"><span class="pre">n</span></tt> 除以2，如果 <tt class="docutils literal"><span class="pre">n</span></tt> 是奇數，就把 <tt class="docutils literal"><span class="pre">n</span></tt> 乘3加1。一般來說循環變數要麼遞增要麼遞減，可是這個例子中的 <tt class="docutils literal"><span class="pre">n</span></tt> 一會兒變大一會兒變小，最終會不會變成1呢？可以找個數試試，例如一開始 <tt class="docutils literal"><span class="pre">n</span></tt> 等於7，每次循環後 <tt class="docutils literal"><span class="pre">n</span></tt> 的值依次是：7、22、11、34、17、52、26、13、40、20、10、5、16、8、4、2、1－－最後 <tt class="docutils literal"><span class="pre">n</span></tt> 確實等於1了。讀者可以再試幾個數都是如此，但無論試多少個數也不能代替證明，這個循環有沒有可能對某些正整數 <tt class="docutils literal"><span class="pre">n</span></tt> 是死循環呢？其實這個例子只是給讀者提提興趣，同時提醒讀者寫循環時要有意識地檢查控製表達式。至于這個循環有沒有可能是死循環，這是著名的3x+1問題，目前世界上還無人能證明。許多世界難題都是這樣的：問題的描述無比簡單，連小學生都能看懂，但證明卻無比困難。</p>
+<p class="rubric">習題</p>
+<ol class="arabic">
+<li><p class="first">用循環解決 <a class="reference internal" href="func2.html#func2-recurse"><em>遞歸</em></a> 的習題，體會遞歸和循環這兩種不同的思路。</p>
+</li>
+<li><p class="first">編寫程序數一下1到100的所有整數中出現多少次數字9。在寫程序之前先把這些問題考慮清楚：
+#. 這個問題中的循環變數是什麼？
+#. 這個問題中的累加器是什麼？用加法還是用乘法累積？
+#. 在 <a class="reference internal" href="cond.html#cond-ifelse"><em>if/else語句</em></a> 的習題中寫過取一個整數的個位和十位的表達式，這兩個表達式怎樣用到本程序中？</p>
+</li>
+<li><p class="first">下面的循環語句執行結果是什麼？</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</li>
+</ol>
+</div>
+<div class="section" id="do-while">
+<h2>6.2. do/while語句<a class="headerlink" href="#do-while" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">do/while</span></tt> 語句的語法是:</p>
+<div class="highlight-python"><pre>語句 → do 語句 while (控製表達式);</pre>
+</div>
+<p><tt class="docutils literal"><span class="pre">while</span></tt> 語句先測試控製表達式的值再執行循環體，而 <tt class="docutils literal"><span class="pre">do/while</span></tt> 語句先執行循環體再測試控製表達式的值。如果控製表達式的值一開始就是假， <tt class="docutils literal"><span class="pre">while</span></tt> 語句的循環體一次都不執行，而 <tt class="docutils literal"><span class="pre">do/while</span></tt> 語句的循環體仍然要執行一次再跳出循環。其實只要有 <tt class="docutils literal"><span class="pre">while</span></tt> 循環就足夠了， <tt class="docutils literal"><span class="pre">do/while</span></tt> 循環和後面要講的 <tt class="docutils literal"><span class="pre">for</span></tt> 循環都可以改寫成 <tt class="docutils literal"><span class="pre">while</span></tt> 循環，只不過有些情況下用 <tt class="docutils literal"><span class="pre">do/while</span></tt> 或 <tt class="docutils literal"><span class="pre">for</span></tt> 循環寫起來更簡便，代碼更易讀。</p>
+<p>上一節的 <tt class="docutils literal"><span class="pre">factorial</span></tt> 函數也可以改用 <tt class="docutils literal"><span class="pre">do/while</span></tt> 循環來寫：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="nf">factorial</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">do</span> <span class="p">{</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">result</span> <span class="o">*</span> <span class="n">i</span><span class="p">;</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>寫循環一定要注意循環即將結束時控製表達式的臨界條件是否準確，上面的循環控制條件如果寫成 <tt class="docutils literal"><span class="pre">i</span> <span class="pre">&lt;</span> <span class="pre">n</span></tt> 就錯了，當 <tt class="docutils literal"><span class="pre">i</span> <span class="pre">==</span> <span class="pre">n</span></tt> 時跳出循環，最後的結果中就少乘了一個 <tt class="docutils literal"><span class="pre">n</span></tt> 。雖然變數名應該儘可能起得有意義一些，不過用 <tt class="docutils literal"><span class="pre">i</span></tt> 、 <tt class="docutils literal"><span class="pre">j</span></tt> 、 <tt class="docutils literal"><span class="pre">k</span></tt> 給循環變數起名倒是很常見的。</p>
+</div>
+<div class="section" id="for">
+<h2>6.3. for語句<a class="headerlink" href="#for" title="Permalink to this headline">¶</a></h2>
+<p>前兩節我們在 <tt class="docutils literal"><span class="pre">while</span></tt> 和 <tt class="docutils literal"><span class="pre">do/while</span></tt> 循環中使用循環變數，其實使用循環變數最常見的是 <tt class="docutils literal"><span class="pre">for</span></tt> 循環這種形式。 <tt class="docutils literal"><span class="pre">for</span></tt> 語句的語法是:</p>
+<div class="highlight-python"><pre>語句 → for (控製表達式1; 控製表達式2; 控製表達式3) 語句</pre>
+</div>
+<p>如果不考慮循環體中包含 <tt class="docutils literal"><span class="pre">continue</span></tt> 語句的情況（稍後介紹 <tt class="docutils literal"><span class="pre">continue</span></tt> 語句），這個 <tt class="docutils literal"><span class="pre">for</span></tt> 循環等價于下面的 <tt class="docutils literal"><span class="pre">while</span></tt> 循環:</p>
+<div class="highlight-python"><pre>控製表達式1;
+while (控製表達式2) {
+        語句
+        控製表達式3;
+}</pre>
+</div>
+<p>從這種等價形式來看，控製表達式1和3都可以為空，但控製表達式2是必不可少的，例如 <tt class="docutils literal"><span class="pre">for</span> <span class="pre">(;1;)</span> <span class="pre">{...}</span></tt> 等價于 <tt class="docutils literal"><span class="pre">while</span> <span class="pre">(1)</span> <span class="pre">{...}</span></tt> 死循環。C語言規定，如果控製表達式2為空，則認為控製表達式2的值為真，因此死循環也可以寫成 <tt class="docutils literal"><span class="pre">for</span> <span class="pre">(;;)</span> <span class="pre">{...}</span></tt> 。</p>
+<p>上一節 <tt class="docutils literal"><span class="pre">do/while</span></tt> 循環的例子可以改寫成 <tt class="docutils literal"><span class="pre">for</span></tt> 循環：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="nf">factorial</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">result</span> <span class="o">*</span> <span class="n">i</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p id="index-5">其中 <tt class="docutils literal"><span class="pre">++i</span></tt> 這個表達式相當於 <tt class="docutils literal"><span class="pre">i</span> <span class="pre">=</span> <span class="pre">i</span> <span class="pre">+</span> <span class="pre">1</span></tt> <a class="footnote-reference" href="#id4" id="id2">[1]</a> ，++稱為首碼自增運算符（Prefix Increment Operator）。類似地，&#8211;稱為首碼自減運算符（Prefix Decrement Operator） <a class="footnote-reference" href="#id5" id="id3">[2]</a> ， <tt class="docutils literal"><span class="pre">--i</span></tt> 相當於 <tt class="docutils literal"><span class="pre">i</span> <span class="pre">=</span> <span class="pre">i</span> <span class="pre">-</span> <span class="pre">1</span></tt> 。如果把 <tt class="docutils literal"><span class="pre">++i</span></tt> 這個表達式看作一個函數調用，除了傳入一個參數 <tt class="docutils literal"><span class="pre">i</span></tt> 返回一個值（返回值等於參數值加1）之外，還產生一個Side Effect，就是把變數 <tt class="docutils literal"><span class="pre">i</span></tt> 的值增加了1。</p>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>這兩種寫法在語義上稍有區別，詳見 <a class="reference internal" href="op.html#op-compoundassign"><em>復合賦值運算符</em></a> 。</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[2]</a></td><td>increment和decrement這兩個詞很有意思，大多數字典都說它們是名詞，但經常被當成動詞用，在計算機術語中，它們當動詞用應該理解為increase by one和decrease by one。現代英語中很多原本是名詞的都被當成動詞用，字典都跟不上時代了，再比如transition也是如此。</td></tr>
+</tbody>
+</table>
+<p id="index-6">++和 ‐‐ 運算符也可以用在變數後面，例如 <tt class="docutils literal"><span class="pre">i++</span></tt> 和 <tt class="docutils literal"><span class="pre">i--</span></tt> ，為了和首碼運算符區別，這兩個運算符稱為尾碼自增運算符（Postfix Increment Operator）和尾碼自減運算符（Postfix Decrement Operator）。如果把 <tt class="docutils literal"><span class="pre">i++</span></tt> 這個表達式看作一個函數調用，傳入一個參數 <tt class="docutils literal"><span class="pre">i</span></tt> 返回一個值，返回值就等於參數值（而不是參數值加1），此外也產生一個Side Effect，就是把變數 <tt class="docutils literal"><span class="pre">i</span></tt> 的值增加了1，它和 <tt class="docutils literal"><span class="pre">++i</span></tt> 的區別就在於返回值不同。同理， <tt class="docutils literal"><span class="pre">--i</span></tt> 返回 <tt class="docutils literal"><span class="pre">i</span></tt> 減1之後的值，而 <tt class="docutils literal"><span class="pre">i--</span></tt> 返回 <tt class="docutils literal"><span class="pre">i</span></tt> 減1之前的值，但這兩個表達式都產生同樣的Side Effect，就是把變數 <tt class="docutils literal"><span class="pre">i</span></tt> 的值減了1。</p>
+<p>使用++和 ‐‐ 運算符會使程序更加簡潔，但也會影響程序的可讀性， [K&amp;R]_ 中的示例代碼大量運用++、 ‐‐ 和其他表達式的組合使得代碼非常簡潔。為了讓初學者循序漸進，在接下來的幾章中++、 ‐‐ 運算符總是單獨組成一個表達式而不跟其他表達式組合，從 <a class="reference internal" href="sortsearch.html"><em>排序與查找</em></a> 開始將採用 [K&amp;R]_ 的簡潔風格。</p>
+<p>我們看一個有意思的問題： <tt class="docutils literal"><span class="pre">a+++++b</span></tt> 這個表達式如何理解？應該理解成 <tt class="docutils literal"><span class="pre">a++</span> <span class="pre">++</span> <span class="pre">+b</span></tt> 還是 <tt class="docutils literal"><span class="pre">a++</span> <span class="pre">+</span> <span class="pre">++b</span></tt> ，還是 <tt class="docutils literal"><span class="pre">a</span> <span class="pre">+</span> <span class="pre">++</span> <span class="pre">++b</span></tt> 呢？應該按第一種方式理解。編譯的過程分為詞法解析、語法解析、語義檢查三個階段，我們分別來分析：</p>
+<ol class="arabic simple">
+<li>在詞法解析階段，編譯器總是從前到後找最長的合法Token。把這個表達式從前到後解析，變數名 <tt class="docutils literal"><span class="pre">a</span></tt> 是一個Token， <tt class="docutils literal"><span class="pre">a</span></tt> 後面有兩個以上的+號，在C語言中一個+號是合法的Token（可以是加法運算符或正號），兩個+號也是合法的Token（可以是自增運算符），根據最長匹配原則，編譯器絶不會止步于一個+號，而一定會把兩個+號當作一個Token。</li>
+<li>再往後解析仍然有兩個以上的+號，所以又是一個++運算符。</li>
+<li>再往後解析只剩一個+號了，是加法運算符。</li>
+<li>再往後解析是變數名 <tt class="docutils literal"><span class="pre">b</span></tt> 。</li>
+<li>詞法解析之後進入下一階段語法解析， <tt class="docutils literal"><span class="pre">a</span></tt> 是一個表達式， <tt class="docutils literal"><span class="pre">表達式++</span></tt> 還是表達式， 再 <tt class="docutils literal"><span class="pre">表達式++</span></tt> 還是表達式，再 <tt class="docutils literal"><span class="pre">表達式+b</span></tt> 還是表達式，語法上沒有問題。</li>
+<li>最後編譯器會做一些基本的語義檢查，這時就有問題了：++運算符要求操作數能做左值， <tt class="docutils literal"><span class="pre">a</span></tt> 能做左值所以 <tt class="docutils literal"><span class="pre">a++</span></tt> 沒問題，但表達式 <tt class="docutils literal"><span class="pre">a++</span></tt> 的值只能做右值，不能再++了，所以最終編譯器會報錯。</li>
+</ol>
+<p>C99規定了一種新的 <tt class="docutils literal"><span class="pre">for</span></tt> 循環語法（其實是從C++借鑒的），在“控製表達式1”的位置可以有變數定義。例如上例的循環變數 <tt class="docutils literal"><span class="pre">i</span></tt> 可以只在 <tt class="docutils literal"><span class="pre">for</span></tt> 循環中定義：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="nf">factorial</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">result</span> <span class="o">*</span> <span class="n">i</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>如果這樣定義，那麼變數 <tt class="docutils literal"><span class="pre">i</span></tt> 只是 <tt class="docutils literal"><span class="pre">for</span></tt> 循環中的局部變數而不是整個函數的局部變數，相當於 <a class="reference internal" href="cond.html#cond-if"><em>if語句</em></a> 講過的語句塊中的局部變數，在循環結束後就不能再使用 <tt class="docutils literal"><span class="pre">i</span></tt> 這個變數了，注意這個程序用 <strong class="command">gcc</strong> 編譯時必須加上選項 <em class="xref std std-option">-std=c99</em> <a class="footnote-reference" href="#id7" id="id6">[3]</a> 。</p>
+<table class="docutils footnote" frame="void" id="id7" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[3]</a></td><td>本書介紹的C99新特性有很多是不需要在編譯時加 <em class="xref std std-option">-std=c99</em> 選項的，例如在 <a class="reference internal" href="expr.html#expr-helloworld"><em>繼續Hello World</em></a> 講過的C++風格的 <tt class="docutils literal"><span class="pre">//</span></tt> 註釋，還有在 <a class="reference internal" href="func.html#func-deffunction"><em>定義自己的函數</em></a> 講過的“在函數體內語句和聲明可以按任意順序排列”，使用這些特性的代碼在編譯時都不需要加 <em class="xref std std-option">-std=c99</em> 選項，這是為什麼呢？因為C標準更新得太慢，有些新特性在C99標準還沒出來之前 <strong class="command">gcc</strong> 就已經實現了，有些已經存在了好多年了，所以在 <strong class="command">gcc</strong> 看來這不算什麼新特性，沒什麼好大驚小怪的。</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="breakcontinue">
+<h2>6.4. break和continue語句<a class="headerlink" href="#breakcontinue" title="Permalink to this headline">¶</a></h2>
+<p id="index-7">在 <a class="reference internal" href="cond.html#cond-switch"><em>switch語句</em></a> 中我們見到了 <tt class="docutils literal"><span class="pre">break</span></tt> 語句的一種用法，用來跳出 <tt class="docutils literal"><span class="pre">switch</span></tt> 語句塊，這個語句也可以用來跳出循環體。 <tt class="docutils literal"><span class="pre">continue</span></tt> 語句也會終止當前循環，和 <tt class="docutils literal"><span class="pre">break</span></tt> 語句不同的是， <tt class="docutils literal"><span class="pre">continue</span></tt> 語句終止當前循環後又回到循環體的開頭準備執行下一次循環。對於 <tt class="docutils literal"><span class="pre">while</span></tt> 循環和 <tt class="docutils literal"><span class="pre">do/while</span></tt> 循環，執行 <tt class="docutils literal"><span class="pre">continue</span></tt> 語句之後測試控製表達式，如果值為真則繼續執行下一次循環；對於 <tt class="docutils literal"><span class="pre">for</span></tt> 循環，執行 <tt class="docutils literal"><span class="pre">continue</span></tt> 語句之後首先計算“控製表達式3”，然後測試“控製表達式2”，如果值為真則繼續執行下一次循環。例如下面的代碼打印1到100之間的素數（Prime）：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="nf">is_prime</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">%</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="k">break</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">else</span>
+                <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">is_prime</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+                        <span class="k">continue</span><span class="p">;</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p><tt class="docutils literal"><span class="pre">is_prime</span></tt> 函數從2到 <tt class="docutils literal"><span class="pre">n</span> <span class="pre">-</span> <span class="pre">1</span></tt> 依次檢查有沒有能被 <tt class="docutils literal"><span class="pre">n</span></tt> 整除的數，如果有就說明 <tt class="docutils literal"><span class="pre">n</span></tt> 不是素數，立刻跳出循環而不執行 <tt class="docutils literal"><span class="pre">i++</span></tt> 。因此，如果 <tt class="docutils literal"><span class="pre">n</span></tt> 不是素數，則循環結束後 <tt class="docutils literal"><span class="pre">i</span></tt> 一定小於 <tt class="docutils literal"><span class="pre">n</span></tt> ，如果 <tt class="docutils literal"><span class="pre">n</span></tt> 是素數，則循環結束後 <tt class="docutils literal"><span class="pre">i</span></tt> 一定等於 <tt class="docutils literal"><span class="pre">n</span></tt> 。注意檢查臨界條件：2應該是素數，如果 <tt class="docutils literal"><span class="pre">n</span></tt> 是2，則循環體一次也不執行，但 <tt class="docutils literal"><span class="pre">i</span></tt> 的初值就是2，也等於 <tt class="docutils literal"><span class="pre">n</span></tt> ，在程序中也判定為素數。其實沒有必要從2一直檢查到n-1，只要從2檢查到⌊sqrt(n)⌋，如果全都不能整除就足以證明n是素數了，請讀者想一想為什麼。</p>
+<p>在主程序中，從1到100依次檢查每個數是不是素數，如果不是素數，並不直接跳出循環，而是 <tt class="docutils literal"><span class="pre">i++</span></tt> 後繼續執行下一次循環，因此用 <tt class="docutils literal"><span class="pre">continue</span></tt> 語句。注意主程序的局部變數 <tt class="docutils literal"><span class="pre">i</span></tt> 和 <tt class="docutils literal"><span class="pre">is_prime</span></tt> 中的局部變數 <tt class="docutils literal"><span class="pre">i</span></tt> 是不同的兩個變數，其實在調用 <tt class="docutils literal"><span class="pre">is_prime</span></tt> 函數時主程序的局部變數 <tt class="docutils literal"><span class="pre">i</span></tt> 和 <tt class="docutils literal"><span class="pre">is_prime</span></tt> 函數的參數 <tt class="docutils literal"><span class="pre">n</span></tt> 的值相等。</p>
+<p class="rubric">習題</p>
+<ol class="arabic simple">
+<li>求素數這個程序只是為了說明 <tt class="docutils literal"><span class="pre">break</span></tt> 和 <tt class="docutils literal"><span class="pre">continue</span></tt> 的用法才這麼寫的，其實完全可以不用 <tt class="docutils literal"><span class="pre">break</span></tt> 和 <tt class="docutils literal"><span class="pre">continue</span></tt> ，請讀者修改一下控制流程，去掉 <tt class="docutils literal"><span class="pre">break</span></tt> 和 <tt class="docutils literal"><span class="pre">continue</span></tt> 而保持功能不變。</li>
+<li>上一節講過怎樣把 <tt class="docutils literal"><span class="pre">for</span></tt> 循環改寫成等價的 <tt class="docutils literal"><span class="pre">while</span></tt> 循環，但也提到如果循環體中有 <tt class="docutils literal"><span class="pre">continue</span></tt> 語句這兩種形式就不等價了，想一想為什麼不等價了？</li>
+</ol>
+</div>
+<div class="section" id="id8">
+<h2>6.5. 嵌套循環<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<p>上一節求素數的例子在循環中調用一個函數，而那個函數里面又有一個循環，這其實是一種嵌套循環。如果把那個函數的代碼拿出來寫就更清楚了：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                                <span class="k">break</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>現在內循環的循環變數就不能再用 <tt class="docutils literal"><span class="pre">i</span></tt> 了，而是改用 <tt class="docutils literal"><span class="pre">j</span></tt> ，原來程序中 <tt class="docutils literal"><span class="pre">is_prime</span></tt> 函數的參數 <tt class="docutils literal"><span class="pre">n</span></tt> 現在直接用 <tt class="docutils literal"><span class="pre">i</span></tt> 代替。在有多層循環或 <tt class="docutils literal"><span class="pre">switch</span></tt> 嵌套的情況下， <tt class="docutils literal"><span class="pre">break</span></tt> 只能跳出最內層的循環或 <tt class="docutils literal"><span class="pre">switch</span></tt> ， <tt class="docutils literal"><span class="pre">continue</span></tt> 也只能終止最內層循環並回到該層循環的開頭。</p>
+<p>用循環也可以打印表格式的數據，比如打印小九九乘法表：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;=</span><span class="mi">9</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;=</span><span class="mi">9</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+                        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d  &quot;</span><span class="p">,</span> <span class="n">i</span><span class="o">*</span><span class="n">j</span><span class="p">);</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>內循環每次打印一個數，數與數之間用兩個空格隔開，外循環每次打印一行。結果如下:</p>
+<div class="highlight-python"><pre>1  2  3  4  5  6  7  8  9
+2  4  6  8  10  12  14  16  18
+3  6  9  12  15  18  21  24  27
+4  8  12  16  20  24  28  32  36
+5  10  15  20  25  30  35  40  45
+6  12  18  24  30  36  42  48  54
+7  14  21  28  35  42  49  56  63
+8  16  24  32  40  48  56  64  72
+9  18  27  36  45  54  63  72  81</pre>
+</div>
+<p>由於乘法結果有一位數的也有兩位數的，這個表格很不整齊，如果把打印語句改為 <tt class="docutils literal"><span class="pre">printf(&quot;%d\t&quot;,</span> <span class="pre">i*j);</span></tt> 就整齊了，Tab字元（製表符）就是這樣得名的。</p>
+<p class="rubric">習題</p>
+<ol class="arabic">
+<li><p class="first">本節打印小九九的例子打印出來的結果有一半數據是重複的，比如8×9跟9×8的結果一樣。請修改程序打印這樣的小九九:</p>
+<div class="highlight-python"><pre>1
+2       4
+3       6       9
+4       8       12      16
+5       10      15      20      25
+6       12      18      24      30      36
+7       14      21      28      35      42      49
+8       16      24      32      40      48      56      64
+9       18      27      36      45      54      63      72      81</pre>
+</div>
+</li>
+<li><p class="first">編寫函數 <tt class="docutils literal"><span class="pre">diamond</span></tt> 打印一個菱形。如果調用 <tt class="docutils literal"><span class="pre">diamond(3,</span> <span class="pre">'*')</span></tt> 則打印:</p>
+<div class="highlight-python"><pre>        *
+*       *       *
+        *</pre>
+</div>
+<p>如果調用 <tt class="docutils literal"><span class="pre">diamond(5,</span> <span class="pre">'+')</span></tt> 則打印:</p>
+<div class="highlight-python"><pre>                +
+        +       +       +
++       +       +       +       +
+        +       +       +
+                +</pre>
+</div>
+<p>如果用偶數做參數則打印錯誤提示。</p>
+</li>
+</ol>
+</div>
+<div class="section" id="goto">
+<h2>6.6. goto語句和標號<a class="headerlink" href="#goto" title="Permalink to this headline">¶</a></h2>
+<p>分支、循環都講完了，還剩下最後一種影響控制流程的語句沒講，就是 <tt class="docutils literal"><span class="pre">goto</span></tt> 語句，實現無條件跳轉。我們知道 <tt class="docutils literal"><span class="pre">break</span></tt> 只能跳出最內層的循環，如果在一個嵌套循環中遇到某個錯誤條件需要立即跳出最外層循環做出錯處理，就可以用 <tt class="docutils literal"><span class="pre">goto</span></tt> 語句，例如：</p>
+<div class="highlight-c"><pre>for (...)
+        for (...) {
+                ...
+                if (出現錯誤條件)
+                        goto error;
+        }
+error:
+        出錯處理;</pre>
+</div>
+<p id="index-8">這裡的 <tt class="docutils literal"><span class="pre">error:</span></tt> 叫做標號（Label），任何語句前面都可以加若干個標號，標號的命名也要遵循標識符的命名規則。</p>
+<p><tt class="docutils literal"><span class="pre">goto</span></tt> 語句過于強大了，從程序中的任何地方都可以無條件跳轉到任何其他地方，只要在那個地方定義一個標號就行，唯一的限制是 <tt class="docutils literal"><span class="pre">goto</span></tt> 只能跳轉到同一個函數中的某個標號處，而不能跳到別的函數中 <a class="footnote-reference" href="#id10" id="id9">[4]</a> 。 <strong>濫用 ``goto`` 語句會使程序的控制流程非常複雜，可讀性很差。</strong> 著名的計算機科學家Edsger W. Dijkstra最早指出編程語言中 <tt class="docutils literal"><span class="pre">goto</span></tt> 語句的危害，提倡取消 <tt class="docutils literal"><span class="pre">goto</span></tt> 語句。 <tt class="docutils literal"><span class="pre">goto</span></tt> 語句不是必須存在的，顯然可以用別的辦法替代，比如上面的代碼段可以改寫為：</p>
+<table class="docutils footnote" frame="void" id="id10" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id9">[4]</a></td><td>C標準庫函數 <tt class="docutils literal"><span class="pre">setjmp</span></tt> 和 <tt class="docutils literal"><span class="pre">longjmp</span></tt> 配合起來可以實現函數間的跳轉，但只能從被調用的函數跳回到它的直接或間接調用者（同時從棧空間彈出一個或多個棧幀），而不能從一個函數跳轉到另一個和它毫不相干的函數中。 <tt class="docutils literal"><span class="pre">setjmp/longjmp</span></tt> 函數主要也是用於出錯處理，比如函數A調用函數B，函數B調用函數C，如果在C中出現某個錯誤條件，使得函數B和C繼續執行下去都沒有意義了，可以利用 <tt class="docutils literal"><span class="pre">setjmp/longjmp</span></tt> 機制快速返回到函數A做出錯處理，本書不詳細介紹這種機制，有興趣的讀者可參考 <a class="reference internal" href="bibli.html#apue2e">[APUE2e]</a> 的7.10節和10.15節。</td></tr>
+</tbody>
+</table>
+<div class="highlight-c"><pre>int cond = 0; /* bool variable indicating error condition */
+for (...) {
+        for (...) {
+                ...
+                if (出現錯誤條件) {
+                        cond = 1;
+                        break;
+                }
+        }
+        if (cond)
+                break;
+}
+if (cond)
+        出錯處理;</pre>
+</div>
+<p>通常 <tt class="docutils literal"><span class="pre">goto</span></tt> 語句只用於這種場合，一個函數中任何地方出現了錯誤條件都可以立即跳轉到函數末尾做出錯處理（例如釋放先前分配的資源、恢復先前改動過的全局變數等），處理完之後函數返回。比較用 <tt class="docutils literal"><span class="pre">goto</span></tt> 和不用 <tt class="docutils literal"><span class="pre">goto</span></tt> 的兩種寫法，用 <tt class="docutils literal"><span class="pre">goto</span></tt> 語句還是方便很多。但是除此之外，在任何其他場合都不要輕易考慮使用 <tt class="docutils literal"><span class="pre">goto</span></tt> 語句。有些編程語言（如C++）中有異常（Exception）處理的語法，可以代替 <tt class="docutils literal"><span class="pre">goto</span></tt> 和 <tt class="docutils literal"><span class="pre">setjmp/longjmp</span></tt> 的這種用法。</p>
+<p id="index-9">回想一下我們在 <a class="reference internal" href="cond.html#cond-switch"><em>switch語句</em></a> 學過的語法， <tt class="docutils literal"><span class="pre">case</span></tt> 和 <tt class="docutils literal"><span class="pre">default</span></tt> 後面也要跟:號（Colon），事實上它們是兩種特殊的標號。和標號有關的語法規則如下:</p>
+<div class="highlight-python"><pre>語句 → 標識符: 語句
+語句 → case 整型常量表達式: 語句
+語句 → default: 語句</pre>
+</div>
+<p>反覆應用這些語法規則進行組合，可以在一條語句前面添加多個標號，例如在 <a class="reference internal" href="cond.html#cond-switch2"><em>缺break的switch語句</em></a> 的代碼中，有些語句前面有多個 <tt class="docutils literal"><span class="pre">case</span></tt> 標號。現在我們再看 <tt class="docutils literal"><span class="pre">switch</span></tt> 語句的格式:</p>
+<div class="highlight-python"><pre>switch (控製表達式) {
+case 整型常量表達式： 零或多條語句
+case 整型常量表達式： 零或多條語句
+...
+default： 零或多條語句
+}</pre>
+</div>
+<p>{}裡面是一組語句列表，其中每個分支的第一條語句帶有 <tt class="docutils literal"><span class="pre">case</span></tt> 或 <tt class="docutils literal"><span class="pre">default</span></tt> 標號，從語法上來說， <tt class="docutils literal"><span class="pre">switch</span></tt> 的語句塊和其他分支、循環結構的語句塊沒有本質區別，因此前面的語法規則可以改寫為:</p>
+<div class="highlight-python"><pre>語句 → switch (控製表達式) 語句
+語句 → { 語句列表 }</pre>
+</div>
+<p>我們知道{}中的語句列表不僅可以包含語句，還可以包含聲明，而先前的語法規則並沒有體現出這一點，因此改寫後的語法規則更為準確。但要注意，只有語句前面才能帶標號，聲明前面不能帶標號，例如這樣寫是錯的：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">case</span> <span class="mi">1</span>: <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p>但這樣寫是對的：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">case</span> <span class="mi">1</span>: <span class="p">{</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>這樣寫也是對的：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">case</span> <span class="mi">1</span>: <span class="p">;</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p>再比如這樣的 <tt class="docutils literal"><span class="pre">switch</span></tt> 語句：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">switch</span> <span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="k">case</span> <span class="mi">1</span>:
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="k">break</span><span class="p">;</span>
+<span class="k">case</span> <span class="mi">2</span>:
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+        <span class="k">break</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>這段代碼從語法上看是對的，從語義上看卻有一個陷阱。變數 <tt class="docutils literal"><span class="pre">i</span></tt> 在 <tt class="docutils literal"><span class="pre">switch</span></tt> 語句塊中定義，但並不會初始化成10，因為不管 <tt class="docutils literal"><span class="pre">n</span></tt> 的值是幾，進入 <tt class="docutils literal"><span class="pre">switch</span></tt> 語句塊都會跳過給 <tt class="docutils literal"><span class="pre">i</span></tt> 做初始化的指令，從某一個 <tt class="docutils literal"><span class="pre">case</span></tt> 標號開始執行。</p>
+<p class="rubric">習題</p>
+<ol class="arabic">
+<li><p class="first">以下代碼編譯沒有問題，但運行結果卻和預期不符（不能打印出 <tt class="docutils literal"><span class="pre">other</span> <span class="pre">number</span></tt> ），請分析原因。（提示：注意關鍵字的拼寫）</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="k">switch</span> <span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">case</span> <span class="mi">1</span>:
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;1</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="k">break</span><span class="p">;</span>
+<span class="k">case</span> <span class="mi">2</span>:
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;2</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="k">break</span><span class="p">;</span>
+<span class="nl">defau1t:</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;other number</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p class="first">請在網上查找有關Duff&#8217;s Device的資料，Duff&#8217;s Device是一段很有意思的代碼，正是利用“ <tt class="docutils literal"><span class="pre">switch</span></tt> 的語句塊和循環結構的語句塊沒有本質區別”這一點實現了一個巧妙的代碼優化。</p>
+</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">6. 循環語句</a><ul>
+<li><a class="reference internal" href="#while">6.1. while語句</a></li>
+<li><a class="reference internal" href="#do-while">6.2. do/while語句</a></li>
+<li><a class="reference internal" href="#for">6.3. for語句</a></li>
+<li><a class="reference internal" href="#breakcontinue">6.4. break和continue語句</a></li>
+<li><a class="reference internal" href="#id8">6.5. 嵌套循環</a></li>
+<li><a class="reference internal" href="#goto">6.6. goto語句和標號</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="func2.html"
+                        title="previous chapter">5. 深入理解函數</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="struct.html"
+                        title="next chapter">7. 結構體</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/zh/iter.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><table border=0 cellspacing=0 style="color: white;">
+
+<tr><td>
+   請輸入您的email訂閲<a href="http://groups.google.com/group/learning-linux-c-cpp">本書的郵件列表</a><br/>
+   (Please enter your email to subscribe to <a href="http://groups.google.com/group/learning-linux-c-cpp">this book's mailing list</a>)<br/>
+   <form action="http://groups.google.com/group/learning-linux-c-cpp/boxsubscribe"><input type=text name=email><input type=submit name="sub" value="訂閲(Subscribe)"></form>
+</td></tr>
+
+<tr><td><br/>關注<a href="http://weibo.com/sansoong">我的微博</a></td></tr>
+
+<tr><td><br/>Checkout the source from github: <a href="https://github.com/learning-linux-c-cpp/akabook">https://github.com/learning-linux-c-cpp/akabook</a></td></tr>
+
+<tr><td>
+   <br/>感謝您的慷慨捐贈！<br/>
+   Thanks for your generous donation!<br/>
+   <a href="http://me.alipay.com/songjinshan" target="_blank"><img src="_static/me.alipay.png" alt="捐贈"></a>
+</td></tr>
+
+</table>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="struct.html" title="7. 結構體"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="func2.html" title="5. 深入理解函數"
+             >previous</a> |</li>
+        <li><a href="../index.html">akabook 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >中文版：Linux C/C++編程一站式學習</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Sean Soong.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

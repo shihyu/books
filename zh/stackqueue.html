@@ -1,0 +1,974 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>12. 棧與隊列 &mdash; akabook 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="akabook 3.0 documentation" href="../index.html" />
+    <link rel="up" title="中文版：Linux C/C++編程一站式學習" href="index.html" />
+    <link rel="next" title="13. 本階段總結" href="summary1.html" />
+    <link rel="prev" title="11. 排序與查找" href="sortsearch.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="summary1.html" title="13. 本階段總結"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="sortsearch.html" title="11. 排序與查找"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">akabook 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">中文版：Linux C/C++編程一站式學習</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>12. 棧與隊列<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id2">
+<h2>12.1. 資料結構的概念<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p id="index-0">資料結構（Data Structure）是數據的組織方式。程序中用到的數據都不是孤立的，而是有相互聯繫的，根據訪問數據的需求不同，同樣的數據可以有多種不同的組織方式。以前學過的復合類型也可以看作數據的組織方式：把同一類型的數據組織成數組，或者把描述同一對象的各成員組織成結構體。數據的組織方式包含了存儲方式和訪問方式這兩層意思，二者是緊密聯繫的。例如，數組的各元素是一個挨一個存儲的，並且每個元素的大小相同，因此數組可以提供按下標訪問的方式（根據“元素大小×下標”可以找到相應元素在數組中的存儲位置），結構體的各成員也是一個挨一個存儲的，但是每個成員的大小不一定相同，所以只能用.運算符加成員名來訪問，而不能按下標訪問。</p>
+<p>本章主要介紹棧和隊列這兩種資料結構以及它們的應用。從本章的應用實例可以看出，一個問題中數據的存儲方式和訪問方式就決定瞭解決問題可以採用什麼樣的算法，要設計一個算法就要同時設計相應的資料結構來支持這種算法。所以Pascal語言的設計者Niklaus Wirth提出： <strong>算法+資料結構=程序</strong> （詳見 <a class="reference internal" href="bibli.html#adsp">[ADSP]</a> ）。</p>
+</div>
+<div class="section" id="id4">
+<h2>12.2. 堆棧<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p id="index-1">在 <a class="reference internal" href="func2.html#func2-recurse"><em>遞歸</em></a> 中我們已經對堆棧這種資料結構有了初步認識。堆棧是一組元素的集合，類似於數組，不同之處在於，數組可以按下標隨機訪問，這次訪問 <tt class="docutils literal"><span class="pre">a[5]</span></tt> 下次可以訪問 <tt class="docutils literal"><span class="pre">a[1]</span></tt> ，但是堆棧的訪問規則被限製為Push和Pop兩種操作，Push（入棧或壓棧）向棧頂添加元素，Pop（出棧或彈出）則取出當前棧頂的元素，也就是說，只能訪問棧頂元素而不能訪問棧中其他元素。如果所有元素的類型相同，堆棧的存儲也可以用數組來實現，訪問操作可以通過函數介面提供。看下面的示常式序。</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+
+<span class="kt">char</span> <span class="n">stack</span><span class="p">[</span><span class="mi">512</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">top</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="kt">char</span> <span class="n">c</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">stack</span><span class="p">[</span><span class="n">top</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">char</span> <span class="nf">pop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">return</span> <span class="n">stack</span><span class="p">[</span><span class="o">--</span><span class="n">top</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">is_empty</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">return</span> <span class="n">top</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">push</span><span class="p">(</span><span class="sc">&#39;a&#39;</span><span class="p">);</span>
+        <span class="n">push</span><span class="p">(</span><span class="sc">&#39;b&#39;</span><span class="p">);</span>
+        <span class="n">push</span><span class="p">(</span><span class="sc">&#39;c&#39;</span><span class="p">);</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">is_empty</span><span class="p">())</span>
+                <span class="n">putchar</span><span class="p">(</span><span class="n">pop</span><span class="p">());</span>
+        <span class="n">putchar</span><span class="p">(</span><span class="sc">&#39;\n&#39;</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>運行結果是 <tt class="docutils literal"><span class="pre">cba</span></tt> 。運行過程圖示如下：</p>
+<div class="figure">
+<img alt="../_images/stackqueue.stack.png" src="../_images/stackqueue.stack.png" />
+<p class="caption">用堆棧實現倒序打印</p>
+</div>
+<p id="index-2">數組 <tt class="docutils literal"><span class="pre">stack</span></tt> 是堆棧的存儲空間，變數 <tt class="docutils literal"><span class="pre">top</span></tt> 總是保存數組中棧頂的下一個元素的下標，我們說“ <tt class="docutils literal"><span class="pre">top</span></tt> 總是指向棧頂的下一個元素”， <tt class="docutils literal"><span class="pre">top</span></tt> 也叫做棧頂指針（Pointer）。在 <a class="reference internal" href="sortsearch.html#sortsearch-insertion"><em>插入排序</em></a> 中介紹了Loop Invariant的概念，可以用它檢驗循環的正確性，這裡的“ <tt class="docutils literal"><span class="pre">top</span></tt> 總是指向棧頂的下一個元素”其實也是一種Invariant，Push和Pop操作總是維持這個條件不變，這種Invariant描述的對象是一個資料結構而不是一個循環，在DbC中稱為Class Invariant。</p>
+<p>Pop操作的語義是取出棧頂元素，但上例的實現其實並沒有清除原來的棧頂元素，只是把 <tt class="docutils literal"><span class="pre">top</span></tt> 指針移動了一下，原來的棧頂元素仍然存在那裡，這就足夠了，因為此後通過Push和Pop操作不可能再訪問到已經取出的元素，下次Push操作就會覆蓋它。 <tt class="docutils literal"><span class="pre">putchar</span></tt> 函數的作用是把一個字元打印到屏幕上，和 <tt class="docutils literal"><span class="pre">printf</span></tt> 的 <tt class="docutils literal"><span class="pre">%c</span></tt> 作用相同。Predicate函數 <tt class="docutils literal"><span class="pre">is_empty</span></tt> 的作用是防止Pop操作訪問越界。這裡我們預留了足夠大的棧空間（512個元素），其實嚴格來說Push操作之前也應該檢查棧是否滿了。</p>
+<p id="index-3">在 <tt class="docutils literal"><span class="pre">main</span></tt> 函數中，入棧的順序是 <tt class="docutils literal"><span class="pre">'a'</span></tt> 、 <tt class="docutils literal"><span class="pre">'b'</span></tt> 、 <tt class="docutils literal"><span class="pre">'c'</span></tt> ，而出棧打印的順序卻是 <tt class="docutils literal"><span class="pre">'c'</span></tt> 、 <tt class="docutils literal"><span class="pre">'b'</span></tt> 、 <tt class="docutils literal"><span class="pre">'a'</span></tt> ，最後入棧的 <tt class="docutils literal"><span class="pre">'c'</span></tt> 最早出來，因此堆棧這種資料結構的特點可以概括為LIFO（Last In First Out，後進先出）。我們也可以寫一個遞歸函數做倒序打印，利用函數調用的棧幀實現後進先出：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="cp">#define LEN 3</span>
+
+<span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="n">LEN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="sc">&#39;a&#39;</span><span class="p">,</span> <span class="sc">&#39;b&#39;</span><span class="p">,</span> <span class="sc">&#39;c&#39;</span><span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">print_backward</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">==</span> <span class="n">LEN</span><span class="p">)</span>
+                <span class="k">return</span><span class="p">;</span>
+        <span class="n">print_backward</span><span class="p">(</span><span class="n">pos</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+        <span class="n">putchar</span><span class="p">(</span><span class="n">buf</span><span class="p">[</span><span class="n">pos</span><span class="p">]);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">print_backward</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="n">putchar</span><span class="p">(</span><span class="sc">&#39;\n&#39;</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>也許你會說，又是堆棧又是遞歸的，倒序打印一個數組犯得着這麼大動干戈嗎？寫一個簡單的循環不就行了：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">LEN</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+        <span class="n">putchar</span><span class="p">(</span><span class="n">buf</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</pre></div>
+</td></tr></table></div>
+<p>對於數組來說確實沒必要搞這麼複雜，因為數組既可以從前向後訪問也可以從後向前訪問，甚至可以隨機訪問，但有些資料結構的訪問並沒有這麼自由，下一節你就會看到這樣的資料結構。</p>
+</div>
+<div class="section" id="stackqueue-dfs">
+<span id="id5"></span><h2>12.3. 深度優先搜索<a class="headerlink" href="#stackqueue-dfs" title="Permalink to this headline">¶</a></h2>
+<p>現在我們用堆棧解決一個有意思的問題，定義一個二維數組：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="n">maze</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+</td></tr></table></div>
+<p>它表示一個迷宮，其中的1表示牆壁，0表示可以走的路，只能橫着走或豎著走，不能斜着走，要求編程序找出從左上角到右下角的路線。程序如下：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+
+<span class="cp">#define MAX_ROW 5</span>
+<span class="cp">#define MAX_COL 5</span>
+
+<span class="k">struct</span> <span class="n">point</span> <span class="p">{</span> <span class="kt">int</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">;</span> <span class="p">}</span> <span class="n">stack</span><span class="p">[</span><span class="mi">512</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">top</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="k">struct</span> <span class="n">point</span> <span class="n">p</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">stack</span><span class="p">[</span><span class="n">top</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">struct</span> <span class="n">point</span> <span class="nf">pop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">return</span> <span class="n">stack</span><span class="p">[</span><span class="o">--</span><span class="n">top</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">is_empty</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">return</span> <span class="n">top</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">maze</span><span class="p">[</span><span class="n">MAX_ROW</span><span class="p">][</span><span class="n">MAX_COL</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">print_maze</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">MAX_ROW</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">MAX_COL</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+                        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d &quot;</span><span class="p">,</span> <span class="n">maze</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
+                <span class="n">putchar</span><span class="p">(</span><span class="sc">&#39;\n&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;*********</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">struct</span> <span class="n">point</span> <span class="n">predecessor</span><span class="p">[</span><span class="n">MAX_ROW</span><span class="p">][</span><span class="n">MAX_COL</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">{{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">}},</span>
+        <span class="p">{{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">}},</span>
+        <span class="p">{{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">}},</span>
+        <span class="p">{{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">}},</span>
+        <span class="p">{{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">}},</span>
+<span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">visit</span><span class="p">(</span><span class="kt">int</span> <span class="n">row</span><span class="p">,</span> <span class="kt">int</span> <span class="n">col</span><span class="p">,</span> <span class="k">struct</span> <span class="n">point</span> <span class="n">pre</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">struct</span> <span class="n">point</span> <span class="n">visit_point</span> <span class="o">=</span> <span class="p">{</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="p">};</span>
+        <span class="n">maze</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="n">predecessor</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pre</span><span class="p">;</span>
+        <span class="n">push</span><span class="p">(</span><span class="n">visit_point</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">struct</span> <span class="n">point</span> <span class="n">p</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">};</span>
+
+        <span class="n">maze</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="p">][</span><span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="n">push</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">is_empty</span><span class="p">())</span> <span class="p">{</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">pop</span><span class="p">();</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">row</span> <span class="o">==</span> <span class="n">MAX_ROW</span> <span class="o">-</span> <span class="mi">1</span>  <span class="cm">/* goal */</span>
+                    <span class="o">&amp;&amp;</span> <span class="n">p</span><span class="p">.</span><span class="n">col</span> <span class="o">==</span> <span class="n">MAX_COL</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="k">break</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="o">+</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">MAX_COL</span>     <span class="cm">/* right */</span>
+                    <span class="o">&amp;&amp;</span> <span class="n">maze</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="p">][</span><span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="n">visit</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="o">+</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">MAX_ROW</span>     <span class="cm">/* down */</span>
+                    <span class="o">&amp;&amp;</span> <span class="n">maze</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="n">visit</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="p">,</span> <span class="n">p</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="o">-</span><span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">0</span>          <span class="cm">/* left */</span>
+                    <span class="o">&amp;&amp;</span> <span class="n">maze</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="p">][</span><span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="n">visit</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="o">-</span><span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">0</span>          <span class="cm">/* up */</span>
+                    <span class="o">&amp;&amp;</span> <span class="n">maze</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="n">visit</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="p">,</span> <span class="n">p</span><span class="p">);</span>
+                <span class="n">print_maze</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">row</span> <span class="o">==</span> <span class="n">MAX_ROW</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">p</span><span class="p">.</span><span class="n">col</span> <span class="o">==</span> <span class="n">MAX_COL</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;(%d, %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="p">);</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">predecessor</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="p">][</span><span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="p">].</span><span class="n">row</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">p</span> <span class="o">=</span> <span class="n">predecessor</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="p">][</span><span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="p">];</span>
+                        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;(%d, %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="p">);</span>
+                <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;No path!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>運行結果如下:</p>
+<div class="highlight-python"><pre>2 1 0 0 0
+2 1 0 1 0
+0 0 0 0 0
+0 1 1 1 0
+0 0 0 1 0
+*********
+2 1 0 0 0
+2 1 0 1 0
+2 0 0 0 0
+0 1 1 1 0
+0 0 0 1 0
+*********
+2 1 0 0 0
+2 1 0 1 0
+2 2 0 0 0
+2 1 1 1 0
+0 0 0 1 0
+*********
+2 1 0 0 0
+2 1 0 1 0
+2 2 0 0 0
+2 1 1 1 0
+2 0 0 1 0
+*********
+2 1 0 0 0
+2 1 0 1 0
+2 2 0 0 0
+2 1 1 1 0
+2 2 0 1 0
+*********
+2 1 0 0 0
+2 1 0 1 0
+2 2 0 0 0
+2 1 1 1 0
+2 2 2 1 0
+*********
+2 1 0 0 0
+2 1 0 1 0
+2 2 0 0 0
+2 1 1 1 0
+2 2 2 1 0
+*********
+2 1 0 0 0
+2 1 0 1 0
+2 2 2 0 0
+2 1 1 1 0
+2 2 2 1 0
+*********
+2 1 0 0 0
+2 1 2 1 0
+2 2 2 2 0
+2 1 1 1 0
+2 2 2 1 0
+*********
+2 1 2 0 0
+2 1 2 1 0
+2 2 2 2 0
+2 1 1 1 0
+2 2 2 1 0
+*********
+2 1 2 2 0
+2 1 2 1 0
+2 2 2 2 0
+2 1 1 1 0
+2 2 2 1 0
+*********
+2 1 2 2 2
+2 1 2 1 0
+2 2 2 2 0
+2 1 1 1 0
+2 2 2 1 0
+*********
+2 1 2 2 2
+2 1 2 1 2
+2 2 2 2 0
+2 1 1 1 0
+2 2 2 1 0
+*********
+2 1 2 2 2
+2 1 2 1 2
+2 2 2 2 2
+2 1 1 1 0
+2 2 2 1 0
+*********
+2 1 2 2 2
+2 1 2 1 2
+2 2 2 2 2
+2 1 1 1 2
+2 2 2 1 0
+*********
+2 1 2 2 2
+2 1 2 1 2
+2 2 2 2 2
+2 1 1 1 2
+2 2 2 1 2
+*********
+(4, 4)
+(3, 4)
+(2, 4)
+(1, 4)
+(0, 4)
+(0, 3)
+(0, 2)
+(1, 2)
+(2, 2)
+(2, 1)
+(2, 0)
+(1, 0)
+(0, 0)</pre>
+</div>
+<p id="index-4">這次堆棧裡的元素是結構體類型的，用來表示迷宮中一個點的x和y坐標。我們用一個新的資料結構保存走迷宮的路線，每個走過的點都有一個前趨（Predecessor）點，表示是從哪兒走到當前點的，比如 <tt class="docutils literal"><span class="pre">predecessor[4][4]</span></tt> 是坐標為(3, 4)的點，就表示從(3, 4)走到了(4, 4)，一開始 <tt class="docutils literal"><span class="pre">predecessor</span></tt> 的各元素初始化為無效坐標(-1, -1)。在迷宮中探索路線的同時就把路線保存在 <tt class="docutils literal"><span class="pre">predecessor</span></tt> 數組中，已經走過的點在 <tt class="docutils literal"><span class="pre">maze</span></tt> 數組中記為2防止重複走，最後找到終點時就根據 <tt class="docutils literal"><span class="pre">predecessor</span></tt> 數組保存的路線從終點打印到起點。為了幫助理解，我把這個算法改寫成偽代碼（Pseudocode）如下：</p>
+<div class="highlight-c"><pre>將起點標記為已走過並壓棧;
+while (棧非空) {
+        從棧頂彈出一個點p;
+        if (p這個點是終點)
+                break;
+        否則沿右、下、左、上四個方向探索相鄰的點
+        if (和p相鄰的點有路可走，並且還沒走過)
+                將相鄰的點標記為已走過並壓棧，它的前趨就是p點;
+}
+if (p點是終點) {
+        打印p點的坐標;
+        while (p點有前趨) {
+                p點 = p點的前趨;
+                打印p點的坐標;
+        }
+} else
+        沒有路線可以到達終點;</pre>
+</div>
+<p id="index-5">我在 <tt class="docutils literal"><span class="pre">while</span></tt> 循環的末尾插了打印語句，每探索一步都打印出當前迷宮的狀態（標記了哪些點），從打印結果可以看出這種搜索算法的特點是：每次探索完各個方向相鄰的點之後，取其中一個相鄰的點走下去，一直走到無路可走了再退回來，取另一個相鄰的點再走下去。這稱為深度優先搜索（DFS，Depth First Search）。探索迷宮和堆棧變化的過程如下圖所示。</p>
+<div class="figure">
+<img alt="../_images/stackqueue.dfs.png" src="../_images/stackqueue.dfs.png" />
+<p class="caption">深度優先搜索</p>
+</div>
+<p id="index-6">圖中各點的編號表示探索順序，堆棧中保存的應該是坐標，我在畫圖時為了直觀就把各點的編號寫在堆棧裡了。可見正是堆棧後進先出的性質使這個算法具有了深度優先的特點。如果在探索問題的解時走進了死衚衕，則需要退回來從另一條路繼續探索，這種思想稱為回溯（Backtrack），一個典型的例子是很多編程書上都會講的八皇后問題。</p>
+<p>最後我們打印終點的坐標並通過 <tt class="docutils literal"><span class="pre">predecessor</span></tt> 資料結構找到它的前趨，這樣順藤摸瓜一直打印到起點。那麼能不能從起點到終點正向打印路線呢？在上一節我們看到，數組支持隨機訪問也支持順序訪問，如果在一個循環裡打印數組，既可以正向打印也可以反向打印。但 <tt class="docutils literal"><span class="pre">predecessor</span></tt> 這種資料結構卻有很多限制：</p>
+<ol class="arabic simple" id="index-7">
+<li>不能隨機訪問一條路線上的任意點，只能通過第一個點找到第二個點，通過第二個點再找到第三個點，因此只能 <strong>順序訪問</strong> 。</li>
+<li>每個點只知道它的前趨是誰，而不知道它的後繼（Successor）是誰，所以只能 <strong>反向順序訪問</strong> 。</li>
+</ol>
+<p>可見，有什麼樣的資料結構就決定了可以用什麼樣的算法。那為什麼不再建一個 <tt class="docutils literal"><span class="pre">successor</span></tt> 數組來保存每個點的後繼呢？從DFS算法的過程可以看出，雖然每個點的前趨只有一個，後繼卻不止一個，如果我們為每個點只保存一個後繼，則無法保證這個後繼指向正確的路線。由此可見，有什麼樣的算法就決定了可以用什麼樣的資料結構。設計算法和設計資料結構這兩件工作是緊密聯繫的。</p>
+<p class="rubric">習題</p>
+<ol class="arabic simple">
+<li>修改本節的程序，要求從起點到終點正向打印路線。你能想到幾種辦法？</li>
+<li>本節程序中 <tt class="docutils literal"><span class="pre">predecessor</span></tt> 這個資料結構占用的存儲空間太多了，改變它的存儲方式可以節省空間，想想該怎麼改。</li>
+<li>上一節我們實現了一個基于堆棧的程序，然後改寫成遞歸程序，用函數調用的棧幀替代自己實現的堆棧。本節的DFS算法也是基于堆棧的，請把它改寫成遞歸程序，這樣改寫可以避免使用 <tt class="docutils literal"><span class="pre">predecessor</span></tt> 資料結構，想想該怎麼做。</li>
+<li>本節的程序只要找到一條路線就退出了，而不再回溯，如果要求找到從起點到終點的所有路線，想想該怎麼做。</li>
+</ol>
+</div>
+<div class="section" id="id6">
+<h2>12.4. 隊列與廣度優先搜索<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<p id="index-8">隊列（Queue）也是一組元素的集合，也提供兩種基本操作：Enqueue（入隊）將元素添加到隊尾，Dequeue（出隊）從隊頭取出元素並返回。就像排隊買票一樣，先來先服務，先入隊的人也是先出隊的，這種方式稱為FIFO（First In First Out，先進先出），有時候隊列本身也被稱為FIFO。</p>
+<p>下面我們用隊列解決迷宮問題。程序如下：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+
+<span class="cp">#define MAX_ROW 5</span>
+<span class="cp">#define MAX_COL 5</span>
+
+<span class="k">struct</span> <span class="n">point</span> <span class="p">{</span> <span class="kt">int</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">predecessor</span><span class="p">;</span> <span class="p">}</span> <span class="n">queue</span><span class="p">[</span><span class="mi">512</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">head</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">tail</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">enqueue</span><span class="p">(</span><span class="k">struct</span> <span class="n">point</span> <span class="n">p</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">queue</span><span class="p">[</span><span class="n">tail</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">struct</span> <span class="n">point</span> <span class="nf">dequeue</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">return</span> <span class="n">queue</span><span class="p">[</span><span class="n">head</span><span class="o">++</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">is_empty</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">return</span> <span class="n">head</span> <span class="o">==</span> <span class="n">tail</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">maze</span><span class="p">[</span><span class="n">MAX_ROW</span><span class="p">][</span><span class="n">MAX_COL</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">print_maze</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">MAX_ROW</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">MAX_COL</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+                        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d &quot;</span><span class="p">,</span> <span class="n">maze</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
+                <span class="n">putchar</span><span class="p">(</span><span class="sc">&#39;\n&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;*********</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">visit</span><span class="p">(</span><span class="kt">int</span> <span class="n">row</span><span class="p">,</span> <span class="kt">int</span> <span class="n">col</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">struct</span> <span class="n">point</span> <span class="n">visit_point</span> <span class="o">=</span> <span class="p">{</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">head</span><span class="o">-</span><span class="mi">1</span> <span class="p">};</span>
+        <span class="n">maze</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="n">enqueue</span><span class="p">(</span><span class="n">visit_point</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">struct</span> <span class="n">point</span> <span class="n">p</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="p">};</span>
+
+        <span class="n">maze</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="p">][</span><span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="n">enqueue</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">is_empty</span><span class="p">())</span> <span class="p">{</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">dequeue</span><span class="p">();</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">row</span> <span class="o">==</span> <span class="n">MAX_ROW</span> <span class="o">-</span> <span class="mi">1</span>  <span class="cm">/* goal */</span>
+                    <span class="o">&amp;&amp;</span> <span class="n">p</span><span class="p">.</span><span class="n">col</span> <span class="o">==</span> <span class="n">MAX_COL</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="k">break</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="o">+</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">MAX_COL</span>     <span class="cm">/* right */</span>
+                    <span class="o">&amp;&amp;</span> <span class="n">maze</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="p">][</span><span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="n">visit</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="o">+</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">MAX_ROW</span>     <span class="cm">/* down */</span>
+                    <span class="o">&amp;&amp;</span> <span class="n">maze</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="n">visit</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="o">-</span><span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">0</span>          <span class="cm">/* left */</span>
+                    <span class="o">&amp;&amp;</span> <span class="n">maze</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="p">][</span><span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="n">visit</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="o">-</span><span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">0</span>          <span class="cm">/* up */</span>
+                    <span class="o">&amp;&amp;</span> <span class="n">maze</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="n">visit</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="p">);</span>
+                <span class="n">print_maze</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">row</span> <span class="o">==</span> <span class="n">MAX_ROW</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">p</span><span class="p">.</span><span class="n">col</span> <span class="o">==</span> <span class="n">MAX_COL</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;(%d, %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="p">);</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">predecessor</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">p</span> <span class="o">=</span> <span class="n">queue</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">predecessor</span><span class="p">];</span>
+                        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;(%d, %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">row</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">col</span><span class="p">);</span>
+                <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;No path!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>運行結果如下:</p>
+<div class="highlight-python"><pre>2 1 0 0 0
+2 1 0 1 0
+0 0 0 0 0
+0 1 1 1 0
+0 0 0 1 0
+*********
+2 1 0 0 0
+2 1 0 1 0
+2 0 0 0 0
+0 1 1 1 0
+0 0 0 1 0
+*********
+2 1 0 0 0
+2 1 0 1 0
+2 2 0 0 0
+2 1 1 1 0
+0 0 0 1 0
+*********
+2 1 0 0 0
+2 1 0 1 0
+2 2 2 0 0
+2 1 1 1 0
+0 0 0 1 0
+*********
+2 1 0 0 0
+2 1 0 1 0
+2 2 2 0 0
+2 1 1 1 0
+2 0 0 1 0
+*********
+2 1 0 0 0
+2 1 2 1 0
+2 2 2 2 0
+2 1 1 1 0
+2 0 0 1 0
+*********
+2 1 0 0 0
+2 1 2 1 0
+2 2 2 2 0
+2 1 1 1 0
+2 2 0 1 0
+*********
+2 1 0 0 0
+2 1 2 1 0
+2 2 2 2 2
+2 1 1 1 0
+2 2 0 1 0
+*********
+2 1 2 0 0
+2 1 2 1 0
+2 2 2 2 2
+2 1 1 1 0
+2 2 0 1 0
+*********
+2 1 2 0 0
+2 1 2 1 0
+2 2 2 2 2
+2 1 1 1 0
+2 2 2 1 0
+*********
+2 1 2 0 0
+2 1 2 1 2
+2 2 2 2 2
+2 1 1 1 2
+2 2 2 1 0
+*********
+2 1 2 2 0
+2 1 2 1 2
+2 2 2 2 2
+2 1 1 1 2
+2 2 2 1 0
+*********
+2 1 2 2 0
+2 1 2 1 2
+2 2 2 2 2
+2 1 1 1 2
+2 2 2 1 0
+*********
+2 1 2 2 0
+2 1 2 1 2
+2 2 2 2 2
+2 1 1 1 2
+2 2 2 1 2
+*********
+2 1 2 2 2
+2 1 2 1 2
+2 2 2 2 2
+2 1 1 1 2
+2 2 2 1 2
+*********
+2 1 2 2 2
+2 1 2 1 2
+2 2 2 2 2
+2 1 1 1 2
+2 2 2 1 2
+*********
+(4, 4)
+(3, 4)
+(2, 4)
+(2, 3)
+(2, 2)
+(2, 1)
+(2, 0)
+(1, 0)
+(0, 0)</pre>
+</div>
+<p>其實仍然可以像上一節一樣用 <tt class="docutils literal"><span class="pre">predecessor</span></tt> 數組表示每個點的前趨，但我想換一種更方便的資料結構，直接在每個點的結構體中加一個成員表示前趨：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">struct</span> <span class="n">point</span> <span class="p">{</span> <span class="kt">int</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">predecessor</span><span class="p">;</span> <span class="p">}</span> <span class="n">queue</span><span class="p">[</span><span class="mi">512</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">head</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">tail</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p>變數 <tt class="docutils literal"><span class="pre">head</span></tt> 和 <tt class="docutils literal"><span class="pre">tail</span></tt> 是隊頭和隊尾指針， <tt class="docutils literal"><span class="pre">head</span></tt> 總是指向隊頭， <tt class="docutils literal"><span class="pre">tail</span></tt> 總是指向隊尾的下一個元素。每個點的 <tt class="docutils literal"><span class="pre">predecessor</span></tt> 成員也是一個指針，指向它的前趨在 <tt class="docutils literal"><span class="pre">queue</span></tt> 數組中的位置。如下圖所示：</p>
+<div class="figure">
+<img alt="../_images/stackqueue.bfsqueue.png" src="../_images/stackqueue.bfsqueue.png" />
+<p class="caption">廣度優先搜索的隊列資料結構</p>
+</div>
+<p>為了幫助理解，我把這個算法改寫成如下偽代碼：</p>
+<div class="highlight-c"><pre>將起點標記為已走過併入隊;
+while (隊列非空) {
+        出隊一個點p;
+        if (p這個點是終點)
+                break;
+        否則沿右、下、左、上四個方向探索相鄰的點
+        if (和p相鄰的點有路可走，並且還沒走過)
+                將相鄰的點標記為已走過併入隊，它的前趨就是剛出隊的p點;
+}
+if (p點是終點) {
+        打印p點的坐標;
+        while (p點有前趨) {
+                p點 = p點的前趨;
+                打印p點的坐標;
+        }
+} else
+        沒有路線可以到達終點;</pre>
+</div>
+<p id="index-9">從搜索過程的打印結果可以看出，這個算法的特點是沿各個方向同時展開搜索，每個可以走通的方向輪流往前走一步，這稱為廣度優先搜索（BFS，Breadth First Search）。探索迷宮和隊列變化的過程如下圖所示。</p>
+<div class="figure">
+<img alt="../_images/stackqueue.bfs.png" src="../_images/stackqueue.bfs.png" />
+<p class="caption">廣度優先搜索</p>
+</div>
+<p>廣度優先是一種步步為營的策略，每次都從各個方向探索一步，將前線推進一步，圖中的虛線就表示這個前線，隊列中的元素總是由前線的點組成的，可見正是隊列先進先出的性質使這個算法具有了廣度優先的特點。廣度優先搜索還有一個特點是可以找到從起點到終點的最短路徑，而深度優先搜索找到的不一定是最短路徑，比較本節和上一節程序的運行結果可以看出這一點，想一想為什麼。</p>
+<p class="rubric">習題</p>
+<ol class="arabic simple">
+<li>本節的例子直接在隊列元素中加一個指針成員表示前趨，想一想為什麼上一節不能採用這種方法表示前趨？</li>
+<li>本節例子中給隊列分配的存儲空間是512個元素，其實沒必要這麼多，那麼解決這個問題至少要分配多少個元素的隊列空間呢？跟什麼因素有關？</li>
+</ol>
+</div>
+<div class="section" id="id7">
+<h2>12.5. 環形隊列<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<p id="index-10">比較前兩節的棧操作和隊列操作可以發現，棧操作的 <tt class="docutils literal"><span class="pre">top</span></tt> 指針在Push時增大而在Pop時減小，棧空間是可以重複利用的，而隊列的 <tt class="docutils literal"><span class="pre">head</span></tt> 、 <tt class="docutils literal"><span class="pre">tail</span></tt> 指針都在一直增大，雖然前面的元素已經出隊了，但它所占的存儲空間卻不能重複利用。在上一節迷宮問題的解法中，出隊的元素仍然有用：保存着走過的點以及每個點的前趨，以便最後打印完整的路線。但大多數程序並不是這樣使用隊列的，一般情況下出隊的元素就不再有保存價值了，這些元素的存儲空間應該回收利用，由此想到把隊列改造成環形隊列（Circular Queue）：把 <tt class="docutils literal"><span class="pre">queue</span></tt> 數組想像成一個圈， <tt class="docutils literal"><span class="pre">head</span></tt> 和 <tt class="docutils literal"><span class="pre">tail</span></tt> 指針仍然是一直增大的，當指到數組末尾時就自動回到數組開頭，就像兩個人圍着操場賽跑，沿著它們跑的方向看，從 <tt class="docutils literal"><span class="pre">head</span></tt> 到 <tt class="docutils literal"><span class="pre">tail</span></tt> 之間是隊列的有效元素，從 <tt class="docutils literal"><span class="pre">tail</span></tt> 到 <tt class="docutils literal"><span class="pre">head</span></tt> 之間是空的存儲位置，如果 <tt class="docutils literal"><span class="pre">head</span></tt> 追上 <tt class="docutils literal"><span class="pre">tail</span></tt> 就表示隊列空了，如果 <tt class="docutils literal"><span class="pre">tail</span></tt> 追上 <tt class="docutils literal"><span class="pre">head</span></tt> 就表示隊列的存儲空間滿了。如下圖所示：</p>
+<div class="figure">
+<img alt="../_images/stackqueue.circular.png" src="../_images/stackqueue.circular.png" />
+<p class="caption">環形隊列</p>
+</div>
+<p>注意上圖中的第三個小圖和最後一個小圖，“ <tt class="docutils literal"><span class="pre">head</span></tt> 和 <tt class="docutils literal"><span class="pre">tail</span></tt> 指向相同的位置”既可能表示“隊列空”也可能表示“隊列滿”，這是肯定不行的，在實現環形隊列時必須要區分這兩種狀態，請思考一下可以用哪些辦法來區分。</p>
+<p class="rubric">習題</p>
+<ol class="arabic simple">
+<li>現在把迷宮問題的要求改一下，只要求程序給出最後結論就可以了，回答“有路能到達終點”或者“沒有路能到達終點”，而不需要把路徑打印出來。請把上一節迷宮問題的解法改用環形隊列實現，然後試驗一下解決這個問題至少需要分配多少個元素的隊列空間。</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">12. 棧與隊列</a><ul>
+<li><a class="reference internal" href="#id2">12.1. 資料結構的概念</a></li>
+<li><a class="reference internal" href="#id4">12.2. 堆棧</a></li>
+<li><a class="reference internal" href="#stackqueue-dfs">12.3. 深度優先搜索</a></li>
+<li><a class="reference internal" href="#id6">12.4. 隊列與廣度優先搜索</a></li>
+<li><a class="reference internal" href="#id7">12.5. 環形隊列</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="sortsearch.html"
+                        title="previous chapter">11. 排序與查找</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="summary1.html"
+                        title="next chapter">13. 本階段總結</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/zh/stackqueue.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><table border=0 cellspacing=0 style="color: white;">
+
+<tr><td>
+   請輸入您的email訂閲<a href="http://groups.google.com/group/learning-linux-c-cpp">本書的郵件列表</a><br/>
+   (Please enter your email to subscribe to <a href="http://groups.google.com/group/learning-linux-c-cpp">this book's mailing list</a>)<br/>
+   <form action="http://groups.google.com/group/learning-linux-c-cpp/boxsubscribe"><input type=text name=email><input type=submit name="sub" value="訂閲(Subscribe)"></form>
+</td></tr>
+
+<tr><td><br/>關注<a href="http://weibo.com/sansoong">我的微博</a></td></tr>
+
+<tr><td><br/>Checkout the source from github: <a href="https://github.com/learning-linux-c-cpp/akabook">https://github.com/learning-linux-c-cpp/akabook</a></td></tr>
+
+<tr><td>
+   <br/>感謝您的慷慨捐贈！<br/>
+   Thanks for your generous donation!<br/>
+   <a href="http://me.alipay.com/songjinshan" target="_blank"><img src="_static/me.alipay.png" alt="捐贈"></a>
+</td></tr>
+
+</table>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="summary1.html" title="13. 本階段總結"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="sortsearch.html" title="11. 排序與查找"
+             >previous</a> |</li>
+        <li><a href="../index.html">akabook 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >中文版：Linux C/C++編程一站式學習</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Sean Soong.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

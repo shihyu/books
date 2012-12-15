@@ -1,0 +1,42 @@
+本階段總結
+=====================
+
+善於學習的人都應該善於總結。本書的編排順序充分考慮到知識的前後依賴關係，保證在講解每個新知識點的時候都只用到前面章節講過的知識，但正因為如此，很多相互關聯的知識點被拆散到多個章節中了。我們一章一章地縱向學習過來之後，應該理出幾個橫切面，把拆散到各章節中的知識點串起來。請從以下幾個方面整理和複習。
+
+#. C的語法規則
+
+   *  源檔案中所有函數定義之外可以出現哪些語法元素？
+   *  函數定義之中可以出現哪些語法元素？
+   *  語句有哪幾種？
+   *  哪些語法元素需要遵循標識符的命名規則？
+   *  表達式由哪些語法元素組成？
+   *  到目前為止學過哪些運算符？它們的優先順序和結合性是怎樣的？
+   *  哪些運算符取操作數的左值？哪些運算符有Side Effect？
+   *  哪些運算符的操作數必須是整型？哪些運算符的操作數必須是算術類型？哪些運算符的操作數必須是標量類型？
+   *  哪些表達式可以做左值？哪些表達式只能做右值？
+   *  哪些地方必須用常量表達式？哪些地方必須用整型常量表達式？
+
+#. 思維方法與編程思想
+
+   *  組合規則， :ref:`expr.expression`
+   *  Least Surprise， :ref:`func.parameter`
+   *  充分條件與必要條件， :ref:`func.scope`
+   *  封裝， :ref:`cond.ifelse`
+   *  布爾邏輯， :ref:`cond.bool`
+   *  遞歸， :ref:`func2.recurse`
+   *  函數式編程， :ref:`iter.while`
+   *  迭代（ :doc:`iter` ）與增量式求解（ :ref:`sortsearch.insertion` ）
+   *  抽象， :ref:`struct.dataabstraction`
+   *  避免硬編碼， :ref:`array.statrandom`
+   *  數據驅動， :ref:`array.multidim`
+   *  分而治之， :ref:`sortsearch.mergesort`
+   *  折半查找， :ref:`sortsearch.binarysearch`
+   *  回溯， :ref:`stackqueue.dfs`
+
+#. 調試方法
+
+   *  編譯錯誤、運行時錯誤與語義錯誤， :ref:`intro.debug`
+   *  增量式開發， :ref:`func2.incremental`
+   *  打印語句與Scaffold， :ref:`func2.incremental`
+   *  gdb， :doc:`gdb`
+   *  DbC與Assertion， :ref:`sortsearch.binarysearch`

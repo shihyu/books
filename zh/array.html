@@ -1,0 +1,794 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>8. 數組 &mdash; akabook 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="akabook 3.0 documentation" href="../index.html" />
+    <link rel="up" title="中文版：Linux C/C++編程一站式學習" href="index.html" />
+    <link rel="next" title="9. 編碼風格" href="codingstyle.html" />
+    <link rel="prev" title="7. 結構體" href="struct.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="codingstyle.html" title="9. 編碼風格"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="struct.html" title="7. 結構體"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">akabook 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">中文版：Linux C/C++編程一站式學習</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>8. 數組<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id2">
+<h2>8.1. 數組的基本概念<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p id="index-0">數組（Array）也是一種復合數據類型，它由一系列相同類型的元素（Element）組成。例如定義一個由4個 <tt class="docutils literal"><span class="pre">int</span></tt> 型元素組成的數組 <tt class="docutils literal"><span class="pre">count</span></tt> ：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="n">count</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+</pre></div>
+</td></tr></table></div>
+<p>和結構體成員類似，數組 <tt class="docutils literal"><span class="pre">count</span></tt> 的4個元素的存儲空間也是相鄰的。結構體成員可以是基本數據類型，也可以是復合數據類型，數組中的元素也是如此。根據組合規則，我們可以定義一個由4個結構體元素組成的數組：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">struct</span> <span class="n">complex_struct</span> <span class="p">{</span>
+        <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+</pre></div>
+</td></tr></table></div>
+<p>也可以定義一個包含數組成員的結構體：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">struct</span> <span class="p">{</span>
+        <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">count</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+<span class="p">}</span> <span class="n">s</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p id="index-1">數組類型的長度應該用一個整型常量表達式來指定 <a class="footnote-reference" href="#id4" id="id3">[1]</a> 。數組中的元素通過下標（或者叫索引，Index）來訪問。例如前面定義的由4個 <tt class="docutils literal"><span class="pre">int</span></tt> 型元素組成的數組 <tt class="docutils literal"><span class="pre">count</span></tt> 圖示如下：</p>
+<span class="target" id="index-2"></span><table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[1]</a></td><td>C99的新特性允許使用變數來定義數組的長度，稱為變長數組（VLA，Variable Length Array），VLA只能定義為局部變數而不能是全局變數，與VLA有關的語法規則比較複雜，本書不做詳細介紹。</td></tr>
+</tbody>
+</table>
+<div class="figure">
+<img alt="../_images/array.count.png" src="../_images/array.count.png" />
+<p class="caption">數組count</p>
+</div>
+<p id="index-3">整個數組占了4個 <tt class="docutils literal"><span class="pre">int</span></tt> 型的存儲單元，存儲單元用小方框表示，裡面的數字是存儲在這個單元中的數據（假設都是0），而框外面的數字是下標，這4個單元分別用 <tt class="docutils literal"><span class="pre">count[0]</span></tt> 、 <tt class="docutils literal"><span class="pre">count[1]</span></tt> 、 <tt class="docutils literal"><span class="pre">count[2]</span></tt> 、 <tt class="docutils literal"><span class="pre">count[3]</span></tt> 來訪問。注意，在定義數組 <tt class="docutils literal"><span class="pre">int</span> <span class="pre">count[4];</span></tt> 時，[]括號（Bracket）中的數字4表示數組的長度，而在訪問數組時，[]括號中的數字表示訪問數組的第幾個元素。和我們平常數數不同，數組元素是從“第0個”開始數的，大多數編程語言都是這麼規定的，所以計算機術語中有Zeroth這個詞。這樣規定使得訪問數組元素非常方便，比如 <tt class="docutils literal"><span class="pre">count</span></tt> 數組中的每個元素占4個位元組，則 <tt class="docutils literal"><span class="pre">count[0]</span></tt> 位於數組開頭，而 <tt class="docutils literal"><span class="pre">count[i]</span></tt> 表示從數組開頭跳過 <tt class="docutils literal"><span class="pre">4*i</span></tt> 個位元組之後的那個存儲單元。</p>
+<p>這種數組下標的表達式不僅可以表示存儲單元中的值，也可以表示存儲單元本身，也就是說可以做左值，因此以下語句都是正確的：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="n">count</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
+<span class="n">count</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">count</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+<span class="o">++</span><span class="n">count</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</pre></div>
+</td></tr></table></div>
+<p>到目前為止我們學習了五種尾碼運算符：尾碼++、尾碼&#8211;、結構體取成員.、數組取下標[]、函數調用()。還學習了五種單目運算符（或者叫首碼運算符）：首碼++、首碼&#8211;、正號+、負號-、邏輯非!。在C語言中尾碼運算符的優先順序最高，單目運算符的優先順序僅次於尾碼運算符，比其他運算符的優先順序都高，所以上例中的 <tt class="docutils literal"><span class="pre">++count[2]</span></tt> 應該看作對 <tt class="docutils literal"><span class="pre">count[2]</span></tt> 做首碼++運算。</p>
+<p>數組下標也可以是表達式，但表達式的值必須是整型的。例如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="n">count</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">count</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+</pre></div>
+</td></tr></table></div>
+<p>使用數組下標不能超出數組的長度範圍，這一點在使用變數做數組下標時尤其要注意。C編譯器並不檢查 <tt class="docutils literal"><span class="pre">count[-1]</span></tt> 或是 <tt class="docutils literal"><span class="pre">count[100]</span></tt> 這樣的訪問越界錯誤，編譯時能順利通過，所以數組訪問越界屬於運行時錯誤 <a class="footnote-reference" href="#id6" id="id5">[2]</a> 。這種錯誤有時候很隱蔽，發生訪問越界時程序可能並不會立即崩潰，而執行到後面某個正確的語句時卻有可能突然崩潰（在 <a class="reference internal" href="gdb.html#gdb-segfault"><em>程序崩潰</em></a> 我們會看到這樣的例子）。所以在寫代碼時要小心避免出這樣的問題，事後依靠調試來解決問題的成本是很高的。</p>
+<table class="docutils footnote" frame="void" id="id6" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[2]</a></td><td>你可能會想為什麼編譯器對這麼明顯的錯誤都視而不見？理由一，這種錯誤並不總是顯而易見的，在 <a class="reference internal" href="pointer.html"><em>指針</em></a> 會講到通過指針而不是數組名來訪問數組的情況，指針指向數組中的什麼位置只有運行時才知道，編譯時無法檢查是否越界，而運行時每次訪問數組元素都檢查越界會嚴重影響性能，所以乾脆不檢查了；理由二， <a class="reference internal" href="bibli.html#c99rationale">[C99Rationale]</a> 的第0章指出，C語言的設計精神是：相信每個C程序員都是高手，不要阻止程序員去幹他們需要干的事，在高手們寫的代碼中數組訪問越界往往是一種技巧而不是Bug。此外，:command:<cite>gcc</cite> 的C語法擴展允許把數組長度定義為0，對這種數組的任何下標訪問顯然都是越界的，0長度的數組通常用作結構體的最後一個成員，詳見 <a class="reference external" href="http://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html">http://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html</a> 。</td></tr>
+</tbody>
+</table>
+<p>數組也可以像結構體一樣初始化，未賦初值的元素也是用0來初始化，例如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="n">count</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">};</span>
+</pre></div>
+</td></tr></table></div>
+<p>則 <tt class="docutils literal"><span class="pre">count[0]</span></tt> 等於3， <tt class="docutils literal"><span class="pre">count[1]</span></tt> 等於2，後面兩個元素等於0。如果定義數組的同時初始化它，也可以不指定數組的長度，例如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="n">count</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">};</span>
+</pre></div>
+</td></tr></table></div>
+<p>編譯器會根據Initializer有三個元素確定數組的長度為3。利用C99的新特性也可以做Memberwise Initialization：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="n">count</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span> <span class="p">};</span>
+</pre></div>
+</td></tr></table></div>
+<p>下面看一個完整的例子：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">count</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">},</span> <span class="n">i</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;count[%d]=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">count</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p id="index-4">這個例子通過循環把數組中的每個元素依次訪問一遍，在計算機術語中稱為遍歷（Traversal）。注意控製表達式 <tt class="docutils literal"><span class="pre">i</span> <span class="pre">&lt;</span> <span class="pre">4</span></tt> ，如果寫成 <tt class="docutils literal"><span class="pre">i</span> <span class="pre">&lt;=</span> <span class="pre">4</span></tt> 就錯了，因為 <tt class="docutils literal"><span class="pre">count[4]</span></tt> 是訪問越界。</p>
+<p>數組和結構體雖然有很多相似之處，但也有一個顯著的不同： <strong>數組不能相互賦值或初始化。</strong> 比如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span> <span class="p">};</span>
+<span class="kt">int</span> <span class="n">b</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span> <span class="cm">/* WRONG! */</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>        <span class="cm">/* WRONG! */</span>
+</pre></div>
+</td></tr></table></div>
+<p>用數組 <tt class="docutils literal"><span class="pre">a</span></tt> 來初始化數組 <tt class="docutils literal"><span class="pre">b</span></tt> 是錯的，用數組 <tt class="docutils literal"><span class="pre">a</span></tt> 給數組 <tt class="docutils literal"><span class="pre">b</span></tt> 賦值也是錯的。既然不能相互賦值，也就 <strong>不能用數組類型作為函數的參數或返回值</strong> 。如果寫出這樣的函數定義：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">void</span> <span class="nf">foo</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+<span class="p">{</span>
+        <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>然後這樣調用：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="n">array</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">foo</span><span class="p">(</span><span class="n">array</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
+<p>編譯器也不會報錯，但這樣寫的意思並不是傳一個數組類型的參數。對於數組類型有一條特殊的類型轉換規則： <strong>數組類型做右值使用時，自動轉換成指向數組首元素的指針。</strong> 對於函數聲明也有一條特殊規則： <strong>在函數原型中，如果參數寫成數組的形式，則該參數實際上是指針類型。</strong> 所以上面的函數調用其實是傳一個指針類型的參數，而不是數組類型的參數。接下來的幾章裡有的函數需要訪問數組，我們就把數組定義為全局變數給函數訪問，等到 <a class="reference internal" href="pointer.html"><em>指針</em></a> 講了指針再使用傳參的辦法。</p>
+<p>數組類型不能相互賦值或初始化也是因為這條規則，例如上面提到的 <tt class="docutils literal"><span class="pre">b</span> <span class="pre">=</span> <span class="pre">a</span></tt> 這個表達式， <tt class="docutils literal"><span class="pre">a</span></tt> 和 <tt class="docutils literal"><span class="pre">b</span></tt> 都是數組類型的變數， <tt class="docutils literal"><span class="pre">a</span></tt> 做右值使用自動轉換成指針類型，而 <tt class="docutils literal"><span class="pre">b</span></tt> 做左值仍然是數組類型，把指針賦給數組是不行的，所以編譯器報的錯是 <tt class="docutils literal"><span class="pre">error:</span> <span class="pre">incompatible</span> <span class="pre">types</span> <span class="pre">when</span> <span class="pre">assigning</span> <span class="pre">to</span> <span class="pre">type</span> <span class="pre">‘int[5]’</span> <span class="pre">from</span> <span class="pre">type</span> <span class="pre">‘int</span> <span class="pre">*’</span></tt> 。</p>
+<p class="rubric">習題</p>
+<ol class="arabic simple">
+<li>編寫一個程序，定義兩個類型和長度都相同的數組，將其中一個數組的所有元素拷貝給另一個。既然數組不能直接賦值，想想應該怎麼實現。</li>
+</ol>
+</div>
+<div class="section" id="array-statrandom">
+<span id="id8"></span><h2>8.2. 數組應用實例：統計隨機數<a class="headerlink" href="#array-statrandom" title="Permalink to this headline">¶</a></h2>
+<p id="index-5">本節通過一個實例介紹使用數組的一些基本模式。問題是這樣的：首先生成一列0~9的隨機數保存在數組中，然後統計其中每個數字出現的次數並打印，檢查這些數字的隨機性如何。隨機數在某些場合（例如遊戲程序）是非常有用的，但是用計算機生成完全隨機的數卻不是那麼容易。計算機執行每一條指令的結果都是確定的，沒有一條指令產生的是隨機數，調用C標準庫函數得到的隨機數其實是偽隨機（Pseudorandom）數，是用數學公式算出來的確定的數，只不過這些數看起來很隨機，並且從統計意義上也很接近於均勻分佈（Uniform Distribution）的隨機數。</p>
+<p>C標準庫中生成偽隨機數的是 <tt class="docutils literal"><span class="pre">rand</span></tt> 函數，使用這個函數需要包含標頭檔 <tt class="docutils literal"><span class="pre">stdlib.h</span></tt> ，它沒有參數，返回值是一個介於0和 <tt class="docutils literal"><span class="pre">RAND_MAX</span></tt> 之間的接近均勻分佈的整數。 <tt class="docutils literal"><span class="pre">RAND_MAX</span></tt> 是該標頭檔中定義的一個常量，在不同的平台上有不同的取值，但可以肯定它是一個非常大的整數。通常我們用到的隨機數是限定在某個範圍之中的，例如0~9，而不是0~RAND_MAX，我們可以用%運算符將 <tt class="docutils literal"><span class="pre">rand</span></tt> 函數的返回值處理一下：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="o">%</span> <span class="mi">10</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p>完整的程序如下：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="cp">#include &lt;stdlib.h&gt;</span>
+<span class="cp">#define N 20</span>
+
+<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+
+<span class="kt">void</span> <span class="nf">gen_random</span><span class="p">(</span><span class="kt">int</span> <span class="n">upper_bound</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="o">%</span> <span class="n">upper_bound</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">print_random</span><span class="p">()</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d &quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">gen_random</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+        <span class="n">print_random</span><span class="p">();</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p id="index-6">這裡介紹一種新的預處理指示：用 <tt class="docutils literal"><span class="pre">#define</span></tt> 定義一個常量。實際上編譯器的工作分為兩個階段，先是預處理（Preprocess）階段，然後才是編譯階段，用 <strong class="command">gcc</strong> 的 <em class="xref std std-option">-E</em> 選項可以看到預處理之後、編譯之前的程序，例如:</p>
+<div class="highlight-python"><pre>$ gcc -E main.c
+...（這裡省略了很多行stdio.h和stdlib.h的代碼）
+int a[20];
+
+void gen_random(int upper_bound)
+{
+        int i;
+        for (i = 0; i &lt; 20; i++)
+                a[i] = rand() % upper_bound;
+}
+
+void print_random()
+{
+        int i;
+        for (i = 0; i &lt; 20; i++)
+                printf("%d ", a[i]);
+        printf("\n");
+}
+
+int main(void)
+{
+        gen_random(10);
+        print_random();
+        return 0;
+}</pre>
+</div>
+<p>可見在這裡預處理器做了兩件事情，一是把標頭檔 <tt class="docutils literal"><span class="pre">stdio.h</span></tt> 和 <tt class="docutils literal"><span class="pre">stdlib.h</span></tt> 在代碼中展開，二是把 <tt class="docutils literal"><span class="pre">#define</span></tt> 定義的標識符 <tt class="docutils literal"><span class="pre">N</span></tt> 替換成它的定義 <tt class="docutils literal"><span class="pre">20</span></tt> （在代碼中做了三處替換，分別位於數組的定義中和兩個函數中）。用 <strong class="command">cpp main.c</strong> 命令也可以達到同樣的效果，只做預處理而不編譯， <strong class="command">cpp</strong> 是C preprocessor的縮寫。</p>
+<p id="index-7">那麼用 <tt class="docutils literal"><span class="pre">#define</span></tt> 定義的常量和 <a class="reference internal" href="struct.html#struct-typetag"><em>數據類型標誌</em></a> 講的枚舉常量有什麼區別呢？首先， <tt class="docutils literal"><span class="pre">#define</span></tt> 不僅用於定義常量，也可以定義更複雜的語法結構，稱為宏（Macro）定義，我們將在 <a class="reference internal" href="prep.html"><em>預處理</em></a> 詳細介紹。其次， <tt class="docutils literal"><span class="pre">#define</span></tt> 定義是在預處理階段處理的，而枚舉是在編譯階段處理的，試試看把 <a class="reference internal" href="struct.html#struct-typetag"><em>數據類型標誌</em></a> 習題中的程序改成下面這樣會是什麼結果。</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="cp">#define RECTANGULAR 1</span>
+<span class="cp">#define POLAR 2</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">RECTANGULAR</span><span class="p">;</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">RECTANGULAR</span><span class="p">,</span> <span class="n">POLAR</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>注意，雖然 <tt class="docutils literal"><span class="pre">include</span></tt> 和 <tt class="docutils literal"><span class="pre">define</span></tt> 在預處理指示中有特殊含義，但它們並不是C語言的關鍵字，換句話說，它們也可以用作標識符，例如聲明 <tt class="docutils literal"><span class="pre">int</span> <span class="pre">include;</span></tt> 或者 <tt class="docutils literal"><span class="pre">void</span> <span class="pre">define(int);</span></tt> 。在預處理階段，如果一行以#號開頭，後面跟 <tt class="docutils literal"><span class="pre">include</span></tt> 或 <tt class="docutils literal"><span class="pre">define</span></tt> ，預處理器就認為這是一條預處理指示，除此之外出現在其他地方的 <tt class="docutils literal"><span class="pre">include</span></tt> 或 <tt class="docutils literal"><span class="pre">define</span></tt> 預處理器並不關心，只當成普通的標識符留給編譯階段去處理。</p>
+<p>回到隨機數這個程序繼續討論，一開始為了便于分析和調試，我們取小一點的數組長度，只生成20個隨機數，這個程序的運行結果為:</p>
+<div class="highlight-python"><pre>3 6 7 5 3 5 6 2 9 1 2 7 0 9 3 6 0 6 2 6</pre>
+</div>
+<p>看起來很隨機了。但隨機性如何呢？分佈得均勻嗎？所謂均勻分佈，應該每個數出現的概率是一樣的。在上面的20個結果中，6出現了5次，而4和8一次也沒出現過。但這說明不了什麼問題，畢竟我們的樣本太少了，才20個數，如果樣本足夠多，比如說100000個數，統計一下其中每個數字出現的次數也許能說明問題。但總不能把100000個數都打印出來然後挨個去數吧？我們需要寫一個函數統計每個數字出現的次數。完整的程序如下：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="cp">#include &lt;stdlib.h&gt;</span>
+<span class="cp">#define N 100000</span>
+
+<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+
+<span class="kt">void</span> <span class="nf">gen_random</span><span class="p">(</span><span class="kt">int</span> <span class="n">upper_bound</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="o">%</span> <span class="n">upper_bound</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">howmany</span><span class="p">(</span><span class="kt">int</span> <span class="n">value</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">value</span><span class="p">)</span>
+                        <span class="o">++</span><span class="n">count</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">count</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+
+        <span class="n">gen_random</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;value</span><span class="se">\t</span><span class="s">how many</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\t</span><span class="s">%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">howmany</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
+
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p id="index-8">我們只要把 <tt class="docutils literal"><span class="pre">#define</span> <span class="pre">N</span></tt> 的值改為 <tt class="docutils literal"><span class="pre">100000</span></tt> ，就相當於把整個程序中所有用到 <tt class="docutils literal"><span class="pre">N</span></tt> 的地方都改為 <tt class="docutils literal"><span class="pre">100000</span></tt> 了。如果我們不這麼寫，而是在定義數組時直接寫成 <tt class="docutils literal"><span class="pre">int</span> <span class="pre">a[20];</span></tt> ，在每個循環中也直接使用 <tt class="docutils literal"><span class="pre">20</span></tt> 這個值，則稱為硬編碼（Hard Coding）。如果原來的代碼是硬編碼的，那麼一旦需要把 <tt class="docutils literal"><span class="pre">20</span></tt> 改成 <tt class="docutils literal"><span class="pre">100000</span></tt> 就非常麻煩，你需要找遍整個代碼，判斷哪些 <tt class="docutils literal"><span class="pre">20</span></tt> 表示這個數組的長度就改為 <tt class="docutils literal"><span class="pre">100000</span></tt> ，哪些 <tt class="docutils literal"><span class="pre">20</span></tt> 表示別的數量則不做改動，如果代碼很長，這是很容易出錯的。所以， <strong>寫代碼時應儘可能避免硬編碼</strong> ，這其實也是一個“提取公因式”的過程，和 <a class="reference internal" href="struct.html#struct-dataabstraction"><em>數據抽象</em></a> 講的抽象具有相同的作用，就是儘量把一個改動侷限在一個地方，避免這個改動波及大範圍的代碼。這個程序的運行結果如下:</p>
+<div class="highlight-python"><pre>$ ./a.out
+value   how many
+0       10130
+1       10072
+2       9990
+3       9842
+4       10174
+5       9930
+6       10059
+7       9954
+8       9891
+9       9958</pre>
+</div>
+<p>各數字出現的次數都在10000次左右，可見是比較均勻的。</p>
+<p class="rubric">習題</p>
+<ol class="arabic simple">
+<li>用 <tt class="docutils literal"><span class="pre">rand</span></tt> 函數生成[10, 20]之間的隨機整數，表達式應該怎麼寫？</li>
+</ol>
+</div>
+<div class="section" id="id9">
+<h2>8.3. 數組應用實例：直方圖<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<p id="index-9">繼續上面的例子。我們統計一列0~9的隨機數，打印每個數字出現的次數，像這樣的統計結果稱為直方圖（Histogram）。有時候我們並不只是想打印，更想把統計結果保存下來以便做後續處理。我們可以把程序改成這樣：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">howmanyones</span> <span class="o">=</span> <span class="n">howmany</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">howmanytwos</span> <span class="o">=</span> <span class="n">howmany</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+        <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>這顯然太繁瑣了。要是這樣的隨機數有100個呢？顯然這裡用數組最合適不過了：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">histogram</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+
+        <span class="n">gen_random</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">histogram</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">howmany</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>有意思的是，這裡的循環變數 <tt class="docutils literal"><span class="pre">i</span></tt> 有兩個作用，一是作為參數傳給 <tt class="docutils literal"><span class="pre">howmany</span></tt> 函數，統計數字 <tt class="docutils literal"><span class="pre">i</span></tt> 出現的次數，二是做 <tt class="docutils literal"><span class="pre">histogram</span></tt> 的下標，也就是“把數字 <tt class="docutils literal"><span class="pre">i</span></tt> 出現的次數保存在數組 <tt class="docutils literal"><span class="pre">histogram</span></tt> 的第 <tt class="docutils literal"><span class="pre">i</span></tt> 個位置”。</p>
+<p id="index-10">儘管上面的方法可以準確地得到統計結果，但是效率很低，這100000個隨機數需要從頭到尾檢查十遍，每一遍檢查只統計一種數字的出現次數。其實可以把 <tt class="docutils literal"><span class="pre">histogram</span></tt> 中的元素當作累加器來用，這些隨機數只需要從頭到尾檢查一遍（Single Pass）就可以得出結果：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">histogram</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+        <span class="n">gen_random</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">n</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">histogram</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">n</span><span class="p">]]</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>首先把 <tt class="docutils literal"><span class="pre">histogram</span></tt> 的所有元素初始化為0，注意使用局部變數的值之前一定要初始化，否則值是不確定的。接下來的代碼很有意思，在每次循環中， <tt class="docutils literal"><span class="pre">a[n]</span></tt> 就是出現的隨機數，而這個隨機數同時也是 <tt class="docutils literal"><span class="pre">histogram</span></tt> 的下標，這個隨機數每出現一次就把 <tt class="docutils literal"><span class="pre">histogram</span></tt> 中相應的元素加1。</p>
+<p id="index-11">把上面的程序運行幾遍，你就會發現每次產生的隨機數都是一樣的，不僅如此，在別的計算機上運行該程序產生的隨機數很可能也是這樣的。這正說明了這些數是偽隨機數，是用一套確定的公式基于某個初值算出來的，只要初值相同，隨後的整個數列就都相同。實際應用中不可能使用每次都一樣的隨機數，例如開發一個麻將遊戲，每次運行這個遊戲摸到的牌不應該是一樣的。因此，C標準庫允許我們自己指定一個初值，然後在此基礎上生成偽隨機數序列，這個初值稱為Seed，可以用 <tt class="docutils literal"><span class="pre">srand</span></tt> 函數指定Seed。通常我們通過別的途徑得到一個不確定的數作為Seed，例如調用 <em class="manpage">time(2)</em> 函數得到當前系統時間距1970年1月1日00:00:00 <a class="footnote-reference" href="#id11" id="id10">[3]</a> 的秒數，然後傳給 <tt class="docutils literal"><span class="pre">srand</span></tt> ：</p>
+<table class="docutils footnote" frame="void" id="id11" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id10">[3]</a></td><td>各種派生自UNIX的系統都把這個時刻稱為Epoch，因為這個時刻近似等於UNIX系統誕生的時間（實際上最早的UNIX系統誕生於1969年）。</td></tr>
+</tbody>
+</table>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="n">srand</span><span class="p">(</span><span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">));</span>
+</pre></div>
+</td></tr></table></div>
+<p>然後再調用 <tt class="docutils literal"><span class="pre">rand</span></tt> ，得到的隨機數就和剛纔完全不同了。調用 <em class="manpage">time(2)</em> 函數需要包含標頭檔 <tt class="file docutils literal"><span class="pre">time.h</span></tt> ，這裡的 <tt class="docutils literal"><span class="pre">NULL</span></tt> 表示空指針，到 <a class="reference internal" href="pointer.html#pointer-pointer"><em>指針的基本概念</em></a> 再詳細解釋。</p>
+<p class="rubric">習題</p>
+<ol class="arabic">
+<li><p class="first">補完本節直方圖程序的 <tt class="docutils literal"><span class="pre">main</span></tt> 函數，以可視化的形式打印直方圖。例如上一節統計20個隨機數的結果是:</p>
+<div class="highlight-python"><pre>0  1  2  3  4  5  6  7  8  9
+
+*  *  *  *     *  *  *     *
+*     *  *     *  *  *     *
+      *  *        *
+                  *
+                  *</pre>
+</div>
+</li>
+<li><p class="first">用數組定義一個序列，編程打印它的全排列。比如定義：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#define N 3</span>
+<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span> <span class="p">};</span>
+</pre></div>
+</td></tr></table></div>
+<p>則運行結果是:</p>
+<div class="highlight-python"><pre>$ ./a.out
+1 2 3
+1 3 2
+2 1 3
+2 3 1
+3 2 1
+3 1 2</pre>
+</div>
+<p>程序的主要思路是：</p>
+<ol class="arabic simple">
+<li>把第1個數換到最前面來（和第1個數交換，其實就是自己和自己交換，序列不變，還是1，2，3），準備打印1xx，再對後兩個數2和3做全排列，打印完所有排列後恢復序列原來的次序。</li>
+<li>把第2個數換到最前面來（和第1個數交換，序列變成2，1，3），準備打印2xx，再對後兩個數1和3做全排列，打印完所有排列後恢復序列原來的次序。</li>
+<li>把第3個數換到最前面來（和第1個數交換，序列變成3，2，1），準備打印3xx，再對後兩個數2和1做全排列，打印完所有排列後恢復序列原來的次序。</li>
+</ol>
+<p>可見這是一個遞歸的過程，把“對整個序列做全排列”的問題歸結為“對它的子序列做全排列”的問題，注意我沒有描述Base Case怎麼處理，你需要自己想。你的程序要具有通用性，如果改變了 <tt class="docutils literal"><span class="pre">N</span></tt> 和數組 <tt class="docutils literal"><span class="pre">a</span></tt> 的定義（比如改成4個數的數組），其他代碼不需要修改就可以做4個數的全排列（共24種排列）。</p>
+<p>完成了上述要求之後再考慮第二個問題：如果再定義一個常量 <tt class="docutils literal"><span class="pre">M</span></tt> 表示從 <tt class="docutils literal"><span class="pre">N</span></tt> 個數中取 <tt class="docutils literal"><span class="pre">M</span></tt> 個數做排列（ <tt class="docutils literal"><span class="pre">N</span> <span class="pre">==</span> <span class="pre">M</span></tt> 時表示全排列），原來的程序應該怎麼改？</p>
+<p>最後再考慮第三個問題：如果要求從 <tt class="docutils literal"><span class="pre">N</span></tt> 個數中取 <tt class="docutils literal"><span class="pre">M</span></tt> 個數做組合而不是做排列，就不能用原來的遞歸過程了，想想組合的遞歸過程應該怎麼描述，編程實現它。</p>
+</li>
+</ol>
+</div>
+<div class="section" id="id12">
+<h2>8.4. 字元串<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
+<p>之前我一直對字元串避而不談，不做詳細解釋，現在已經具備了必要的基礎知識，可以深入討論一下字元串了。字元串字面值和數組類型相似，它的每個元素是字元型的，例如字元串 <tt class="docutils literal"><span class="pre">&quot;Hello,</span> <span class="pre">world.\n&quot;</span></tt> 圖示如下：</p>
+<div class="figure">
+<img alt="../_images/array.string.png" src="../_images/array.string.png" />
+<p class="caption">字元串</p>
+</div>
+<p id="index-12">注意每個字元串末尾都有一個字元 <tt class="docutils literal"><span class="pre">'\0'</span></tt> 做結束符，在 <a class="reference internal" href="expr.html#expr-char"><em>字元類型與字元編碼</em></a> 講過 <tt class="docutils literal"><span class="pre">'\0'</span></tt> 叫Null字元，所以字元串也稱為“以Null結尾的字元串”（Null-terminated String）。</p>
+<p>數組元素可以通過數組名加下標的方式訪問，而字元串字面值也可以像數組名一樣使用，可以加下標訪問其中的字元，例如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="s">&quot;Hello, world.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">[</span><span class="mi">14</span><span class="p">];</span>
+</pre></div>
+</td></tr></table></div>
+<p>把 <tt class="docutils literal"><span class="pre">&quot;Hello,</span> <span class="pre">world.\n&quot;</span></tt> 這個字元串看作一個數組，下標14的位置是字元 <tt class="docutils literal"><span class="pre">'\0'</span></tt> ，所以這個語句把 <tt class="docutils literal"><span class="pre">'\0'</span></tt> 賦給了變數 <tt class="docutils literal"><span class="pre">c</span></tt> 。C標準沒有規定字元串字面值所占的存儲空間是否允許被修改，但常見的C編譯器都把字元串字面值實現成只讀的。假如代碼中有這麼一行：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="s">&quot;Hello, world.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;A&#39;</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p><strong class="command">gcc</strong> 在編譯時會給出一個警告 <tt class="docutils literal"><span class="pre">warning:</span> <span class="pre">assignment</span> <span class="pre">of</span> <span class="pre">read-only</span> <span class="pre">location</span></tt> ，在運行時程序執行到這一條語句會產生段錯誤。</p>
+<p>字元串字面值還有一點和數組類型相似：做右值使用時自動轉換成指向首字元的指針。在 <a class="reference internal" href="func.html#func-parameter"><em>形參和實參</em></a> 我們看到 <tt class="docutils literal"><span class="pre">printf</span></tt> 原型的第一個參數是指向字元的指針類型，而函數調用 <tt class="docutils literal"><span class="pre">printf(&quot;Hello,</span> <span class="pre">world.\n&quot;)</span></tt> 其實就是傳一個指針參數給 <tt class="docutils literal"><span class="pre">printf</span></tt> ，關於字元串字面值和指針的關係將在 <a class="reference internal" href="pointer.html#pointer-pointertoconst"><em>指針與const限定符</em></a> 詳細解釋。字元串字面值有一種特殊用法，可以作為Initializer給一個字元數組初始化 <a class="footnote-reference" href="#id14" id="id13">[4]</a> ：</p>
+<table class="docutils footnote" frame="void" id="id14" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id13">[4]</a></td><td>這個語法的特殊之處在於，在這裡字元串字面值和數組的用法並不相似，我們不能用一個數組給另一個數組初始化，卻可以用一個字元串字面值給一個數組初始化。另一方面，我們不能把一個數組賦值給另一個數組，同樣也不能把一個字元串字面值賦值給一個數組。這些特殊規定沒什麼道理可講，一切都可歸結于歷史原因。</td></tr>
+</tbody>
+</table>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">char</span> <span class="n">str</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;Hello&quot;</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p>等價于這樣初始化：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">char</span> <span class="n">str</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="sc">&#39;H&#39;</span><span class="p">,</span> <span class="sc">&#39;e&#39;</span><span class="p">,</span> <span class="sc">&#39;l&#39;</span><span class="p">,</span> <span class="sc">&#39;l&#39;</span><span class="p">,</span> <span class="sc">&#39;o&#39;</span><span class="p">,</span> <span class="sc">&#39;\0&#39;</span> <span class="p">};</span>
+</pre></div>
+</td></tr></table></div>
+<p><tt class="docutils literal"><span class="pre">str</span></tt> 的後4個元素沒有指定，自動初始化為Null字元。注意，雖然字元串字面值 <tt class="docutils literal"><span class="pre">&quot;Hello&quot;</span></tt> 是隻讀的，但用它初始化的數組 <tt class="docutils literal"><span class="pre">str</span></tt> 卻是可讀可寫的，這說明 <tt class="docutils literal"><span class="pre">str</span></tt> 和 <tt class="docutils literal"><span class="pre">&quot;Hello&quot;</span></tt> 各自佔據不同的存儲空間，只不過 <tt class="docutils literal"><span class="pre">str</span></tt> 所占的存儲空間裡的內容拷貝自 <tt class="docutils literal"><span class="pre">&quot;Hello&quot;</span></tt> 。數組 <tt class="docutils literal"><span class="pre">str</span></tt> 中保存了一串字元，以Null字元結尾，也可以叫字元串。 <strong>在本書中只要是以Null結尾的一串字元都叫字元串，不管是像str這樣的字元數組，還是像&#8221;Hello&#8221;這樣的字元串字面值。</strong></p>
+<p>如果用於初始化的字元串字面值比數組還長，比如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">char</span> <span class="n">str</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;Hello, world.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p>則數組 <tt class="docutils literal"><span class="pre">str</span></tt> 只包含字元串的前10個字元，不包含Null字元，這種情況編譯器會給出警告。如果要用一個字元串字面值準確地初始化一個字元數組，最好的辦法是不指定數組的長度，讓編譯器自己計算：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">char</span> <span class="n">str</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;Hello, world.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p>字元串字面值的長度包括Null字元在內一共15個字元，編譯器會確定數組 <tt class="docutils literal"><span class="pre">str</span></tt> 的長度為15。有一種情況需要特別注意，如果用於初始化的字元串字面值比數組剛好長出一個Null字元的長度，比如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">char</span> <span class="n">str</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;Hello, world.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p>則數組 <tt class="docutils literal"><span class="pre">str</span></tt> 不包含Null字元，並且編譯器不會給出警告， <a class="reference internal" href="bibli.html#c99rationale">[C99Rationale]</a> 的6.7.8節說這樣規定是為了程序員方便，以前的很多編譯器也都是這樣實現的，不管它有理沒理，C標準既然這麼規定了我們也沒辦法，只能自己小心了。</p>
+<p>補充一點，在 <tt class="docutils literal"><span class="pre">printf</span></tt> 函數的格式化字元串中可以用 <tt class="docutils literal"><span class="pre">%s</span></tt> 表示字元串的占位符。在學習字元數組以前，我們用 <tt class="docutils literal"><span class="pre">%s</span></tt> 沒什麼意義，因為</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="n">printf</span><span class="p">(</span><span class="s">&quot;string: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;Hello&quot;</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
+<p>還不如寫成</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="n">printf</span><span class="p">(</span><span class="s">&quot;string: Hello</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
+<p>但現在字元串可以保存在一個數組裡面，用 <tt class="docutils literal"><span class="pre">%s</span></tt> 來打印就很有必要了：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="n">printf</span><span class="p">(</span><span class="s">&quot;string: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
+<p><tt class="docutils literal"><span class="pre">printf</span></tt> 會從數組 <tt class="docutils literal"><span class="pre">str</span></tt> 的開頭一直打印到Null字元為止，Null字元本身是Non-printable字元，不打印。這其實是一個危險的信號：如果數組 <tt class="docutils literal"><span class="pre">str</span></tt> 中沒有Null字元，那麼 <tt class="docutils literal"><span class="pre">printf</span></tt> 函數就會訪問數組越界，後果可能會很詭異，有時候打印出亂碼，有時候看起來沒錯誤，有時候引起程序崩潰。</p>
+</div>
+<div class="section" id="array-multidim">
+<span id="id16"></span><h2>8.5. 多維數組<a class="headerlink" href="#array-multidim" title="Permalink to this headline">¶</a></h2>
+<p id="index-13">就像結構體可以嵌套一樣，數組也可以嵌套，一個數組的元素可以是另外一個數組，這樣就構成了多維數組（Multi-dimensional Array）。例如定義並初始化一個二維數組：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span> <span class="p">};</span>
+</pre></div>
+</td></tr></table></div>
+<p>數組 <tt class="docutils literal"><span class="pre">a</span></tt> 有3個元素， <tt class="docutils literal"><span class="pre">a[0]</span></tt> 、 <tt class="docutils literal"><span class="pre">a[1]</span></tt> 、 <tt class="docutils literal"><span class="pre">a[2]</span></tt> 。每個元素也是一個數組，例如 <tt class="docutils literal"><span class="pre">a[0]</span></tt> 是一個數組，它有兩個元素 <tt class="docutils literal"><span class="pre">a[0][0]</span></tt> 、 <tt class="docutils literal"><span class="pre">a[0][1]</span></tt> ，這兩個元素的類型是 <tt class="docutils literal"><span class="pre">int</span></tt> ，值分別是1、2，同理，數組 <tt class="docutils literal"><span class="pre">a[1]</span></tt> 的兩個元素是3、4，數組 <tt class="docutils literal"><span class="pre">a[2]</span></tt> 的兩個元素是5、0。如下圖所示：</p>
+<div class="figure">
+<img alt="../_images/array.multidim.png" src="../_images/array.multidim.png" />
+<p class="caption">多維數組</p>
+</div>
+<p id="index-14">從概念模型上看，這個二維數組是三行兩列的表格，元素的兩個下標分別是行號和列號。從物理模型上看，這六個元素在存儲器中仍然是連續存儲的，就像一維數組一樣，相當於把概念模型的表格一行一行接起來拼成一串，C語言的這種存儲方式稱為Row-major方式，而有些編程語言（例如FORTRAN）是把概念模型的表格一列一列接起來拼成一串存儲的，稱為Column-major方式。</p>
+<p>多維數組也可以像嵌套結構體一樣用嵌套Initializer初始化，例如上面的二維數組也可以這樣初始化：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="p">},</span> <span class="p">{</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span> <span class="p">},</span> <span class="p">{</span> <span class="mi">5</span><span class="p">,</span> <span class="p">}</span> <span class="p">};</span>
+</pre></div>
+</td></tr></table></div>
+<p>利用C99的新特性也可以做Memberwise Initialization，例如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">9</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">8</span> <span class="p">};</span>
+</pre></div>
+</td></tr></table></div>
+<p>結構體和數組嵌套的情況也可以做Memberwise Initialization，例如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">struct</span> <span class="n">complex_struct</span> <span class="p">{</span>
+        <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="mf">8.0</span> <span class="p">};</span>
+
+<span class="k">struct</span> <span class="p">{</span>
+        <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">count</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+<span class="p">}</span> <span class="n">s</span> <span class="o">=</span> <span class="p">{</span> <span class="p">.</span><span class="n">count</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">9</span> <span class="p">};</span>
+</pre></div>
+</td></tr></table></div>
+<p>如果是多維字元數組，也可以嵌套使用字元串字面值做Initializer，例如：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+
+<span class="kt">void</span> <span class="nf">print_day</span><span class="p">(</span><span class="kt">int</span> <span class="n">day</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">char</span> <span class="n">days</span><span class="p">[</span><span class="mi">8</span><span class="p">][</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="s">&quot;Monday&quot;</span><span class="p">,</span> <span class="s">&quot;Tuesday&quot;</span><span class="p">,</span>
+                             <span class="s">&quot;Wednesday&quot;</span><span class="p">,</span> <span class="s">&quot;Thursday&quot;</span><span class="p">,</span> <span class="s">&quot;Friday&quot;</span><span class="p">,</span>
+                             <span class="s">&quot;Saturday&quot;</span><span class="p">,</span> <span class="s">&quot;Sunday&quot;</span> <span class="p">};</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">day</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">day</span> <span class="o">&lt;=</span> <span class="mi">7</span><span class="p">)</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">days</span><span class="p">[</span><span class="n">day</span><span class="p">]);</span>
+        <span class="k">else</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Illegal day number!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">print_day</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<div class="figure">
+<img alt="../_images/array.multichar.png" src="../_images/array.multichar.png" />
+<p class="caption">多維字元數組</p>
+</div>
+<p>這個程序中定義了一個多維字元數組 <tt class="docutils literal"><span class="pre">char</span> <span class="pre">days[8][10];</span></tt> ，如上圖所示。為了使1~7剛好映射到 <tt class="docutils literal"><span class="pre">days[1]</span></tt> ~ <tt class="docutils literal"><span class="pre">days[7]</span></tt> ，我們把 <tt class="docutils literal"><span class="pre">days[0]</span></tt> 空出來不用，所以第一維的長度是8，為了使最長的字元串 <tt class="docutils literal"><span class="pre">&quot;Wednesday&quot;</span></tt> 能夠保存到一行，末尾還能多出一個Null字元的位置，所以第二維的長度是10。</p>
+<p id="index-15">這個程序和 <a class="reference internal" href="cond.html#cond-switch1"><em>switch語句</em></a> 的功能其實是一樣的，但是代碼簡潔多了。簡潔的代碼不僅可讀性強，而且維護成本也低，像 <a class="reference internal" href="cond.html#cond-switch1"><em>switch語句</em></a> 那樣一堆 <tt class="docutils literal"><span class="pre">case</span></tt> 、 <tt class="docutils literal"><span class="pre">printf</span></tt> 和 <tt class="docutils literal"><span class="pre">break</span></tt> ，如果漏寫一個 <tt class="docutils literal"><span class="pre">break</span></tt> 就要出Bug。這個程序之所以簡潔，是因為用數據代替了代碼。具體來說，通過下標訪問字元串組成的數組可以代替一堆 <tt class="docutils literal"><span class="pre">case</span></tt> 分支判斷，這樣就可以把每個 <tt class="docutils literal"><span class="pre">case</span></tt> 裡重複的代碼（ <tt class="docutils literal"><span class="pre">printf</span></tt> 調用）提取出來，從而又一次達到了“提取公因式”的效果。這種方法稱為數據驅動的編程（Data-driven Programming），寫代碼最重要的是選擇正確的資料結構來組織信息，設計控制流程和算法尚在其次，只要資料結構選擇得正確，其他代碼自然而然就變得容易理解和維護了，就像這裡的 <tt class="docutils literal"><span class="pre">printf</span></tt> 自然而然就被提取出來了。 <a class="reference internal" href="bibli.html#id3">[人月神話]</a> 的第9章說：“Show me your flowcharts and conceal your tables, and I shall continue to be mystified. Show me your tables, and I won&#8217;t usually need your flowcharts; they&#8217;ll be obvious.”</p>
+<p>最後，綜合本章的知識，我們來寫一個最簡單的小遊戲－－剪刀石頭布：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="cp">#include &lt;stdlib.h&gt;</span>
+<span class="cp">#include &lt;time.h&gt;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">char</span> <span class="n">gesture</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&quot;scissor&quot;</span><span class="p">,</span> <span class="s">&quot;stone&quot;</span><span class="p">,</span> <span class="s">&quot;cloth&quot;</span> <span class="p">};</span>
+        <span class="kt">int</span> <span class="n">man</span><span class="p">,</span> <span class="n">computer</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">ret</span><span class="p">;</span>
+
+        <span class="n">srand</span><span class="p">(</span><span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">));</span>
+        <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">computer</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="o">%</span> <span class="mi">3</span><span class="p">;</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">Input your gesture (0-scissor 1-stone 2-cloth):</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+                <span class="n">ret</span> <span class="o">=</span> <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">man</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">man</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">man</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Invalid input!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+                        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;You: %s</span><span class="se">\t</span><span class="s">Computer: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+                       <span class="n">gesture</span><span class="p">[</span><span class="n">man</span><span class="p">],</span> <span class="n">gesture</span><span class="p">[</span><span class="n">computer</span><span class="p">]);</span>
+
+                <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="n">man</span> <span class="o">-</span> <span class="n">computer</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;You win!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Draw!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+                <span class="k">else</span>
+                        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;You lose!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>0、1、2三個整數分別是剪刀、石頭、布在程序中的內部表示，用戶也要求輸入0、1或2，然後和計算機隨機生成的0、1或2比勝負。這個程序的主體是一個死循環，需要按Ctrl-C退出程序。以往我們寫的程序都只有打印輸出，在這個程序中我們第一次碰到處理鍵盤輸入的情況。我們簡單介紹一下 <tt class="docutils literal"><span class="pre">scanf</span></tt> 函數的用法，到 <a class="reference internal" href="stdlib.html#stdlib-formattedio"><em>格式化I/O函數</em></a> 再詳細解釋。</p>
+<p><tt class="docutils literal"><span class="pre">scanf(&quot;%d&quot;,</span> <span class="pre">&amp;man)</span></tt> 這個調用的功能是等待用戶輸入一個整數並回車，這個整數會被 <tt class="docutils literal"><span class="pre">scanf</span></tt> 函數保存在 <tt class="docutils literal"><span class="pre">man</span></tt> 這個整型變數裡。如果用戶輸入合法（輸入的確實是數字而不是別的字元），則 <tt class="docutils literal"><span class="pre">scanf</span></tt> 函數返回1，表示成功讀入一個數據。但即使用戶輸入的是整數，我們還需要進一步檢查是不是在0~2的範圍內，寫程序處理用戶輸入時要格外小心，用戶有可能輸入任何數據，他才不管遊戲規則是什麼。</p>
+<p>和 <tt class="docutils literal"><span class="pre">printf</span></tt> 類似， <tt class="docutils literal"><span class="pre">scanf</span></tt> 也可以用 <tt class="docutils literal"><span class="pre">%c</span></tt> 、 <tt class="docutils literal"><span class="pre">%f</span></tt> 、 <tt class="docutils literal"><span class="pre">%s</span></tt> 等轉換說明。如果在傳給 <tt class="docutils literal"><span class="pre">scanf</span></tt> 的第一個參數中用 <tt class="docutils literal"><span class="pre">%d</span></tt> 、 <tt class="docutils literal"><span class="pre">%f</span></tt> 或 <tt class="docutils literal"><span class="pre">%c</span></tt> 表示讀入一個整數、浮點數或字元，則第二個參數的形式應該是&amp;運算符加相應類型的變數名，表示讀進來的數保存到這個變數中，&amp;運算符的作用是取變數存儲空間的地址得到一個指針類型，到 <a class="reference internal" href="pointer.html#pointer-pointer"><em>指針的基本概念</em></a> 再詳細解釋。如果在第一個參數中用 <tt class="docutils literal"><span class="pre">%s</span></tt> 讀入一個字元串，則第二個參數應該是數組名，數組名前面不加&amp;，因為數組類型做右值時自動轉換成指針類型，在 <a class="reference internal" href="gdb.html#gdb-breakpoint"><em>斷點</em></a> 有 <tt class="docutils literal"><span class="pre">scanf</span></tt> 讀入字元串的例子。</p>
+<p>留給讀者思考的問題是： <tt class="docutils literal"><span class="pre">(man</span> <span class="pre">-</span> <span class="pre">computer</span> <span class="pre">+</span> <span class="pre">4)</span> <span class="pre">%</span> <span class="pre">3</span> <span class="pre">-</span> <span class="pre">1</span></tt> 這個神奇的表達式是如何比較出0、1、2這三個數字在“剪刀石頭布”意義上的大小的？</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">8. 數組</a><ul>
+<li><a class="reference internal" href="#id2">8.1. 數組的基本概念</a></li>
+<li><a class="reference internal" href="#array-statrandom">8.2. 數組應用實例：統計隨機數</a></li>
+<li><a class="reference internal" href="#id9">8.3. 數組應用實例：直方圖</a></li>
+<li><a class="reference internal" href="#id12">8.4. 字元串</a></li>
+<li><a class="reference internal" href="#array-multidim">8.5. 多維數組</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="struct.html"
+                        title="previous chapter">7. 結構體</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="codingstyle.html"
+                        title="next chapter">9. 編碼風格</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/zh/array.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><table border=0 cellspacing=0 style="color: white;">
+
+<tr><td>
+   請輸入您的email訂閲<a href="http://groups.google.com/group/learning-linux-c-cpp">本書的郵件列表</a><br/>
+   (Please enter your email to subscribe to <a href="http://groups.google.com/group/learning-linux-c-cpp">this book's mailing list</a>)<br/>
+   <form action="http://groups.google.com/group/learning-linux-c-cpp/boxsubscribe"><input type=text name=email><input type=submit name="sub" value="訂閲(Subscribe)"></form>
+</td></tr>
+
+<tr><td><br/>關注<a href="http://weibo.com/sansoong">我的微博</a></td></tr>
+
+<tr><td><br/>Checkout the source from github: <a href="https://github.com/learning-linux-c-cpp/akabook">https://github.com/learning-linux-c-cpp/akabook</a></td></tr>
+
+<tr><td>
+   <br/>感謝您的慷慨捐贈！<br/>
+   Thanks for your generous donation!<br/>
+   <a href="http://me.alipay.com/songjinshan" target="_blank"><img src="_static/me.alipay.png" alt="捐贈"></a>
+</td></tr>
+
+</table>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="codingstyle.html" title="9. 編碼風格"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="struct.html" title="7. 結構體"
+             >previous</a> |</li>
+        <li><a href="../index.html">akabook 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >中文版：Linux C/C++編程一站式學習</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Sean Soong.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

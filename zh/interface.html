@@ -8,37 +8,43 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Learning Linux C/C++ Programming from Scratch &mdash; akabook 3.0 documentation</title>
+    <title>10. 函數介面 &mdash; akabook 3.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    '../',
         VERSION:     '3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="akabook 3.0 documentation" href="#" />
-    <link rel="next" title="中文版：Linux C/C++編程一站式學習" href="zh/index.html" /> 
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="akabook 3.0 documentation" href="../index.html" />
+    <link rel="up" title="中文版：Linux C/C++編程一站式學習" href="index.html" />
+    <link rel="next" title="11. C標準庫" href="stdlib.html" />
+    <link rel="prev" title="9. 指針" href="pointer.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
+          <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="zh/index.html" title="中文版：Linux C/C++編程一站式學習"
+          <a href="stdlib.html" title="11. C標準庫"
              accesskey="N">next</a> |</li>
-        <li><a href="#">akabook 3.0 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="pointer.html" title="9. 指針"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">akabook 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">中文版：Linux C/C++編程一站式學習</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -47,13 +53,10 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="learning-linux-c-c-programming-from-scratch">
-<h1>Learning Linux C/C++ Programming from Scratch<a class="headerlink" href="#learning-linux-c-c-programming-from-scratch" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="zh/index.html">中文版：Linux C/C++編程一站式學習</a></li>
-<li class="toctree-l1"><a class="reference internal" href="en/index.html">English Version: Learning Linux C/C++ Programming from Scratch</a></li>
-</ul>
+  <div class="section" id="id1">
+<h1>10. 函數介面<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="interface-va">
+<span id="id2"></span><h2>10.1. 可變參數<a class="headerlink" href="#interface-va" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -63,17 +66,28 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">10. 函數介面</a><ul>
+<li><a class="reference internal" href="#interface-va">10.1. 可變參數</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pointer.html"
+                        title="previous chapter">9. 指針</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="zh/index.html"
-                        title="next chapter">中文版：Linux C/C++編程一站式學習</a></p>
+  <p class="topless"><a href="stdlib.html"
+                        title="next chapter">11. C標準庫</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="_sources/index.txt"
+    <li><a href="../_sources/zh/interface.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
+    <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -110,12 +124,16 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
+          <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="zh/index.html" title="中文版：Linux C/C++編程一站式學習"
+          <a href="stdlib.html" title="11. C標準庫"
              >next</a> |</li>
-        <li><a href="#">akabook 3.0 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="pointer.html" title="9. 指針"
+             >previous</a> |</li>
+        <li><a href="../index.html">akabook 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >中文版：Linux C/C++編程一站式學習</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

@@ -1,0 +1,23 @@
+指針
+=======
+
+.. _pointer.pointer:
+
+指針的基本概念
+-----------------
+
+.. _pointer.pointertoconst:
+
+指針與const限定符
+------------------------
+
+.. _pointer.pointertopointer:
+
+指向指針的指針與指針數組
+-------------------------
+
+.. _pointer.type:
+
+.. figure:: ../images/pointer.type.gif
+
+   C語言類型總結
