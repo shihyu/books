@@ -1,0 +1,649 @@
+數組
+===========
+
+數組的基本概念
+-----------------------
+
+.. index:: s數組, Array, y元素, Element
+
+數組（Array）也是一種復合數據類型，它由一系列相同類型的元素（Element）組成。例如定義一個由4個 ``int`` 型元素組成的數組 ``count`` ：
+
+.. code-block:: c
+   :linenos:
+
+   int count[4];
+
+和結構體成員類似，數組 ``count`` 的4個元素的存儲空間也是相鄰的。結構體成員可以是基本數據類型，也可以是復合數據類型，數組中的元素也是如此。根據組合規則，我們可以定義一個由4個結構體元素組成的數組：
+
+.. code-block:: c
+   :linenos:
+
+   struct complex_struct {
+           double x, y;
+   } a[4];
+
+也可以定義一個包含數組成員的結構體：
+
+.. code-block:: c
+   :linenos:
+
+   struct {
+           double x, y;
+           int count[4];
+   } s;
+
+.. index:: s索引, Index
+
+數組類型的長度應該用一個整型常量表達式來指定 [#]_ 。數組中的元素通過下標（或者叫索引，Index）來訪問。例如前面定義的由4個 ``int`` 型元素組成的數組 ``count`` 圖示如下：
+
+.. index:: b變長數組, VLA, Variable Length Array
+
+.. [#] C99的新特性允許使用變數來定義數組的長度，稱為變長數組（VLA，Variable Length Array），VLA只能定義為局部變數而不能是全局變數，與VLA有關的語法規則比較複雜，本書不做詳細介紹。
+
+.. figure:: ../images/array.count.png
+
+   數組count
+
+.. index:: []括號, Bracket, Zeroth
+
+整個數組占了4個 ``int`` 型的存儲單元，存儲單元用小方框表示，裡面的數字是存儲在這個單元中的數據（假設都是0），而框外面的數字是下標，這4個單元分別用 ``count[0]`` 、 ``count[1]`` 、 ``count[2]`` 、 ``count[3]`` 來訪問。注意，在定義數組 ``int count[4];`` 時，[]括號（Bracket）中的數字4表示數組的長度，而在訪問數組時，[]括號中的數字表示訪問數組的第幾個元素。和我們平常數數不同，數組元素是從“第0個”開始數的，大多數編程語言都是這麼規定的，所以計算機術語中有Zeroth這個詞。這樣規定使得訪問數組元素非常方便，比如 ``count`` 數組中的每個元素占4個位元組，則 ``count[0]`` 位於數組開頭，而 ``count[i]`` 表示從數組開頭跳過 ``4*i`` 個位元組之後的那個存儲單元。
+
+這種數組下標的表達式不僅可以表示存儲單元中的值，也可以表示存儲單元本身，也就是說可以做左值，因此以下語句都是正確的：
+
+.. code-block:: c
+   :linenos:
+
+   count[0] = 7;
+   count[1] = count[0] * 2;
+   ++count[2];
+
+到目前為止我們學習了五種尾碼運算符：尾碼++、尾碼--、結構體取成員.、數組取下標[]、函數調用()。還學習了五種單目運算符（或者叫首碼運算符）：首碼++、首碼--、正號+、負號-、邏輯非!。在C語言中尾碼運算符的優先順序最高，單目運算符的優先順序僅次於尾碼運算符，比其他運算符的優先順序都高，所以上例中的 ``++count[2]`` 應該看作對 ``count[2]`` 做首碼++運算。
+
+數組下標也可以是表達式，但表達式的值必須是整型的。例如：
+
+.. code-block:: c
+   :linenos:
+
+   int i = 10;
+   count[i] = count[i+1];
+
+使用數組下標不能超出數組的長度範圍，這一點在使用變數做數組下標時尤其要注意。C編譯器並不檢查 ``count[-1]`` 或是 ``count[100]`` 這樣的訪問越界錯誤，編譯時能順利通過，所以數組訪問越界屬於運行時錯誤 [#]_ 。這種錯誤有時候很隱蔽，發生訪問越界時程序可能並不會立即崩潰，而執行到後面某個正確的語句時卻有可能突然崩潰（在 :ref:`gdb.segfault` 我們會看到這樣的例子）。所以在寫代碼時要小心避免出這樣的問題，事後依靠調試來解決問題的成本是很高的。
+
+.. [#] 你可能會想為什麼編譯器對這麼明顯的錯誤都視而不見？理由一，這種錯誤並不總是顯而易見的，在 :doc:`pointer` 會講到通過指針而不是數組名來訪問數組的情況，指針指向數組中的什麼位置只有運行時才知道，編譯時無法檢查是否越界，而運行時每次訪問數組元素都檢查越界會嚴重影響性能，所以乾脆不檢查了；理由二， [C99Rationale]_ 的第0章指出，C語言的設計精神是：相信每個C程序員都是高手，不要阻止程序員去幹他們需要干的事，在高手們寫的代碼中數組訪問越界往往是一種技巧而不是Bug。此外，:command:`gcc` 的C語法擴展允許把數組長度定義為0，對這種數組的任何下標訪問顯然都是越界的，0長度的數組通常用作結構體的最後一個成員，詳見 http://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html 。
+
+數組也可以像結構體一樣初始化，未賦初值的元素也是用0來初始化，例如：
+
+.. code-block:: c
+   :linenos:
+
+   int count[4] = { 3, 2, };
+
+則 ``count[0]`` 等於3， ``count[1]`` 等於2，後面兩個元素等於0。如果定義數組的同時初始化它，也可以不指定數組的長度，例如：
+
+.. code-block:: c
+   :linenos:
+
+   int count[] = { 3, 2, 1, };
+
+編譯器會根據Initializer有三個元素確定數組的長度為3。利用C99的新特性也可以做Memberwise Initialization：
+
+.. code-block:: c
+   :linenos:
+
+   int count[4] = { [2] = 3 };
+
+下面看一個完整的例子：
+
+.. code-block:: c
+   :linenos:
+
+   #include <stdio.h>
+
+   int main(void)
+   {
+           int count[4] = { 3, 2, }, i;
+
+           for (i = 0; i < 4; i++)
+                   printf("count[%d]=%d\n", i, count[i]);
+           return 0;
+   }
+
+.. index:: b遍歷, Traversal
+
+這個例子通過循環把數組中的每個元素依次訪問一遍，在計算機術語中稱為遍歷（Traversal）。注意控製表達式 ``i < 4`` ，如果寫成 ``i <= 4`` 就錯了，因為 ``count[4]`` 是訪問越界。
+
+數組和結構體雖然有很多相似之處，但也有一個顯著的不同： **數組不能相互賦值或初始化。** 比如：
+
+.. code-block:: c
+   :linenos:
+
+   int a[5] = { 4, 3, 2, 1 };
+   int b[5] = a; /* WRONG! */
+   b = a;        /* WRONG! */
+
+用數組 ``a`` 來初始化數組 ``b`` 是錯的，用數組 ``a`` 給數組 ``b`` 賦值也是錯的。既然不能相互賦值，也就 **不能用數組類型作為函數的參數或返回值** 。如果寫出這樣的函數定義：
+
+.. code-block:: c
+   :linenos:
+
+   void foo(int a[5])
+   {
+           ...
+   }
+
+然後這樣調用：
+
+.. code-block:: c
+   :linenos:
+
+   int array[5] = {0};
+   foo(array);
+
+編譯器也不會報錯，但這樣寫的意思並不是傳一個數組類型的參數。對於數組類型有一條特殊的類型轉換規則： **數組類型做右值使用時，自動轉換成指向數組首元素的指針。** 對於函數聲明也有一條特殊規則： **在函數原型中，如果參數寫成數組的形式，則該參數實際上是指針類型。** 所以上面的函數調用其實是傳一個指針類型的參數，而不是數組類型的參數。接下來的幾章裡有的函數需要訪問數組，我們就把數組定義為全局變數給函數訪問，等到 :doc:`pointer` 講了指針再使用傳參的辦法。
+
+數組類型不能相互賦值或初始化也是因為這條規則，例如上面提到的 ``b = a`` 這個表達式， ``a`` 和 ``b`` 都是數組類型的變數， ``a`` 做右值使用自動轉換成指針類型，而 ``b`` 做左值仍然是數組類型，把指針賦給數組是不行的，所以編譯器報的錯是 ``error: incompatible types when assigning to type ‘int[5]’ from type ‘int *’`` 。
+
+.. rubric:: 習題
+
+#. 編寫一個程序，定義兩個類型和長度都相同的數組，將其中一個數組的所有元素拷貝給另一個。既然數組不能直接賦值，想想應該怎麼實現。
+
+.. _array.statrandom:
+
+數組應用實例：統計隨機數
+-----------------------------
+
+.. index:: w偽隨機, Pseudorandom, j均勻分佈, Uniform Distribution
+
+本節通過一個實例介紹使用數組的一些基本模式。問題是這樣的：首先生成一列0~9的隨機數保存在數組中，然後統計其中每個數字出現的次數並打印，檢查這些數字的隨機性如何。隨機數在某些場合（例如遊戲程序）是非常有用的，但是用計算機生成完全隨機的數卻不是那麼容易。計算機執行每一條指令的結果都是確定的，沒有一條指令產生的是隨機數，調用C標準庫函數得到的隨機數其實是偽隨機（Pseudorandom）數，是用數學公式算出來的確定的數，只不過這些數看起來很隨機，並且從統計意義上也很接近於均勻分佈（Uniform Distribution）的隨機數。
+
+C標準庫中生成偽隨機數的是 ``rand`` 函數，使用這個函數需要包含標頭檔 ``stdlib.h`` ，它沒有參數，返回值是一個介於0和 ``RAND_MAX`` 之間的接近均勻分佈的整數。 ``RAND_MAX`` 是該標頭檔中定義的一個常量，在不同的平台上有不同的取值，但可以肯定它是一個非常大的整數。通常我們用到的隨機數是限定在某個範圍之中的，例如0~9，而不是0~RAND_MAX，我們可以用%運算符將 ``rand`` 函數的返回值處理一下：
+
+.. code-block:: c
+   :linenos:
+
+   int x = rand() % 10;
+
+完整的程序如下：
+
+.. code-block:: c
+   :linenos:
+
+   #include <stdio.h>
+   #include <stdlib.h>
+   #define N 20
+
+   int a[N];
+
+   void gen_random(int upper_bound)
+   {
+           int i;
+           for (i = 0; i < N; i++)
+                   a[i] = rand() % upper_bound;
+   }
+
+   void print_random()
+   {
+           int i;
+           for (i = 0; i < N; i++)
+                   printf("%d ", a[i]);
+           printf("\n");
+   }
+
+   int main(void)
+   {
+           gen_random(10);
+           print_random();
+           return 0;
+   }
+
+.. index:: y預處理, Preprocess
+
+這裡介紹一種新的預處理指示：用 ``#define`` 定義一個常量。實際上編譯器的工作分為兩個階段，先是預處理（Preprocess）階段，然後才是編譯階段，用 :command:`gcc` 的 :option:`-E` 選項可以看到預處理之後、編譯之前的程序，例如::
+
+   $ gcc -E main.c
+   ...（這裡省略了很多行stdio.h和stdlib.h的代碼）
+   int a[20];
+
+   void gen_random(int upper_bound)
+   {
+           int i;
+           for (i = 0; i < 20; i++)
+                   a[i] = rand() % upper_bound;
+   }
+
+   void print_random()
+   {
+           int i;
+           for (i = 0; i < 20; i++)
+                   printf("%d ", a[i]);
+           printf("\n");
+   }
+
+   int main(void)
+   {
+           gen_random(10);
+           print_random();
+           return 0;
+   }
+
+可見在這裡預處理器做了兩件事情，一是把標頭檔 ``stdio.h`` 和 ``stdlib.h`` 在代碼中展開，二是把 ``#define`` 定義的標識符 ``N`` 替換成它的定義 ``20`` （在代碼中做了三處替換，分別位於數組的定義中和兩個函數中）。用 :command:`cpp main.c` 命令也可以達到同樣的效果，只做預處理而不編譯， :command:`cpp` 是C preprocessor的縮寫。
+
+.. index:: h宏, Macro
+
+那麼用 ``#define`` 定義的常量和 :ref:`struct.typetag` 講的枚舉常量有什麼區別呢？首先， ``#define`` 不僅用於定義常量，也可以定義更複雜的語法結構，稱為宏（Macro）定義，我們將在 :doc:`prep` 詳細介紹。其次， ``#define`` 定義是在預處理階段處理的，而枚舉是在編譯階段處理的，試試看把 :ref:`struct.typetag` 習題中的程序改成下面這樣會是什麼結果。
+
+.. code-block:: c
+   :linenos:
+
+   #include <stdio.h>
+   #define RECTANGULAR 1
+   #define POLAR 2
+
+   int main(void)
+   {
+           int RECTANGULAR;
+           printf("%d %d\n", RECTANGULAR, POLAR);
+           return 0;
+   }
+
+注意，雖然 ``include`` 和 ``define`` 在預處理指示中有特殊含義，但它們並不是C語言的關鍵字，換句話說，它們也可以用作標識符，例如聲明 ``int include;`` 或者 ``void define(int);`` 。在預處理階段，如果一行以#號開頭，後面跟 ``include`` 或 ``define`` ，預處理器就認為這是一條預處理指示，除此之外出現在其他地方的 ``include`` 或 ``define`` 預處理器並不關心，只當成普通的標識符留給編譯階段去處理。
+
+回到隨機數這個程序繼續討論，一開始為了便于分析和調試，我們取小一點的數組長度，只生成20個隨機數，這個程序的運行結果為::
+
+   3 6 7 5 3 5 6 2 9 1 2 7 0 9 3 6 0 6 2 6
+
+看起來很隨機了。但隨機性如何呢？分佈得均勻嗎？所謂均勻分佈，應該每個數出現的概率是一樣的。在上面的20個結果中，6出現了5次，而4和8一次也沒出現過。但這說明不了什麼問題，畢竟我們的樣本太少了，才20個數，如果樣本足夠多，比如說100000個數，統計一下其中每個數字出現的次數也許能說明問題。但總不能把100000個數都打印出來然後挨個去數吧？我們需要寫一個函數統計每個數字出現的次數。完整的程序如下：
+
+.. code-block:: c
+   :linenos:
+
+   #include <stdio.h>
+   #include <stdlib.h>
+   #define N 100000
+
+   int a[N];
+
+   void gen_random(int upper_bound)
+   {
+           int i;
+           for (i = 0; i < N; i++)
+                   a[i] = rand() % upper_bound;
+   }
+
+   int howmany(int value)
+   {
+           int count = 0, i;
+           for (i = 0; i < N; i++)
+                   if (a[i] == value)
+                           ++count;
+           return count;
+   }
+
+   int main(void)
+   {
+           int i;
+
+           gen_random(10);
+           printf("value\thow many\n");
+           for (i = 0; i < 10; i++)
+                   printf("%d\t%d\n", i, howmany(i));
+
+           return 0;
+   }
+
+.. index:: y硬編碼, Hard Coding
+
+我們只要把 ``#define N`` 的值改為 ``100000`` ，就相當於把整個程序中所有用到 ``N`` 的地方都改為 ``100000`` 了。如果我們不這麼寫，而是在定義數組時直接寫成 ``int a[20];`` ，在每個循環中也直接使用 ``20`` 這個值，則稱為硬編碼（Hard Coding）。如果原來的代碼是硬編碼的，那麼一旦需要把 ``20`` 改成 ``100000`` 就非常麻煩，你需要找遍整個代碼，判斷哪些 ``20`` 表示這個數組的長度就改為 ``100000`` ，哪些 ``20`` 表示別的數量則不做改動，如果代碼很長，這是很容易出錯的。所以， **寫代碼時應儘可能避免硬編碼** ，這其實也是一個“提取公因式”的過程，和 :ref:`struct.dataabstraction` 講的抽象具有相同的作用，就是儘量把一個改動侷限在一個地方，避免這個改動波及大範圍的代碼。這個程序的運行結果如下::
+
+   $ ./a.out
+   value   how many
+   0       10130
+   1       10072
+   2       9990
+   3       9842
+   4       10174
+   5       9930
+   6       10059
+   7       9954
+   8       9891
+   9       9958
+
+各數字出現的次數都在10000次左右，可見是比較均勻的。
+
+.. rubric:: 習題
+
+#. 用 ``rand`` 函數生成[10, 20]之間的隨機整數，表達式應該怎麼寫？
+
+數組應用實例：直方圖
+-------------------------
+
+.. index:: z直方圖, Histogram
+
+繼續上面的例子。我們統計一列0~9的隨機數，打印每個數字出現的次數，像這樣的統計結果稱為直方圖（Histogram）。有時候我們並不只是想打印，更想把統計結果保存下來以便做後續處理。我們可以把程序改成這樣：
+
+.. code-block:: c
+   :linenos:
+
+   int main(void)
+   {
+           int howmanyones = howmany(1);
+           int howmanytwos = howmany(2);
+           ...
+   }
+
+這顯然太繁瑣了。要是這樣的隨機數有100個呢？顯然這裡用數組最合適不過了：
+
+.. code-block:: c
+   :linenos:
+
+   int main(void)
+   {
+           int i, histogram[10];
+
+           gen_random(10);
+           for (i = 0; i < 10; i++)
+                   histogram[i] = howmany(i);
+           ...
+   }
+
+有意思的是，這裡的循環變數 ``i`` 有兩個作用，一是作為參數傳給 ``howmany`` 函數，統計數字 ``i`` 出現的次數，二是做 ``histogram`` 的下標，也就是“把數字 ``i`` 出現的次數保存在數組 ``histogram`` 的第 ``i`` 個位置”。
+
+.. index:: Single Pass
+
+儘管上面的方法可以準確地得到統計結果，但是效率很低，這100000個隨機數需要從頭到尾檢查十遍，每一遍檢查只統計一種數字的出現次數。其實可以把 ``histogram`` 中的元素當作累加器來用，這些隨機數只需要從頭到尾檢查一遍（Single Pass）就可以得出結果：
+
+.. code-block:: c
+   :linenos:
+
+   int main(void)
+   {
+           int n, histogram[10] = {0};
+
+           gen_random(10);
+           for (n = 0; n < N; n++)
+                   histogram[a[n]]++;
+           ...
+   }
+
+首先把 ``histogram`` 的所有元素初始化為0，注意使用局部變數的值之前一定要初始化，否則值是不確定的。接下來的代碼很有意思，在每次循環中， ``a[n]`` 就是出現的隨機數，而這個隨機數同時也是 ``histogram`` 的下標，這個隨機數每出現一次就把 ``histogram`` 中相應的元素加1。
+
+.. index:: Seed
+
+把上面的程序運行幾遍，你就會發現每次產生的隨機數都是一樣的，不僅如此，在別的計算機上運行該程序產生的隨機數很可能也是這樣的。這正說明了這些數是偽隨機數，是用一套確定的公式基于某個初值算出來的，只要初值相同，隨後的整個數列就都相同。實際應用中不可能使用每次都一樣的隨機數，例如開發一個麻將遊戲，每次運行這個遊戲摸到的牌不應該是一樣的。因此，C標準庫允許我們自己指定一個初值，然後在此基礎上生成偽隨機數序列，這個初值稱為Seed，可以用 ``srand`` 函數指定Seed。通常我們通過別的途徑得到一個不確定的數作為Seed，例如調用 :manpage:`time(2)` 函數得到當前系統時間距1970年1月1日00:00:00 [#]_ 的秒數，然後傳給 ``srand`` ：
+
+.. [#] 各種派生自UNIX的系統都把這個時刻稱為Epoch，因為這個時刻近似等於UNIX系統誕生的時間（實際上最早的UNIX系統誕生於1969年）。
+
+.. code-block:: c
+   :linenos:
+
+   srand(time(NULL));
+
+然後再調用 ``rand`` ，得到的隨機數就和剛纔完全不同了。調用 :manpage:`time(2)` 函數需要包含標頭檔 :file:`time.h` ，這裡的 ``NULL`` 表示空指針，到 :ref:`pointer.pointer` 再詳細解釋。
+
+.. rubric:: 習題
+
+#. 補完本節直方圖程序的 ``main`` 函數，以可視化的形式打印直方圖。例如上一節統計20個隨機數的結果是::
+
+      0  1  2  3  4  5  6  7  8  9
+
+      *  *  *  *     *  *  *     *
+      *     *  *     *  *  *     *
+            *  *        *
+                        *
+                        *
+
+#. 用數組定義一個序列，編程打印它的全排列。比如定義：
+
+   .. code-block:: c
+      :linenos:
+
+      #define N 3
+      int a[N] = { 1, 2, 3 };
+
+   則運行結果是::
+
+      $ ./a.out
+      1 2 3 
+      1 3 2 
+      2 1 3 
+      2 3 1 
+      3 2 1 
+      3 1 2
+
+   程序的主要思路是：
+
+   #. 把第1個數換到最前面來（和第1個數交換，其實就是自己和自己交換，序列不變，還是1，2，3），準備打印1xx，再對後兩個數2和3做全排列，打印完所有排列後恢復序列原來的次序。
+   #. 把第2個數換到最前面來（和第1個數交換，序列變成2，1，3），準備打印2xx，再對後兩個數1和3做全排列，打印完所有排列後恢復序列原來的次序。
+   #. 把第3個數換到最前面來（和第1個數交換，序列變成3，2，1），準備打印3xx，再對後兩個數2和1做全排列，打印完所有排列後恢復序列原來的次序。
+
+   可見這是一個遞歸的過程，把“對整個序列做全排列”的問題歸結為“對它的子序列做全排列”的問題，注意我沒有描述Base Case怎麼處理，你需要自己想。你的程序要具有通用性，如果改變了 ``N`` 和數組 ``a`` 的定義（比如改成4個數的數組），其他代碼不需要修改就可以做4個數的全排列（共24種排列）。
+
+   完成了上述要求之後再考慮第二個問題：如果再定義一個常量 ``M`` 表示從 ``N`` 個數中取 ``M`` 個數做排列（ ``N == M`` 時表示全排列），原來的程序應該怎麼改？
+
+   最後再考慮第三個問題：如果要求從 ``N`` 個數中取 ``M`` 個數做組合而不是做排列，就不能用原來的遞歸過程了，想想組合的遞歸過程應該怎麼描述，編程實現它。
+
+字元串
+---------------
+
+之前我一直對字元串避而不談，不做詳細解釋，現在已經具備了必要的基礎知識，可以深入討論一下字元串了。字元串字面值和數組類型相似，它的每個元素是字元型的，例如字元串 ``"Hello, world.\n"`` 圖示如下：
+
+.. figure:: ../images/array.string.png
+
+   字元串
+
+.. index:: Null-terminated String
+
+注意每個字元串末尾都有一個字元 ``'\0'`` 做結束符，在 :ref:`expr.char` 講過 ``'\0'`` 叫Null字元，所以字元串也稱為“以Null結尾的字元串”（Null-terminated String）。
+
+數組元素可以通過數組名加下標的方式訪問，而字元串字面值也可以像數組名一樣使用，可以加下標訪問其中的字元，例如：
+
+.. code-block:: c
+   :linenos:
+
+   char c = "Hello, world.\n"[14];
+
+把 ``"Hello, world.\n"`` 這個字元串看作一個數組，下標14的位置是字元 ``'\0'`` ，所以這個語句把 ``'\0'`` 賦給了變數 ``c`` 。C標準沒有規定字元串字面值所占的存儲空間是否允許被修改，但常見的C編譯器都把字元串字面值實現成只讀的。假如代碼中有這麼一行：
+
+.. code-block:: c
+   :linenos:
+
+   "Hello, world.\n"[0] = 'A';
+
+:command:`gcc` 在編譯時會給出一個警告 ``warning: assignment of read-only location`` ，在運行時程序執行到這一條語句會產生段錯誤。
+
+字元串字面值還有一點和數組類型相似：做右值使用時自動轉換成指向首字元的指針。在 :ref:`func.parameter` 我們看到 ``printf`` 原型的第一個參數是指向字元的指針類型，而函數調用 ``printf("Hello, world.\n")`` 其實就是傳一個指針參數給 ``printf`` ，關於字元串字面值和指針的關係將在 :ref:`pointer.pointertoconst` 詳細解釋。字元串字面值有一種特殊用法，可以作為Initializer給一個字元數組初始化 [#]_ ：
+
+.. [#] 這個語法的特殊之處在於，在這裡字元串字面值和數組的用法並不相似，我們不能用一個數組給另一個數組初始化，卻可以用一個字元串字面值給一個數組初始化。另一方面，我們不能把一個數組賦值給另一個數組，同樣也不能把一個字元串字面值賦值給一個數組。這些特殊規定沒什麼道理可講，一切都可歸結于歷史原因。
+
+.. code-block:: c
+   :linenos:
+
+   char str[10] = "Hello";
+
+等價于這樣初始化：
+
+.. code-block:: c
+   :linenos:
+
+   char str[10] = { 'H', 'e', 'l', 'l', 'o', '\0' };
+
+``str`` 的後4個元素沒有指定，自動初始化為Null字元。注意，雖然字元串字面值 ``"Hello"`` 是隻讀的，但用它初始化的數組 ``str`` 卻是可讀可寫的，這說明 ``str`` 和 ``"Hello"`` 各自佔據不同的存儲空間，只不過 ``str`` 所占的存儲空間裡的內容拷貝自 ``"Hello"`` 。數組 ``str`` 中保存了一串字元，以Null字元結尾，也可以叫字元串。 **在本書中只要是以Null結尾的一串字元都叫字元串，不管是像str這樣的字元數組，還是像"Hello"這樣的字元串字面值。**
+
+如果用於初始化的字元串字面值比數組還長，比如：
+
+.. code-block:: c
+   :linenos:
+
+   char str[10] = "Hello, world.\n";
+
+則數組 ``str`` 只包含字元串的前10個字元，不包含Null字元，這種情況編譯器會給出警告。如果要用一個字元串字面值準確地初始化一個字元數組，最好的辦法是不指定數組的長度，讓編譯器自己計算：
+
+.. code-block:: c
+   :linenos:
+
+   char str[] = "Hello, world.\n";
+
+字元串字面值的長度包括Null字元在內一共15個字元，編譯器會確定數組 ``str`` 的長度為15。有一種情況需要特別注意，如果用於初始化的字元串字面值比數組剛好長出一個Null字元的長度，比如：
+
+.. code-block:: c
+   :linenos:
+
+   char str[14] = "Hello, world.\n";
+
+則數組 ``str`` 不包含Null字元，並且編譯器不會給出警告， [C99Rationale]_ 的6.7.8節說這樣規定是為了程序員方便，以前的很多編譯器也都是這樣實現的，不管它有理沒理，C標準既然這麼規定了我們也沒辦法，只能自己小心了。
+
+補充一點，在 ``printf`` 函數的格式化字元串中可以用 ``%s`` 表示字元串的占位符。在學習字元數組以前，我們用 ``%s`` 沒什麼意義，因為
+
+.. code-block:: c
+   :linenos:
+
+   printf("string: %s\n", "Hello");
+
+還不如寫成
+
+.. code-block:: c
+   :linenos:
+
+   printf("string: Hello\n");
+
+但現在字元串可以保存在一個數組裡面，用 ``%s`` 來打印就很有必要了：
+
+.. code-block:: c
+   :linenos:
+
+   printf("string: %s\n", str);
+
+``printf`` 會從數組 ``str`` 的開頭一直打印到Null字元為止，Null字元本身是Non-printable字元，不打印。這其實是一個危險的信號：如果數組 ``str`` 中沒有Null字元，那麼 ``printf`` 函數就會訪問數組越界，後果可能會很詭異，有時候打印出亂碼，有時候看起來沒錯誤，有時候引起程序崩潰。
+
+.. _array.multidim:
+
+多維數組
+-------------------
+
+.. index:: d多維數組, Multi-dimensional Array
+
+就像結構體可以嵌套一樣，數組也可以嵌套，一個數組的元素可以是另外一個數組，這樣就構成了多維數組（Multi-dimensional Array）。例如定義並初始化一個二維數組：
+
+.. code-block:: c
+   :linenos:
+
+   int a[3][2] = { 1, 2, 3, 4, 5 };
+
+數組 ``a`` 有3個元素， ``a[0]`` 、 ``a[1]`` 、 ``a[2]`` 。每個元素也是一個數組，例如 ``a[0]`` 是一個數組，它有兩個元素 ``a[0][0]`` 、 ``a[0][1]`` ，這兩個元素的類型是 ``int`` ，值分別是1、2，同理，數組 ``a[1]`` 的兩個元素是3、4，數組 ``a[2]`` 的兩個元素是5、0。如下圖所示：
+
+.. figure:: ../images/array.multidim.png
+
+   多維數組
+
+.. index:: Row-major, Column-major
+
+從概念模型上看，這個二維數組是三行兩列的表格，元素的兩個下標分別是行號和列號。從物理模型上看，這六個元素在存儲器中仍然是連續存儲的，就像一維數組一樣，相當於把概念模型的表格一行一行接起來拼成一串，C語言的這種存儲方式稱為Row-major方式，而有些編程語言（例如FORTRAN）是把概念模型的表格一列一列接起來拼成一串存儲的，稱為Column-major方式。
+
+多維數組也可以像嵌套結構體一樣用嵌套Initializer初始化，例如上面的二維數組也可以這樣初始化：
+
+.. code-block:: c
+   :linenos:
+
+   int a[3][2] = { { 1, 2 }, { 3, 4 }, { 5, } };
+
+利用C99的新特性也可以做Memberwise Initialization，例如：
+
+.. code-block:: c
+   :linenos:
+
+   int a[3][2] = { [0][1] = 9, [2][1] = 8 };
+
+結構體和數組嵌套的情況也可以做Memberwise Initialization，例如：
+
+.. code-block:: c
+   :linenos:
+
+   struct complex_struct {
+           double x, y;
+   } a[4] = { [0].x = 8.0 };
+
+   struct {
+           double x, y;
+           int count[4];
+   } s = { .count[2] = 9 };
+
+如果是多維字元數組，也可以嵌套使用字元串字面值做Initializer，例如：
+
+.. code-block:: c
+   :linenos:
+
+   #include <stdio.h>
+
+   void print_day(int day)
+   {
+           char days[8][10] = { "", "Monday", "Tuesday",
+                                "Wednesday", "Thursday", "Friday",
+                                "Saturday", "Sunday" };
+
+           if (day >= 1 && day <= 7)
+                   printf("%s\n", days[day]);
+           else
+                   printf("Illegal day number!\n");
+   }
+
+   int main(void)
+   {
+           print_day(2);
+           return 0;
+   }
+
+.. figure:: ../images/array.multichar.png
+
+   多維字元數組
+
+這個程序中定義了一個多維字元數組 ``char days[8][10];`` ，如上圖所示。為了使1~7剛好映射到 ``days[1]`` ~ ``days[7]`` ，我們把 ``days[0]`` 空出來不用，所以第一維的長度是8，為了使最長的字元串 ``"Wednesday"`` 能夠保存到一行，末尾還能多出一個Null字元的位置，所以第二維的長度是10。
+
+.. index:: Data-driven Programmming
+
+這個程序和 :ref:`cond.switch1` 的功能其實是一樣的，但是代碼簡潔多了。簡潔的代碼不僅可讀性強，而且維護成本也低，像 :ref:`cond.switch1` 那樣一堆 ``case`` 、 ``printf`` 和 ``break`` ，如果漏寫一個 ``break`` 就要出Bug。這個程序之所以簡潔，是因為用數據代替了代碼。具體來說，通過下標訪問字元串組成的數組可以代替一堆 ``case`` 分支判斷，這樣就可以把每個 ``case`` 裡重複的代碼（ ``printf`` 調用）提取出來，從而又一次達到了“提取公因式”的效果。這種方法稱為數據驅動的編程（Data-driven Programming），寫代碼最重要的是選擇正確的資料結構來組織信息，設計控制流程和算法尚在其次，只要資料結構選擇得正確，其他代碼自然而然就變得容易理解和維護了，就像這裡的 ``printf`` 自然而然就被提取出來了。 [人月神話]_ 的第9章說：“Show me your flowcharts and conceal your tables, and I shall continue to be mystified. Show me your tables, and I won't usually need your flowcharts; they'll be obvious.”
+
+最後，綜合本章的知識，我們來寫一個最簡單的小遊戲－－剪刀石頭布：
+
+.. code-block:: c
+   :linenos:
+
+   #include <stdio.h>
+   #include <stdlib.h>
+   #include <time.h>
+
+   int main(void)
+   {
+           char gesture[3][10] = { "scissor", "stone", "cloth" };
+           int man, computer, result, ret;
+
+           srand(time(NULL));
+           while (1) {
+                   computer = rand() % 3;
+                   printf("\nInput your gesture (0-scissor 1-stone 2-cloth):\n");
+                   ret = scanf("%d", &man);
+                   if (ret != 1 || man < 0 || man > 2) {
+                           printf("Invalid input!\n");
+                           return 1;
+                   }
+                   printf("You: %s\tComputer: %s\n", 
+                          gesture[man], gesture[computer]);
+
+                   result = (man - computer + 4) % 3 - 1;
+                   if (result > 0)
+                           printf("You win!\n");
+                   else if (result == 0)
+                           printf("Draw!\n");
+                   else
+                           printf("You lose!\n");
+           }
+           return 0;
+   }
+
+
+0、1、2三個整數分別是剪刀、石頭、布在程序中的內部表示，用戶也要求輸入0、1或2，然後和計算機隨機生成的0、1或2比勝負。這個程序的主體是一個死循環，需要按Ctrl-C退出程序。以往我們寫的程序都只有打印輸出，在這個程序中我們第一次碰到處理鍵盤輸入的情況。我們簡單介紹一下 ``scanf`` 函數的用法，到 :ref:`stdlib.formattedio` 再詳細解釋。
+
+``scanf("%d", &man)`` 這個調用的功能是等待用戶輸入一個整數並回車，這個整數會被 ``scanf`` 函數保存在 ``man`` 這個整型變數裡。如果用戶輸入合法（輸入的確實是數字而不是別的字元），則 ``scanf`` 函數返回1，表示成功讀入一個數據。但即使用戶輸入的是整數，我們還需要進一步檢查是不是在0~2的範圍內，寫程序處理用戶輸入時要格外小心，用戶有可能輸入任何數據，他才不管遊戲規則是什麼。
+
+和 ``printf`` 類似， ``scanf`` 也可以用 ``%c`` 、 ``%f`` 、 ``%s`` 等轉換說明。如果在傳給 ``scanf`` 的第一個參數中用 ``%d`` 、 ``%f`` 或 ``%c`` 表示讀入一個整數、浮點數或字元，則第二個參數的形式應該是&運算符加相應類型的變數名，表示讀進來的數保存到這個變數中，&運算符的作用是取變數存儲空間的地址得到一個指針類型，到 :ref:`pointer.pointer` 再詳細解釋。如果在第一個參數中用 ``%s`` 讀入一個字元串，則第二個參數應該是數組名，數組名前面不加&，因為數組類型做右值時自動轉換成指針類型，在 :ref:`gdb.breakpoint` 有 ``scanf`` 讀入字元串的例子。
+
+留給讀者思考的問題是： ``(man - computer + 4) % 3 - 1`` 這個神奇的表達式是如何比較出0、1、2這三個數字在“剪刀石頭布”意義上的大小的？

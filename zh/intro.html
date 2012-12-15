@@ -1,0 +1,425 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1. 程序的基本概念 &mdash; akabook 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="akabook 3.0 documentation" href="../index.html" />
+    <link rel="up" title="中文版：Linux C/C++編程一站式學習" href="index.html" />
+    <link rel="next" title="2. 常量、變數和表達式" href="expr.html" />
+    <link rel="prev" title="前言" href="preface.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="expr.html" title="2. 常量、變數和表達式"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="preface.html" title="前言"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">akabook 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">中文版：Linux C/C++編程一站式學習</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>1. 程序的基本概念<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="intro-program">
+<span id="id2"></span><h2>1.1. 程序和編程語言<a class="headerlink" href="#intro-program" title="Permalink to this headline">¶</a></h2>
+<p id="index-0">程序（Program）告訴計算機應如何完成一個計算任務，這裡的計算可以是數學運算，比如解方程，也可以是符號運算，比如查找和替換文檔中的某個單詞。從根本上說，計算機是由數字電路組成的運算機器，只能對數字做運算，程序之所以能做符號運算，是因為符號在計算機內部也是用數字表示的。此外，程序還可以處理聲音和圖像，聲音和圖像在計算機內部必然也是用數字表示的，這些數字經過專門的硬件設備轉換成人可以聽到、看到的聲音和圖像。</p>
+<p>程序由一系列基本操作組成，基本操作有以下幾類：</p>
+<dl class="docutils" id="index-1">
+<dt>輸入（Input）</dt>
+<dd>從鍵盤、檔案或者其他設備獲取數據。</dd>
+</dl>
+<dl class="docutils" id="index-2">
+<dt>輸出（Output）</dt>
+<dd>把數據顯示到屏幕，或者存入一個檔案，或者發送到其他設備。</dd>
+<dt>基本運算</dt>
+<dd>最基本的數據訪問和數學運算（加減乘除）。</dd>
+<dt>測試和分支</dt>
+<dd>測試某個條件，然後根據不同的測試結果執行不同的後續操作。</dd>
+<dt>循環</dt>
+<dd>重複執行一系列操作。</dd>
+</dl>
+<p>你曾用過的任何一個程序，不管它有多麼複雜，都是按這幾類基本操作一步一步執行的。程序是那麼的複雜，而編寫程序可以用的基本操作卻只有這麼簡單的幾種，這中間巨大的落差就要由程序員去填補了，所以編寫程序理應是一件相當複雜的工作。 <strong>編寫程序可以說是這樣一個過程：把複雜的任務分解成子任務，把子任務再分解成更簡單的任務，層層分解，直到最後簡單得可以用以上幾種基本操作來完成。</strong></p>
+<p id="index-3">編程語言（Programming Language）分為低級語言（Low-level Language）和高級語言（High-level Language）。機器語言（Machine Language）和彙編語言（Assembly Language）屬於低級語言，直接用計算機指令（Instruction）編寫程序。而C、C++、Java、Python等屬於高級語言，用語句（Statement）編寫程序，語句是計算機指令的抽象表示。</p>
+<p>舉個例子，同樣一個語句用機器語言、彙編語言和C語言分別表示如下：</p>
+<table border="1" class="docutils">
+<caption>一個語句的三種表示（32位x86平台）</caption>
+<colgroup>
+<col width="34%" />
+<col width="66%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">編程語言</th>
+<th class="head">表示形式</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>機器語言</td>
+<td><div class="first last highlight-python"><pre>a1 18 a0 04 08
+83 c0 01
+a3 1c a0 04 08</pre>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td>彙編語言</td>
+<td><div class="first last highlight-gas"><div class="highlight"><pre><span class="nf">mov</span>    <span class="mi">0x804a018</span><span class="p">,</span><span class="nv">%eax</span>
+<span class="nf">add</span>    <span class="no">$0x1</span><span class="p">,</span><span class="nv">%eax</span>
+<span class="nf">mov</span>    <span class="nv">%eax</span><span class="p">,</span><span class="mi">0x804a01c</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td>C語言</td>
+<td>a = b + 1;</td>
+</tr>
+</tbody>
+</table>
+<p id="index-4">計算機只能對數字做運算，符號、聲音、圖像在計算機內部都要用數字表示，指令也不例外，上表中的機器語言完全由十六進制數字組成。最早的程序員都是直接用機器語言編程，但是很麻煩，需要查大量的表格來確定每個數字表示什麼意思，編寫出來的程序很不直觀，而且容易出錯，於是有了彙編語言，把機器語言中一組一組的數字用助記符（Mnemonic）表示，直接用這些助記符寫出彙編程序，然後讓彙編器（Assembler）去查表把助記符替換成數字，也就把彙編語言翻譯成了機器語言。</p>
+<p>從上面的例子可以看出，彙編語言和機器語言的指令是一一對應的，彙編語言有三條指令，機器語言也有三條指令，彙編器就是做一個簡單的替換工作。例如在第一條指令中，把 <tt class="docutils literal"><span class="pre">mov</span> <span class="pre">?,%eax</span></tt> 這種格式的指令替換成機器碼 <tt class="docutils literal"><span class="pre">a1</span> <span class="pre">?</span></tt> ，?表示一個地址，在彙編指令中是 <tt class="docutils literal"><span class="pre">0x804a018</span></tt> ，轉換成機器碼之後是 <tt class="docutils literal"><span class="pre">18</span> <span class="pre">a0</span> <span class="pre">04</span> <span class="pre">08</span></tt> （這是指令中十六進制數的小端表示，小端表示將在 <a class="reference internal" href="arch.html#arch-cpu"><em>CPU</em></a> 介紹）。</p>
+<p id="index-5">從上面的例子還可以看出，C語言的語句和低級語言的指令之間不是簡單的一一對應關係，一條 <tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">b</span> <span class="pre">+</span> <span class="pre">1;</span></tt> 語句要翻譯成三條彙編或機器指令，這個過程稱為編譯（Compile），由編譯器（Compiler）來完成，顯然編譯器的功能比彙編器要複雜得多。</p>
+<p>編寫、編譯和執行一個C程序的步驟如下：</p>
+<ol class="arabic simple" id="index-6">
+<li>用文本編輯器寫一個C程序，然後保存成一個檔案，例如 <tt class="file docutils literal"><span class="pre">program.c</span></tt> （通常C程序的檔案名尾碼是 <tt class="docutils literal"><span class="pre">.c</span></tt> ），這稱為原始碼（Source Code）或源檔案。</li>
+<li>運行編譯器對它進行編譯，編譯的過程並不執行程序，而是把原始碼全部翻譯成機器指令，再加上一些描述信息，生成一個新的檔案，例如 <tt class="file docutils literal"><span class="pre">a.out</span></tt> ，這個檔案稱為執行檔（Executable）。</li>
+<li>執行檔可以被操作系統（Operating System）加載執行，計算機執行該檔案中由編譯器生成的指令。</li>
+</ol>
+<div class="figure">
+<img alt="../_images/intro.compile.png" src="../_images/intro.compile.png" />
+<p class="caption">編譯執行的過程</p>
+</div>
+<p>現在你就可以跳到本章後面的 <a class="reference internal" href="#intro-firstprogram"><em>第一個程序</em></a> ，按照書上的步驟自己動手試試。</p>
+<p id="index-7">有些高級語言寫的程序不需要經過編譯這個步驟，而是以解釋的方式執行，解釋執行（Interpret）的程序通常又叫做腳本（Script），解釋執行的過程和C語言的編譯執行過程很不一樣。例如編寫一個Shell腳本 <tt class="file docutils literal"><span class="pre">script.sh</span></tt> ，內容如下：</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#! /bin/sh</span>
+<span class="nv">VAR</span><span class="o">=</span>1
+<span class="nv">VAR</span><span class="o">=</span><span class="k">$((</span><span class="nv">$VAR</span><span class="o">+</span><span class="m">1</span><span class="k">))</span>
+<span class="nb">echo</span> <span class="nv">$VAR</span>
+</pre></div>
+</td></tr></table></div>
+<p>這個腳本的第一行表明它是個Shell腳本，後面三行的意思分別是：定義變數 <tt class="docutils literal"><span class="pre">VAR</span></tt> 的初始值是1，然後自增1，最後打印 <tt class="docutils literal"><span class="pre">VAR</span></tt> 的值。用Shell程序 <tt class="file docutils literal"><span class="pre">/bin/sh</span></tt> 解釋執行這個腳本，結果如下:</p>
+<div class="highlight-python"><pre>$ /bin/sh script.sh
+2</pre>
+</div>
+<p>這裡的 <tt class="file docutils literal"><span class="pre">/bin/sh</span></tt> 稱為解釋器（Interpreter），解釋器本身是一個執行檔，而我們寫的腳本 <tt class="file docutils literal"><span class="pre">script.sh</span></tt> 卻不是一個真正的執行檔。解釋器 <tt class="file docutils literal"><span class="pre">/bin/sh</span></tt> 也是由C程序經過編譯得到的包含機器指令的執行檔，它被操作系統加載執行時，它所包含的機器指令指示它做這樣的事情：把我們寫的腳本 <tt class="file docutils literal"><span class="pre">script.sh</span></tt> 當成數據檔案讀取，理解我們所寫的每一行程序的意思，並一行一行地執行相應的操作。</p>
+<div class="figure">
+<img alt="../_images/intro.interpret.png" src="../_images/intro.interpret.png" />
+<p class="caption">解釋執行的過程</p>
+</div>
+<p id="index-8">理解了這些概念之後，我們在編譯型高級語言、解釋型高級語言和低級語言之間做個比較。用高級語言寫的程序不能直接被計算機執行，需要經過編譯之後變成執行檔才能執行，或者需要通過一個解釋器來解釋執行。但用高級語言寫程序有很多優點：首先，用高級語言寫程序更簡便，寫出來的代碼更緊湊，可讀性更強，出了錯也更容易改正；其次，高級語言是可移植的（Portable），或者稱為平台無關的（Platform Independent）、跨平台的（Cross-platform）。</p>
+<p id="index-9">平台（Platform）這個詞可以指計算機體繫結構（Architecture），也可以指操作系統（Operating System）。有些程序只能在某個特定平台上執行，而有些程序拿到各種不同的平台上都可以執行，後者就稱為平台無關的程序。下面我們來具體分析：</p>
+<ol class="arabic" id="index-10">
+<li><p class="first">操作系統相同，計算機體繫結構不同會怎麼樣？</p>
+<p>不同的計算機體繫結構有不同的指令集（Instruction Set），可以識別的機器指令格式是不同的，直接用某種體繫結構的彙編或機器指令寫出來的程序只能在這種體繫結構的計算機上執行。</p>
+<p>不同體繫結構的計算機有各自的C編譯器，可以把C程序編譯成相應的機器指令，這意味着用C語言寫的程序要想在各種不同體繫結構的計算機上執行，只需用相應的編譯器編譯過即可。比如上面 <tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">b</span> <span class="pre">+</span> <span class="pre">1;</span></tt> 的例子是在32位x86平台下編譯的得到的結果，如果在ARMv4平台上編譯則得到完全不同的結果（編譯生成的執行檔也完全不同）：</p>
+<table border="1" class="docutils">
+<caption>一個語句的三種表示（ARMv4平台）</caption>
+<colgroup>
+<col width="34%" />
+<col width="66%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">編程語言</p>
+</th>
+<th class="head"><p class="first last">表示形式</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><p class="first last">機器語言</p>
+</td>
+<td><div class="first last highlight-python"><div class="highlight"><pre><span class="n">e59f2018</span>
+<span class="n">e59f3018</span>
+<span class="n">e5933000</span>
+<span class="n">e2833001</span>
+<span class="n">e5823000</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">彙編語言</p>
+</td>
+<td><div class="first last highlight-python"><pre>ldr     r2, [pc, #24]
+ldr     r3, [pc, #24]
+ldr     r3, [r3]
+add     r3, r3, #1
+str     r3, [r2]</pre>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p class="first last">C語言</p>
+</td>
+<td><p class="first last">a = b + 1;</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>同樣道理，不同體繫結構的計算機有各自的Shell解釋器，一個Shell腳本要想在不同體繫結構的計算機上執行，只需運行相應的Shell解釋器來解釋執行即可。</p>
+</li>
+<li><p class="first">體繫結構相同，操作系統不同會怎麼樣？</p>
+<p>同樣是32位x86平台，把一個Windows下的執行檔（通常副檔名是 <tt class="docutils literal"><span class="pre">.exe</span></tt> ）拷到Linux下能執行嗎？答案是不能。雖然這個Windows下的執行檔包含的是32位x86指令，但其檔案格式和Linux下的執行檔有很大差別，換句話說，能被Windows操作系統加載執行的程序不能被Linux操作系統加載執行，因為這兩種操作系統加載執行程序的機制很不一樣。</p>
+<p>那麼，把一個Windows下的C程序的原始碼拷到Linux下，還能用C編譯器編譯執行嗎？答案是不一定。如果這個C程序只用到了C標準庫，是可以跨平台的；如果這個C程序用到了Windows操作系統提供而Linux操作系統沒有提供的庫和介面，那麼在Linux下是編譯不了的。</p>
+<p>把一個在Windows下的Cygwin環境中能正常執行的Shell腳本拷到Linux下，還能正常執行嗎？答案是能執行，但結果不一定正確。如果這個腳本訪問了Windows下特有的資源（比如 <tt class="file docutils literal"><span class="pre">C:\a.txt</span></tt> 這樣的檔案路徑是Windows特有的，Linux的路徑格式完全不同），則不能在Linux下正確執行。</p>
+</li>
+</ol>
+<p>用解釋型語言寫的程序執行起來一定比編譯型語言慢，因為用解釋型語言寫的程序每次執行時解釋器都要把原始碼分析一遍，理解程序員寫這些代碼是想要做什麼，再去執行相應的操作，而對於編譯型語言來說，這個步驟只需要做一次，就是編譯器把原始碼分析一遍生成執行檔，而之後執行檔在每次執行時就不需要再分析原始碼了。用解釋型語言寫的程序也有它的優點：換個平台就可以直接執行，而不需要先編譯一遍，此外，解釋型語言寫的程序調試起來比編譯型語言方便得多。</p>
+<p id="index-11">既然解釋型語言和編譯型語言各有各的優點，有一些高級語言就把兩者的優點結合起來，採用編譯和解釋相結合的方式執行。Java、Python、Perl等編程語言都採用這種方式。以Python為例，程序員寫的原始碼檔案（副檔名為 <tt class="docutils literal"><span class="pre">.py</span></tt> ）在首次執行時被編譯成位元組碼（Byte Code）檔案（副檔名為 <tt class="docutils literal"><span class="pre">.pyc</span></tt> ），以後每次執行該程序時Python解釋器直接解釋執行位元組碼檔案，而不再編譯原始碼。位元組碼檔案中也包含指令，但並非機器指令，而是Python語言定義的一種虛擬機（Virtual Machine）的指令。Python語言在各種平台上都實現這種虛擬機，因此位元組碼檔案從一種平台拷到另一種平台上仍然能被該平台的Python解釋器解釋執行。</p>
+<div class="figure">
+<img alt="../_images/intro.bytecode.png" src="../_images/intro.bytecode.png" />
+<p class="caption">虛擬機執行的過程</p>
+</div>
+<p id="index-12">編程語言仍在發展演化。以上介紹的機器語言稱為第一代編程語言（1GL，1st Generation Programming Language），彙編語言稱為第二代編程語言（2GL），C、C++、Java、Python等可以稱為第三代編程語言（3GL）。目前已經有了4GL和5GL的概念。3GL的編程語言雖然是用語句編程而不直接用指令編程，但語句也分為輸入、輸出、基本運算、測試分支和循環等幾種，和指令有直接的對應關係。而4GL以後的編程語言更多是描述要做什麼（Declarative）而不描述具體一步一步怎麼做（Imperative），具體一步一步怎麼做完全由編譯器或解釋器決定，例如SQL語言（SQL，Structured Query Language，結構化查詢語言）就是這樣的例子。</p>
+</div>
+<div class="section" id="intro-naturalformallang">
+<span id="id3"></span><h2>1.2. 自然語言和形式語言<a class="headerlink" href="#intro-naturalformallang" title="Permalink to this headline">¶</a></h2>
+<p id="index-13">自然語言（Natural Language）就是人類講的語言，比如漢語、英語和法語。這類語言不是人為設計（雖然有人試圖強加一些規則）而是自然進化的。形式語言（Formal Language）是為了特定應用而人為設計的語言。例如數學家用的數字和運算符號、化學家用的分子式等。編程語言也是一種形式語言，是專門設計用來表達計算過程的形式語言。</p>
+<p id="index-14">形式語言有嚴格的語法（Syntax）規則，例如，3+3=6是一個語法正確的數學等式，而3=+6$則不是，H<sub>2</sub>O是一個正確的分子式，而 <sub>2</sub>Zz則不是。語法規則是由符號（Token）和結構的規則所組成的。Token的概念相當於自然語言中的單詞和標點、數學式中的數和運算符、化學分子式中的元素名和數字，例如3=+6$的問題之一在於$不是一個合法的數也不是一個事先定義好的運算符，而 <sub>2</sub>Zz的問題之一在於沒有一種元素的縮寫是Zz。結構是指Token的排列方式，3=+6$還有一個結構上的錯誤，雖然加號和等號都是合法的運算符，但是不能在等號之後緊跟加號，而 <sub>2</sub>Zz的另一個問題在於分子式中必須把下標寫在化學元素名稱之後而不是前面。關於Token的規則稱為詞法（Lexical）規則，而關於結構的規則稱為語法（Grammar）規則 <a class="footnote-reference" href="#id5" id="id4">[1]</a> 。</p>
+<table class="docutils footnote" frame="void" id="id5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[1]</a></td><td>很不幸，Syntax和Grammar通常都翻譯成“語法”，這讓初學者非常混亂，Syntax的含義其實包含了Lexical和Grammar的規則，還包含一部分語義的規則（例如在C程序中變數應先聲明後使用）。即使在英文的文獻中Syntax和Grammar也經常混用，在有些文獻中Syntax的含義不包括Lexical規則，只要注意上下文就不會誤解。另外，本書在翻譯容易引起混淆的時候通常直接用英文名稱，例如Token沒有十分好的翻譯，直接用英文名稱。</td></tr>
+</tbody>
+</table>
+<p id="index-15">當閲讀一個自然語言的句子或者一種形式語言的語句時，你不僅要搞清楚每個詞（Token）是什麼意思，而且必須搞清楚整個句子的結構是什麼樣的（在自然語言中你只是沒有意識到，但確實這樣做了，尤其是在讀外語時你肯定也意識到了）。這個分析句子結構的過程稱為解析（Parse）。例如，當你聽到“The other shoe fell.”這個句子時，你理解the other shoe是主語而fell是謂語動詞，一旦解析完成，你就搞懂了句子的意思，如果知道shoe是什麼東西，fall意味着什麼，這句話是在什麼上下文（Context）中說的，你還能理解這個句子主要暗示的內容－－這屬於語義（Semantic）的範疇。</p>
+<p>雖然形式語言和自然語言有很多共同之處，包括Token、結構和語義，但是也有很多不一樣的地方。</p>
+<dl class="docutils" id="index-16">
+<dt>歧義性（Ambiguity）</dt>
+<dd>自然語言充滿歧義，人們通過上下文的線索和自己的常識來解決這個問題。形式語言的設計要求是清晰的、毫無歧義的，這意味着每個語句都必須有確切的含義而不管上下文如何。</dd>
+<dt>冗餘性（Redundancy）</dt>
+<dd>為了消除歧義減少誤解，自然語言引入了相當多的冗餘。結果是自然語言經常說得囉裡囉唆，而形式語言則更加緊湊，極少有冗餘。</dd>
+<dt>與字面意思的一致性</dt>
+<dd>自然語言充斥着成語和隱喻（Metaphor），我在某種場合下說“The other shoe fell”，可能並不是說誰的鞋掉了。而形式語言中字面（Literal）意思基本上就是真實意思，也會有一些例外，例如下一章要講的C語言轉義序列，但即使有例外也會明確規定哪些字面意思不是真實意思，它們所表示的真實意思又是什麼。</dd>
+</dl>
+<p>說自然語言長大的人（實際上沒有人例外），往往有一個適應形式語言的困難過程。某種意義上，形式語言和自然語言之間的不同正像詩歌和說明文的區別：</p>
+<dl class="docutils">
+<dt>詩歌</dt>
+<dd>詞語的發音和意思一樣重要，全詩作為一個整體創造出一種效果或者表達一種感情。歧義和非字面意思不僅是常見的而且是刻意使用的。</dd>
+<dt>說明文</dt>
+<dd>詞語的字面意思顯得更重要，並且結構能傳達更多的信息。詩歌只能看一個整體，而說明文更適合逐字逐句分析，但仍然充滿歧義。</dd>
+<dt>程序</dt>
+<dd>計算機程序是毫無歧義的，字面和本意高度一致，能夠完全通過對Token和結構的分析加以理解。</dd>
+</dl>
+<p>這裡給出一些關於閲讀程序（包括其他形式語言）的建議：首先請記住形式語言遠比自然語言緊湊，所以要多花點時間來讀；其次，結構很重要，從上到下從左到右讀往往不是一個好辦法，而應該學會在大腦裡解析－－識別Token，分解結構；最後，請記住細節的影響，諸如拼寫錯誤和標點錯誤這些在自然語言中可以忽略的小毛病會把形式語言搞得面目全非。</p>
+</div>
+<div class="section" id="intro-debug">
+<span id="id6"></span><h2>1.3. 程序的調試<a class="headerlink" href="#intro-debug" title="Permalink to this headline">¶</a></h2>
+<p id="index-17">只要是人做的事情就難免會出錯，何況編程還是一件這麼複雜的工作。據說有這樣一個典故：早期的計算機體積都很大，有一次一台計算機不能正常工作，工程師們找了半天原因最後發現是一隻蟲子（Bug）鑽進計算機中造成的。從此以後，程序中的錯誤被叫做Bug，而找到這些Bug並加以糾正的過程就叫做調試（Debug）。有時候調試是一件非常複雜的工作，要求程序員概念明確、邏輯清晰、性格沉穩，還需要一點運氣。調試的技能我們在後續的學習中慢慢培養，但首先我們要區分清楚程序中的Bug分為哪幾類。</p>
+<dl class="docutils">
+<dt>編譯時錯誤</dt>
+<dd>編譯器只能翻譯語法正確的程序，否則將導致編譯失敗，無法生成執行檔。對於自然語言來說，一點語法錯誤不是很嚴重的問題，因為我們仍然可以讀懂句子。而編譯器就沒那麼寬容了，只要有哪怕一個很小的語法錯誤，編譯器就會輸出一條錯誤提示信息然後罷工，你就得不到你想要的結果。雖然大部分情況下編譯器給出的錯誤提示信息能夠指出錯誤代碼的位置，但也有個別時候編譯器給出的錯誤提示信息幫助不大，甚至會誤導你。在開始學習編程的前幾個星期，你可能會花大量的時間來糾正語法錯誤。等到有了一些經驗之後，還是會犯這樣的錯誤，不過會少得多，而且你能更快地發現錯誤原因。等到經驗更豐富之後你就會覺得，語法錯誤是最簡單最低級的錯誤，編譯器的錯誤提示也就那麼幾種，即使錯誤提示是有誤導的也能夠立刻找出真正的錯誤原因是什麼。相比下面兩種錯誤，語法錯誤解決起來要容易得多。</dd>
+</dl>
+<dl class="docutils" id="index-18">
+<dt>運行時錯誤</dt>
+<dd>編譯器檢查不出這類錯誤，仍然可以生成執行檔，但在運行時會出錯而導致程序崩潰。對於我們接下來的幾章將編寫的簡單程序來說，運行時錯誤很少見，到了後面的章節你會遇到越來越多的運行時錯誤。讀者在以後的學習中要時刻 <strong>注意區分編譯時和運行時（Run-time）這兩個概念</strong> ，不僅在調試時需要區分這兩個概念，在學習C語言的很多語法和規則時都需要區分這兩個概念，有些事情在編譯時做，有些事情則在運行時做。</dd>
+<dt>邏輯錯誤和語義錯誤</dt>
+<dd>第三類錯誤是邏輯錯誤和語義錯誤。如果程序裡有邏輯錯誤，編譯和運行都會很順利，看上去也不產生任何錯誤信息，但是程序沒有干它該干的事情，而是幹了別的事情。當然不管怎麼樣，計算機只會按你寫的程序去做，問題在於你寫的程序不是你真正想要的，這意味着程序的意思（即語義）是錯的。找到邏輯錯誤在哪需要十分清醒的頭腦，要通過觀察程序的輸出回過頭來判斷它到底在做什麼。</dd>
+</dl>
+<p>通過本書你將掌握的最重要的技巧之一就是調試。調試的過程可能會讓你感到一些沮喪，但調試也是編程中最需要動腦的、最有挑戰和樂趣的部分。從某種角度看調試就像偵探工作，根據掌握的線索來推斷是什麼原因和過程導致了你所看到的結果。調試也像是一門實驗科學，每次想到哪裡可能有錯，就修改程序然後再試一次。如果假設是對的，就能得到預期的正確結果，就可以接着調試下一個Bug，一步一步逼近正確的程序；如果假設錯誤，只好另外再找思路再做假設。“當你把不可能的全部剔除，剩下的——即使看起來再怎麼不可能——就一定是事實。”（即使你沒看過福爾摩斯也該看過柯南吧）</p>
+<p>也有一種觀點認為，編程和調試是一回事，編程的過程就是逐步調試直到獲得期望的結果為止。你應該總是從一個能正確運行的小規模程序開始，每做一步小的改動就立刻進行調試，這樣的好處是總有一個正確的程序做參考：如果正確就繼續編程，如果不正確，那麼一定是剛纔的小改動出了問題。例如，Linux操作系統包含了成千上萬行代碼，但它也不是一開始就規劃好了內存管理、設備管理、檔案系統、網絡等等大的模組，一開始它僅僅是Linus Torvalds用來琢磨Intel 80386晶片而寫的小程序。據Larry Greenfield說，“Linus的早期工程之一是編寫一個交替打印AAAA和BBBB的程序，這玩意兒後來進化成了Linux。”（引自The Linux User&#8217;s Guide Beta1版）在後面的章節中會給出更多關於調試和編程實踐的建議。</p>
+</div>
+<div class="section" id="intro-firstprogram">
+<span id="id7"></span><h2>1.4. 第一個程序<a class="headerlink" href="#intro-firstprogram" title="Permalink to this headline">¶</a></h2>
+<p>在開始寫程序之前首先要搭建開發環境，安裝編譯器、標頭檔、庫檔案、開發文檔等。在Linux系統下如何安裝軟件包和搭建開發環境不是本書的重點，這些問題需要讀者自己解決，但我在這裡簡單列出需要安裝的軟件包供參考（假定你用的是Debian或Ubuntu發行版）：</p>
+<ul class="simple">
+<li>gcc: The GNU C compiler</li>
+<li>libc6-dev: GNU C Library: Development Libraries and Header Files</li>
+<li>manpages-dev: Manual pages about using GNU/Linux for development</li>
+<li>manpages-posix-dev: Manual pages about using a POSIX system for development</li>
+<li>binutils: The GNU assembler, linker and binary utilities</li>
+<li>gdb: The GNU Debugger</li>
+<li>make: The GNU version of the &#8220;make&#8221; utility</li>
+</ul>
+<p>本書所有代碼都在Ubuntu 12.04 LTS（32位x86平台）發行版上編譯測試通過。讀者如果用其他Linux發行版，或者不使用發行版提供的軟件包而是用自己從原始碼編譯出的軟件包，則編譯運行本書的代碼得到的結果會有些不同，但不影響學習。</p>
+<p>通常一本教編程的書中第一個例子都是打印Hello world，這個傳統源自 [K&amp;R]_ ，用C語言寫這個程序可以這樣寫：</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+
+<span class="cm">/* main: generate some simple output */</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello, world.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>將這個程序保存成主目錄下的 <tt class="file docutils literal"><span class="pre">main.c</span></tt> ，然後編譯運行:</p>
+<div class="highlight-python"><pre>$ gcc main.c
+$ ./a.out
+Hello, world.</pre>
+</div>
+<p><strong class="command">gcc</strong> 是Linux平台的C編譯器，編譯後在當前目錄下生成執行檔 <tt class="file docutils literal"><span class="pre">a.out</span></tt> <a class="footnote-reference" href="#id9" id="id8">[2]</a> ，直接在命令行輸入這個執行檔的路徑就可以執行它。如果不想把檔案名叫 <tt class="file docutils literal"><span class="pre">a.out</span></tt> ，可以用 <strong class="command">gcc</strong> 的 <em class="xref std std-option">-o</em> 參數自己指定檔案名:</p>
+<div class="highlight-python"><pre>$ gcc main.c -o main
+$ ./main
+Hello, world.</pre>
+</div>
+<table class="docutils footnote" frame="void" id="id9" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id8">[2]</a></td><td>“a.out”是“Assembler Output”的縮寫，實際上一個C程序要先被編譯器翻譯成彙編程序，再被彙編器翻譯成機器指令，最後還要經過連結器的處理才能成為執行檔，詳見 <a class="reference internal" href="asmc.html#asmc-main"><em>main函數、啟動常式和退出狀態</em></a> 。</td></tr>
+</tbody>
+</table>
+<p id="index-19">雖然這只是一個很小的程序，但我們目前暫時還不具備相關的知識來完全理解這個程序，比如程序的第一行，還有程序主體的 <tt class="docutils literal"><span class="pre">int</span> <span class="pre">main(void){...return</span> <span class="pre">0;}</span></tt> 結構，這些部分我們暫時不詳細解釋，讀者現在只需要把它們看成是每個程序按慣例必須要寫的部分（Boilerplate）。但要注意 <tt class="docutils literal"><span class="pre">main</span></tt> 是一個特殊的名字，C程序總是從 <tt class="docutils literal"><span class="pre">main</span></tt> 裡面的第一條語句開始執行的，在這個程序中是指 <tt class="docutils literal"><span class="pre">printf</span></tt> 這條語句。</p>
+<p id="index-20">第3行的 <tt class="docutils literal"><span class="pre">/*</span> <span class="pre">...</span> <span class="pre">*/</span></tt> 結構是一個註釋（Comment），其中可以寫一些描述性的話，解釋這段程序在做什麼。註釋只是寫給程序員看的，編譯器會忽略從 <tt class="docutils literal"><span class="pre">/*</span></tt> 到 <tt class="docutils literal"><span class="pre">*/</span></tt> 的所有字元，所以寫註釋沒有語法規則，愛怎麼寫就怎麼寫，並且不管寫多少都不會被編譯進執行檔中。</p>
+<p id="index-21"><tt class="docutils literal"><span class="pre">printf</span></tt> 語句的作用是把消息打印到屏幕。注意語句的末尾以;號（Semicolon）結束，下一條語句 <tt class="docutils literal"><span class="pre">return</span> <span class="pre">0;</span></tt> 也是如此。</p>
+<p id="index-22">C語言用{}括號（Brace或Curly Brace）把語法結構分成組，在上面的程序中 <tt class="docutils literal"><span class="pre">printf</span></tt> 和 <tt class="docutils literal"><span class="pre">return</span></tt> 語句套在 <tt class="docutils literal"><span class="pre">main</span></tt> 的{}括號中，表示它們屬於 <tt class="docutils literal"><span class="pre">main</span></tt> 的定義之中。我們看到這兩句相比 <tt class="docutils literal"><span class="pre">main</span></tt> 那一行都縮進（Indent）了一些，在代碼中可以用若干個空格（Blank）和Tab字元來縮進，縮進不是必須的，但這樣使我們更容易看出這兩行是屬於 <tt class="docutils literal"><span class="pre">main</span></tt> 的定義之中的，要寫出漂亮的程序必須有整齊的縮進， <a class="reference internal" href="codingstyle.html#codingstyle-indent"><em>縮進和空白</em></a> 將介紹推薦的縮進寫法。</p>
+<p>正如前面所說，編譯器對於語法錯誤是毫不留情的，如果你的程序有一點拼寫錯誤，例如第一行寫成了 <tt class="docutils literal"><span class="pre">stdoi.h</span></tt> ，在編譯時會得到錯誤提示:</p>
+<div class="highlight-python"><pre>$ gcc main.c
+main.c:1:19: fatal error: stdoi.h: No such file or directory
+compilation terminated.</pre>
+</div>
+<p>這個錯誤提示非常緊湊，初學者不容易看明白出了什麼錯誤，即使知道這個錯誤提示說的是第1行有錯誤，很多初學者對照着書看好幾遍也看不出自己這一行哪裡有錯誤，因為他們對符號和拼寫不敏感（尤其是英文較差的初學者），他們還不知道這些符號是什麼意思又如何能記住正確的拼寫？對於初學者來說，最想看到的錯誤提示其實是這樣的：“在main.c程序第1行的第19列，您試圖包含一個叫做stdoi.h的檔案，可惜我沒有找到這個檔案，但我卻找到了一個叫stdio.h的檔案，我猜這個才是您想要的，對嗎？”可惜沒有任何編譯器會友善到這個程度，大多數時候你所得到的錯誤提示並不能直接指出誰是犯人，而只是一個線索，你需要根據這個線索做一些偵探和推理。</p>
+<p>有些時候編譯器的提示信息不是 <tt class="docutils literal"><span class="pre">error</span></tt> 而是 <tt class="docutils literal"><span class="pre">warning</span></tt> ，例如把上例中的 <tt class="docutils literal"><span class="pre">printf(&quot;Hello,</span> <span class="pre">world.\n&quot;);</span></tt> 改成 <tt class="docutils literal"><span class="pre">printf(1);</span></tt> 然後編譯運行:</p>
+<div class="highlight-python"><pre>$ gcc main.c
+main.c: In function ‘main’:
+main.c:7:9: warning: passing argument 1 of ‘printf’ makes pointer from integer without a cast [enabled by default]
+/usr/include/stdio.h:363:12: note: expected ‘const char * __restrict__’ but argument is of type ‘int’
+main.c:7:9: warning: format not a string literal and no format arguments [-Wformat-security]
+$ ./a.out
+Segmentation fault (core dumped)</pre>
+</div>
+<p id="index-23">這個警告信息是說類型不匹配，但勉強還能配得上。警告信息不是致命錯誤，編譯仍然可以繼續，如果整個編譯過程只有警告信息而沒有錯誤信息，仍然可以生成執行檔。但是，警告信息也是不容忽視的。出警告信息說明你的程序寫得不夠規範，可能有Bug，雖然能編譯生成執行檔，但程序的運行結果往往是不正確的，例如上面的程序運行時出了一個段錯誤（Segmentation fault），段錯誤是程序崩潰（Crash）的一種表現，這屬於運行時錯誤。</p>
+<p>各種警告信息的嚴重程度不同，像上面這種警告几乎一定表明程序中有Bug，而另外一些警告只表明程序寫得不夠規範，一般還是能正確運行的。有些不重要的警告信息 <strong class="command">gcc</strong> 預設是不提示的，但這些警告信息也有可能表明程序中有Bug， <strong>一個好的習慣是打開gcc的-Wall選項，讓gcc提示所有的警告信息－－不管是嚴重的還是不嚴重的－－然後把這些問題從代碼中全部消滅</strong> 。比如把上例中的 <tt class="docutils literal"><span class="pre">printf(&quot;Hello,</span> <span class="pre">world.\n&quot;);</span></tt> 改成 <tt class="docutils literal"><span class="pre">printf(0);</span></tt> 然後編譯運行:</p>
+<div class="highlight-python"><pre>$ gcc main.c
+$ ./a.out</pre>
+</div>
+<p>編譯既不報錯也不報警告，一切正常，但是運行程序什麼也不打印。如果打開 <em class="xref std std-option">-Wall</em> 選項編譯就會報警告了:</p>
+<div class="highlight-python"><pre>$ gcc -Wall main.c
+main.c: In function ‘main’:
+main.c:7:9: warning: null argument where non-null required (argument 1) [-Wnonnull]</pre>
+</div>
+<p>如果 <tt class="docutils literal"><span class="pre">printf</span></tt> 後面的 <tt class="docutils literal"><span class="pre">0</span></tt> 是你不小心寫上去的（例如錯誤地使用了編輯器的查找替換功能），這個警告就能幫助你發現錯誤。雖然本書的命令行為了突出重點通常省略 <em class="xref std std-option">-Wall</em> 選項，但是強烈建議你寫每一個編譯命令時都加上 <em class="xref std std-option">-Wall</em> 選項。</p>
+<p class="rubric">習題</p>
+<ol class="arabic simple">
+<li>儘管編譯器的錯誤提示不夠友好，但仍然是學習過程中一個很有用的工具。你可以像上面那樣，從一個正確的程序開始每次改動一小點，然後編譯看是什麼結果，如果出錯了，就儘量記住編譯器給出的錯誤提示並把改動還原。因為錯誤是你改出來的，你已經知道錯誤原因是什麼了，所以能很容易地把錯誤原因和錯誤提示信息對應起來記住，這樣下次你在毫無防備的情況下撞到這個錯誤提示時就會很容易想到錯誤原因是什麼了。這樣反覆練習，有了一定的經驗積累之後面對編譯器的錯誤提示就會從容得多了。</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1. 程序的基本概念</a><ul>
+<li><a class="reference internal" href="#intro-program">1.1. 程序和編程語言</a></li>
+<li><a class="reference internal" href="#intro-naturalformallang">1.2. 自然語言和形式語言</a></li>
+<li><a class="reference internal" href="#intro-debug">1.3. 程序的調試</a></li>
+<li><a class="reference internal" href="#intro-firstprogram">1.4. 第一個程序</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="preface.html"
+                        title="previous chapter">前言</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="expr.html"
+                        title="next chapter">2. 常量、變數和表達式</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/zh/intro.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><table border=0 cellspacing=0 style="color: white;">
+
+<tr><td>
+   請輸入您的email訂閲<a href="http://groups.google.com/group/learning-linux-c-cpp">本書的郵件列表</a><br/>
+   (Please enter your email to subscribe to <a href="http://groups.google.com/group/learning-linux-c-cpp">this book's mailing list</a>)<br/>
+   <form action="http://groups.google.com/group/learning-linux-c-cpp/boxsubscribe"><input type=text name=email><input type=submit name="sub" value="訂閲(Subscribe)"></form>
+</td></tr>
+
+<tr><td><br/>關注<a href="http://weibo.com/sansoong">我的微博</a></td></tr>
+
+<tr><td><br/>Checkout the source from github: <a href="https://github.com/learning-linux-c-cpp/akabook">https://github.com/learning-linux-c-cpp/akabook</a></td></tr>
+
+<tr><td>
+   <br/>感謝您的慷慨捐贈！<br/>
+   Thanks for your generous donation!<br/>
+   <a href="http://me.alipay.com/songjinshan" target="_blank"><img src="_static/me.alipay.png" alt="捐贈"></a>
+</td></tr>
+
+</table>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="expr.html" title="2. 常量、變數和表達式"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="preface.html" title="前言"
+             >previous</a> |</li>
+        <li><a href="../index.html">akabook 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >中文版：Linux C/C++編程一站式學習</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Sean Soong.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
