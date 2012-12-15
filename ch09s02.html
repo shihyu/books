@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>2. 注释</title><link rel="stylesheet" href="styles.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="Linux C编程一站式学习" /><link rel="up" href="ch09.html" title="第 9 章 编码风格" /><link rel="prev" href="ch09s01.html" title="1. 缩进和空白" /><link rel="next" href="ch09s03.html" title="3. 标识符命名" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2. 注释</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch09s01.html">上一页</a> </td><th width="60%" align="center">第 9 章 编码风格</th><td width="20%" align="right"> <a accesskey="n" href="ch09s03.html">下一页</a></td></tr></table><hr /></div><div class="sect1" lang="zh-cn" xml:lang="zh-cn"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2738090"></a>2. 注释</h2></div></div></div><p>单行注释应采用<code class="literal">/*␣comment␣*/</code>的形式，用空格把界定符和文字分开。多行注释最常见的是这种形式：</p><pre class="programlisting">/*
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>2. 註釋</title><link rel="stylesheet" href="styles.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="Linux C編程一站式學習" /><link rel="up" href="ch09.html" title="第 9 章 編碼風格" /><link rel="prev" href="ch09s01.html" title="1. 縮進和空白" /><link rel="next" href="ch09s03.html" title="3. 標識符命名" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2. 註釋</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch09s01.html">上一頁</a> </td><th width="60%" align="center">第 9 章 編碼風格</th><td width="20%" align="right"> <a accesskey="n" href="ch09s03.html">下一頁</a></td></tr></table><hr /></div><div class="sect1" lang="zh-cn" xml:lang="zh-cn"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2738090"></a>2. 註釋</h2></div></div></div><p>單行註釋應採用<code class="literal">/*␣comment␣*/</code>的形式，用空格把界定符和文字分開。多行註釋最常見的是這種形式：</p><pre class="programlisting">/*
 ␣*␣Multi-line
 ␣*␣comment
 ␣*/</pre><p>也有更花哨的形式：</p><pre class="programlisting">/*************\
 * Multi-line  *
 * comment     *
-\*************/</pre><p>使用注释的场合主要有以下几种。</p><p>1、整个源文件的顶部注释。说明此模块的相关信息，例如文件名、作者和版本历史等，顶头写不缩进。例如内核源代码目录下的<code class="literal">kernel/sched.c</code>文件的开头：</p><pre class="programlisting">/*
+\*************/</pre><p>使用註釋的場合主要有以下幾種。</p><p>1、整個源檔案的頂部註釋。說明此模組的相關信息，例如檔案名、作者和版本歷史等，頂頭寫不縮進。例如內核原始碼目錄下的<code class="literal">kernel/sched.c</code>檔案的開頭：</p><pre class="programlisting">/*
  *  kernel/sched.c
  *
  *  Kernel scheduler and related syscalls
@@ -24,7 +24,7 @@
  *              by Davide Libenzi, preemptible kernel bits by Robert Love.
  *  2003-09-03  Interactivity tuning by Con Kolivas.
  *  2004-04-02  Scheduler domains code by Nick Piggin
- */</pre><p>2、函数注释。说明此函数的功能、参数、返回值、错误码等，写在函数定义上侧，和此函数定义之间不留空行，顶头写不缩进。</p><p>3、相对独立的语句组注释。对这一组语句做特别说明，写在语句组上侧，和此语句组之间不留空行，与当前语句组的缩进一致。</p><p>4、代码行右侧的简短注释。对当前代码行做特别说明，一般为单行注释，和代码之间至少用一个空格隔开，一个源文件中所有的右侧注释最好能上下对齐。尽管<a class="xref" href="ch02s01.html#expr.morehelloworld">例 2.1 “带更多注释的Hello World”</a>讲过注释可以穿插在一行代码中间，但不建议这么写。内核源代码目录下的<code class="literal">lib/radix-tree.c</code>文件中的一个函数包含了上述三种注释：</p><pre class="programlisting">/**
+ */</pre><p>2、函數註釋。說明此函數的功能、參數、返回值、錯誤碼等，寫在函數定義上側，和此函數定義之間不留空行，頂頭寫不縮進。</p><p>3、相對獨立的語句組註釋。對這一組語句做特別說明，寫在語句組上側，和此語句組之間不留空行，與當前語句組的縮進一致。</p><p>4、代碼行右側的簡短註釋。對當前代碼行做特別說明，一般為單行註釋，和代碼之間至少用一個空格隔開，一個源檔案中所有的右側註釋最好能上下對齊。儘管<a class="xref" href="ch02s01.html#expr.morehelloworld">例 2.1 “帶更多註釋的Hello World”</a>講過註釋可以穿插在一行代碼中間，但不建議這麼寫。內核原始碼目錄下的<code class="literal">lib/radix-tree.c</code>檔案中的一個函數包含了上述三種註釋：</p><pre class="programlisting">/**
  *      radix_tree_insert    -    insert into a radix tree
  *      @root:          radix tree root
  *      @index:         index key
@@ -83,7 +83,7 @@ int radix_tree_insert(struct radix_tree_root *root,
         BUG_ON(tag_get(node, 1, offset));
 
         return 0;
-}</pre><p><a class="xref" href="bi01.html#bibli.codingstyle" title="Linux内核源代码目录下的Documentation/CodingStyle文件">[<abbr class="abbrev">CodingStyle</abbr>]</a>中特别指出，函数内的注释要尽可能少用。写注释主要是为了说明你的代码“<span class="quote">能做什么</span>”（比如函数接口定义），而不是为了说明“<span class="quote">怎样做</span>”，只要代码写得足够清晰，“<span class="quote">怎样做</span>”是一目了然的，如果你需要用注释才能解释清楚，那就表示你的代码可读性很差，除非是特别需要提醒注意的地方才使用函数内注释。</p><p>5、复杂的结构体定义比函数更需要注释。例如内核源代码目录下的<code class="literal">kernel/sched.c</code>文件中定义了这样一个结构体：</p><pre class="programlisting">/*
+}</pre><p><a class="xref" href="bi01.html#bibli.codingstyle" title="Linux內核原始碼目錄下的Documentation/CodingStyle檔案">[<abbr class="abbrev">CodingStyle</abbr>]</a>中特別指出，函數內的註釋要儘可能少用。寫註釋主要是為了說明你的代碼“<span class="quote">能做什麼</span>”（比如函數介面定義），而不是為了說明“<span class="quote">怎樣做</span>”，只要代碼寫得足夠清晰，“<span class="quote">怎樣做</span>”是一目瞭然的，如果你需要用註釋才能解釋清楚，那就表示你的代碼可讀性很差，除非是特別需要提醒注意的地方纔使用函數內註釋。</p><p>5、複雜的結構體定義比函數更需要註釋。例如內核原始碼目錄下的<code class="literal">kernel/sched.c</code>檔案中定義了這樣一個結構體：</p><pre class="programlisting">/*
  * This is the main, per-CPU runqueue data structure.
  *
  * Locking rule: those places that want to lock multiple runqueues
@@ -150,7 +150,7 @@ struct runqueue {
         unsigned long ttwu_cnt;
         unsigned long ttwu_local;
 #endif
-};</pre><p>6、复杂的宏定义和变量声明也需要注释。例如内核源代码目录下的<code class="literal">include/linux/jiffies.h</code>文件中的定义：</p><pre class="programlisting">/* TICK_USEC_TO_NSEC is the time between ticks in nsec assuming real ACTHZ and  */
+};</pre><p>6、複雜的宏定義和變數聲明也需要註釋。例如內核原始碼目錄下的<code class="literal">include/linux/jiffies.h</code>檔案中的定義：</p><pre class="programlisting">/* TICK_USEC_TO_NSEC is the time between ticks in nsec assuming real ACTHZ and  */
 /* a value TUSEC for TICK_USEC (can be set bij adjtimex)                */
 #define TICK_USEC_TO_NSEC(TUSEC) (SH_DIV (TUSEC * USER_HZ * 1000, ACTHZ, 8))
 
@@ -166,4 +166,4 @@ struct runqueue {
  * get_jiffies_64() will do this for you as appropriate.
  */
 extern u64 __jiffy_data jiffies_64;
-extern unsigned long volatile __jiffy_data jiffies;</pre></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch09s01.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="ch09.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="ch09s03.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">1. 缩进和空白 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 3. 标识符命名</td></tr></table></div></body></html>
+extern unsigned long volatile __jiffy_data jiffies;</pre></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch09s01.html">上一頁</a> </td><td width="20%" align="center"><a accesskey="u" href="ch09.html">上一級</a></td><td width="40%" align="right"> <a accesskey="n" href="ch09s03.html">下一頁</a></td></tr><tr><td width="40%" align="left" valign="top">1. 縮進和空白 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始頁</a></td><td width="40%" align="right" valign="top"> 3. 標識符命名</td></tr></table></div></body></html>

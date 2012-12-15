@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>4. UNIX Domain Socket IPC</title><link rel="stylesheet" href="styles.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="Linux C编程一站式学习" /><link rel="up" href="ch37.html" title="第 37 章 socket编程" /><link rel="prev" href="ch37s03.html" title="3. 基于UDP协议的网络程序" /><link rel="next" href="ch37s05.html" title="5. 练习：实现简单的Web服务器" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4. UNIX Domain Socket IPC</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch37s03.html">上一页</a> </td><th width="60%" align="center">第 37 章 socket编程</th><td width="20%" align="right"> <a accesskey="n" href="ch37s05.html">下一页</a></td></tr></table><hr /></div><div class="sect1" lang="zh-cn" xml:lang="zh-cn"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2904243"></a>4. UNIX Domain Socket IPC</h2></div></div></div><p>socket API原本是为网络通讯设计的，但后来在socket的框架上发展出一种IPC机制，就是UNIX Domain Socket。虽然网络socket也可用于同一台主机的进程间通讯（通过loopback地址127.0.0.1），但是UNIX Domain Socket用于IPC更有效率：不需要经过网络协议栈，不需要打包拆包、计算校验和、维护序号和应答等，只是将应用层数据从一个进程拷贝到另一个进程。这是因为，IPC机制本质上是可靠的通讯，而网络协议是为不可靠的通讯设计的。UNIX Domain Socket也提供面向流和面向数据包两种API接口，类似于TCP和UDP，但是面向消息的UNIX Domain Socket也是可靠的，消息既不会丢失也不会顺序错乱。</p><p>UNIX Domain Socket是全双工的，API接口语义丰富，相比其它IPC机制有明显的优越性，目前已成为使用最广泛的IPC机制，比如X Window服务器和GUI程序之间就是通过UNIX Domain Socket通讯的。</p><p>使用UNIX Domain Socket的过程和网络socket十分相似，也要先调用socket()创建一个socket文件描述符，address family指定为AF_UNIX，type可以选择SOCK_DGRAM或SOCK_STREAM，protocol参数仍然指定为0即可。</p><p>UNIX Domain Socket与网络socket编程最明显的不同在于地址格式不同，用结构体sockaddr_un表示，网络编程的socket地址是IP地址加端口号，而UNIX Domain Socket的地址是一个socket类型的文件在文件系统中的路径，这个socket文件由bind()调用创建，如果调用bind()时该文件已存在，则bind()错误返回。</p><p>以下程序将UNIX Domain socket绑定到一个地址。</p><pre class="programlisting">#include &lt;stdlib.h&gt;
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>4. UNIX Domain Socket IPC</title><link rel="stylesheet" href="styles.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="Linux C編程一站式學習" /><link rel="up" href="ch37.html" title="第 37 章 socket編程" /><link rel="prev" href="ch37s03.html" title="3. 基于UDP協議的網絡程序" /><link rel="next" href="ch37s05.html" title="5. 練習：實現簡單的Web伺服器" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4. UNIX Domain Socket IPC</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch37s03.html">上一頁</a> </td><th width="60%" align="center">第 37 章 socket編程</th><td width="20%" align="right"> <a accesskey="n" href="ch37s05.html">下一頁</a></td></tr></table><hr /></div><div class="sect1" lang="zh-cn" xml:lang="zh-cn"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2904243"></a>4. UNIX Domain Socket IPC</h2></div></div></div><p>socket API原本是為網絡通訊設計的，但後來在socket的框架上發展出一種IPC機制，就是UNIX Domain Socket。雖然網絡socket也可用於同一台主機的進程間通訊（通過loopback地址127.0.0.1），但是UNIX Domain Socket用於IPC更有效率：不需要經過網絡協議棧，不需要打包拆包、計算校驗和、維護序號和應答等，只是將應用層數據從一個進程拷貝到另一個進程。這是因為，IPC機制本質上是可靠的通訊，而網絡協議是為不可靠的通訊設計的。UNIX Domain Socket也提供面向流和麵向數據包兩種API介面，類似於TCP和UDP，但是面向消息的UNIX Domain Socket也是可靠的，消息既不會丟失也不會順序錯亂。</p><p>UNIX Domain Socket是全雙工的，API介面語義豐富，相比其它IPC機制有明顯的優越性，目前已成為使用最廣泛的IPC機制，比如X Window伺服器和GUI程序之間就是通過UNIX Domain Socket通訊的。</p><p>使用UNIX Domain Socket的過程和網絡socket十分相似，也要先調用socket()創建一個socket檔案描述符，address family指定為AF_UNIX，type可以選擇SOCK_DGRAM或SOCK_STREAM，protocol參數仍然指定為0即可。</p><p>UNIX Domain Socket與網絡socket編程最明顯的不同在於地址格式不同，用結構體sockaddr_un表示，網絡編程的socket地址是IP地址加連接埠號，而UNIX Domain Socket的地址是一個socket類型的檔案在檔案系統中的路徑，這個socket檔案由bind()調用創建，如果調用bind()時該檔案已存在，則bind()錯誤返回。</p><p>以下程序將UNIX Domain socket綁定到一個地址。</p><pre class="programlisting">#include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 #include &lt;stddef.h&gt;
 #include &lt;sys/socket.h&gt;
@@ -25,7 +25,7 @@ int main(void)
 	}
 	printf("UNIX domain socket bound\n");
 	exit(0);
-}</pre><p>注意程序中的offsetof宏，它在stddef.h头文件中定义：</p><pre class="programlisting">#define offsetof(TYPE, MEMBER) ((int)&amp;((TYPE *)0)-&gt;MEMBER)</pre><p>offsetof(struct sockaddr_un, sun_path)就是取sockaddr_un结构体的sun_path成员在结构体中的偏移，也就是从结构体的第几个字节开始是sun_path成员。想一想，这个宏是如何实现这一功能的？</p><p>该程序的运行结果如下。</p><pre class="screen">$ ./a.out
+}</pre><p>注意程序中的offsetof宏，它在stddef.h標頭檔中定義：</p><pre class="programlisting">#define offsetof(TYPE, MEMBER) ((int)&amp;((TYPE *)0)-&gt;MEMBER)</pre><p>offsetof(struct sockaddr_un, sun_path)就是取sockaddr_un結構體的sun_path成員在結構體中的偏移，也就是從結構體的第幾個位元組開始是sun_path成員。想一想，這個宏是如何實現這一功能的？</p><p>該程序的運行結果如下。</p><pre class="screen">$ ./a.out
 UNIX domain socket bound
 $ ls -l foo.socket
 srwxrwxr-x 1 user        0 Aug 22 12:43 foo.socket
@@ -33,7 +33,7 @@ $ ./a.out
 bind error: Address already in use
 $ rm foo.socket
 $ ./a.out
-UNIX domain socket bound</pre><p>以下是服务器的listen模块，与网络socket编程类似，在bind之后要listen，表示通过bind的地址（也就是socket文件）提供服务。</p><pre class="programlisting">#include &lt;stddef.h&gt;
+UNIX domain socket bound</pre><p>以下是伺服器的listen模組，與網絡socket編程類似，在bind之後要listen，表示通過bind的地址（也就是socket檔案）提供服務。</p><pre class="programlisting">#include &lt;stddef.h&gt;
 #include &lt;sys/socket.h&gt;
 #include &lt;sys/un.h&gt;
 #include &lt;errno.h&gt;
@@ -76,7 +76,7 @@ errout:
 	close(fd);
 	errno = err;
 	return(rval);
-}</pre><p>以下是服务器的accept模块，通过accept得到客户端地址也应该是一个socket文件，如果不是socket文件就返回错误码，如果是socket文件，在建立连接后这个文件就没有用了，调用unlink把它删掉，通过传出参数uidptr返回客户端程序的user id。</p><pre class="programlisting">#include &lt;stddef.h&gt;
+}</pre><p>以下是伺服器的accept模組，通過accept得到客戶端地址也應該是一個socket檔案，如果不是socket檔案就返回錯誤碼，如果是socket檔案，在建立連接後這個檔案就沒有用了，調用unlink把它刪掉，通過傳出參數uidptr返回客戶端程序的user id。</p><pre class="programlisting">#include &lt;stddef.h&gt;
 #include &lt;sys/stat.h&gt;
 #include &lt;sys/socket.h&gt;
 #include &lt;sys/un.h&gt;
@@ -117,7 +117,7 @@ errout:
 	close(clifd);
 	errno = err;
 	return(rval);
-}</pre><p>以下是客户端的connect模块，与网络socket编程不同的是，UNIX Domain Socket客户端一般要显式调用bind函数，而不依赖系统自动分配的地址。客户端bind一个自己指定的socket文件名的好处是，该文件名可以包含客户端的pid以便服务器区分不同的客户端。</p><pre class="programlisting">#include &lt;stdio.h&gt;
+}</pre><p>以下是客戶端的connect模組，與網絡socket編程不同的是，UNIX Domain Socket客戶端一般要顯式調用bind函數，而不依賴系統自動分配的地址。客戶端bind一個自己指定的socket檔案名的好處是，該檔案名可以包含客戶端的pid以便伺服器區分不同的客戶端。</p><pre class="programlisting">#include &lt;stdio.h&gt;
 #include &lt;stddef.h&gt;
 #include &lt;sys/stat.h&gt;
 #include &lt;sys/socket.h&gt;
@@ -167,4 +167,4 @@ errout:
 	close(fd);
 	errno = err;
 	return(rval);
-}</pre><p>下面是自己动手时间，请利用以上模块编写完整的客户端/服务器通讯的程序。</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch37s03.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="ch37.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="ch37s05.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">3. 基于UDP协议的网络程序 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 5. 练习：实现简单的Web服务器</td></tr></table></div></body></html>
+}</pre><p>下面是自己動手時間，請利用以上模組編寫完整的客戶端/伺服器通訊的程序。</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch37s03.html">上一頁</a> </td><td width="20%" align="center"><a accesskey="u" href="ch37.html">上一級</a></td><td width="40%" align="right"> <a accesskey="n" href="ch37s05.html">下一頁</a></td></tr><tr><td width="40%" align="left" valign="top">3. 基于UDP協議的網絡程序 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始頁</a></td><td width="40%" align="right" valign="top"> 5. 練習：實現簡單的Web伺服器</td></tr></table></div></body></html>
